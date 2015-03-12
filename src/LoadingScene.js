@@ -1,36 +1,47 @@
 var LoadingLayer = cc.Layer.extend({
-    sprite:null,
     ctor:function () {
-        //////////////////////////////
-        // 1. super init first
         this._super();
+        this.init();
+    },
 
-        /////////////////////////////
-        // 2. add a menu item with "X" image, which is clicked to quit the program
-        //    you may modify it.
-        // ask the window size
+    init:function(){
         var size = cc.winSize;
+        //add background
+        var background = new cc.Sprite("loadingscene/bg.jpg");
+        background.setPosition(size.width / 2, size.height / 2);
+        background.setScale(1.5);
+        this.addChild(background);
 
+        //add loadingbar
+        var loadingbar = new ccui.LoadingBar("loadingscene/sliderProgress.png");
+        loadingbar.setDirection(ccui.LoadingBar.TYPE_LEFT);
+        loadingbar.setPosition(size.width / 2, size.height * 0.2);
+        loadingbar.setScale(3, 2);
+        loadingbar.setColor(cc.color(0, 0, 0));
+        loadingbar.setOpacity(70);
+        loadingbar.setPercent(0);
+        this.addChild(loadingbar);
 
+        //add label
+        this.addLoadingText();
 
-        /////////////////////////////
-        // 3. add your codes below...
-        // add a label shows "Hello World"
-        // create and initialize a label
-        var helloLabel = new cc.LabelTTF("Hello World", "Arial", 38);
-        // position the label on the center of the screen
-        helloLabel.x = size.width / 2;
-        helloLabel.y = 0;
-        // add the label as a child to this layer
-        this.addChild(helloLabel, 5);
+        //add slime
+        this.slimeAction();
 
-        helloLabel.runAction(
-            cc.spawn(
-                cc.moveBy(2.5, cc.p(0, size.height - 40)),
-                cc.tintTo(2.5,255,125,0)
-            )
-        );
+        this.scheduleUpdate();
         return true;
+    },
+
+    update:function(dt){
+
+    },
+
+    addLoadingText:function(){
+
+    },
+
+    slimeAction:function(){
+
     }
 });
 
