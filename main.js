@@ -48,15 +48,11 @@
  */
 
 cc.game.onStart = function(){
-    if(!cc.sys.isNative) //If referenced loading.js, please remove it
-        document.body.removeChild(document.getElementById("cocosLoading"));
+    cc.view.setDesignResolutionSize(1136, 640, cc.ResolutionPolicy.SHOW_ALL);
 
-    cc.view.adjustViewPort(true);
-    cc.view.setDesignResolutionSize(800, 450, cc.ResolutionPolicy.SHOW_ALL);
-    cc.view.resizeWithBrowserSize(true);
     //load resources
     cc.LoaderScene.preload(g_resources, function () {
-        cc.director.runScene(new HelloWorldScene());
+        cc.director.runScene(new LoadingScene());
     }, this);
 };
 cc.game.run();

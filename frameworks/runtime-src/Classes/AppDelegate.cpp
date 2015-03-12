@@ -55,7 +55,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
         glview = cocos2d::GLViewImpl::create("js-fantasywarrior3d");
 #else
-        glview = cocos2d::GLViewImpl::createWithRect("js-fantasywarrior3d", Rect(0,0,900,640));
+        glview = cocos2d::GLViewImpl::createWithRect("js-fantasywarrior3d", Rect(0,0,1136,640));
 #endif
         director->setOpenGLView(glview);
 }
