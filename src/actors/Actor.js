@@ -8,5 +8,9 @@ var Actor = cc.Sprite3D.extend({
 
     update:function(dt){
         this._stateMachine.update(dt);
+    },
+
+    getFSM:function(){
+        return this._stateMachine;
     }
 });
