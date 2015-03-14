@@ -684,6 +684,31 @@ bool jsval_to_ray(JSContext *cx, JS::HandleValue v, cocos2d::Ray* ret)
     return true;
 }
 
+bool jsval_to_ttfconfig(JSContext* cx, JS::HandleValue v, cocos2d::TTFConfig* ret)
+{
+    JS::RootedObject tmp(cx, v.toObjectOrNull());
+    JS::RootedValue jsfontFilePath(cx);
+    JS::RootedValue jsfontSize(cx);
+    JS::RootedValue jsoutlineSize(cx);
+    
+    std::string fontFilePath;
+    int fontSize, outlineSize;
+    
+    JS_GetProperty(cx, tmp, "fontFilePath", &jsfontFilePath);
+    JS_GetProperty(cx, tmp, "fontSize", &jsfontSize);
+    JS_GetProperty(cx, tmp, "outlineSize", &jsoutlineSize);
+    jsval_to_std_string(cx, jsfontFilePath, &fontFilePath);
+    ret->fontFilePath = fontFilePath;
+    jsval_to_int(cx, jsfontSize, &fontSize);
+    ret->fontSize = fontSize;
+    jsval_to_int(cx, jsoutlineSize, &outlineSize);
+    ret->outlineSize = outlineSize;
+    if(outlineSize > 0)
+        ret->distanceFieldEnabled = false;
+    
+    return true;
+}
+
 bool jsvals_variadic_to_ccarray( JSContext *cx, jsval *vp, int argc, __Array** ret)
 {
     bool ok = true;

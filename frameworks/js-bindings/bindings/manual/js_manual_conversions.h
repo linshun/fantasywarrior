@@ -110,6 +110,7 @@ bool jsvals_variadic_to_ccarray( JSContext *cx, jsval *vp, int argc, cocos2d::__
 bool jsval_to_quaternion(JSContext *cx, JS::HandleValue vp, cocos2d::Quaternion* ret);
 bool jsval_to_obb(JSContext *cx, JS::HandleValue vp, cocos2d::OBB* ret);
 bool jsval_to_ray(JSContext *cx, JS::HandleValue vp, cocos2d::Ray* ret);
+bool jsval_to_ttfconfig(JSContext* cx, JS::HandleValue vp, cocos2d::TTFConfig* ret);
 
 // forward declaration
 js_proxy_t* jsb_get_js_proxy(JSObject* jsObj);

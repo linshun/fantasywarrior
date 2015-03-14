@@ -37156,6 +37156,31 @@ bool js_cocos2dx_Label_createWithSystemFont(JSContext *cx, uint32_t argc, jsval 
     return false;
 }
 
+bool js_cocos2dx_Label_createWithTTF(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    if (argc == 2) {
+        
+        cocos2d::TTFConfig arg0;
+        std::string arg1;
+        bool ok = jsval_to_std_string(cx, args.get(1), &arg1) && jsval_to_ttfconfig(cx, args.get(0), &arg0);
+        cocos2d::Label* ret = cocos2d::Label::createWithTTF(arg0, arg1);
+        jsval jsret = JSVAL_NULL;
+        do {
+            if (ret) {
+                js_proxy_t *jsProxy = js_get_or_create_proxy<cocos2d::Label>(cx, (cocos2d::Label*)ret);
+                jsret = OBJECT_TO_JSVAL(jsProxy->obj);
+            } else {
+                jsret = JSVAL_NULL;
+            }
+        } while (0);
+        args.rval().set(jsret);
+        return true;
+    }
+    JS_ReportError(cx, "js_cocos2dx_Label_create : wrong number of arguments");
+    return false;
+}
+
 bool js_cocos2dx_Label_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
@@ -37275,6 +37300,7 @@ void js_register_cocos2dx_Label(JSContext *cx, JS::HandleObject global) {
 
     static JSFunctionSpec st_funcs[] = {
         JS_FN("createWithBMFont", js_cocos2dx_Label_createWithBMFont, 2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("createWithTTF", js_cocos2dx_Label_createWithTTF, 2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("create", js_cocos2dx_Label_create, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("createWithCharMap", js_cocos2dx_Label_createWithCharMap, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("createWithSystemFont", js_cocos2dx_Label_createWithSystemFont, 3, JSPROP_PERMANENT | JSPROP_ENUMERATE),
