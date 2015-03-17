@@ -5,5 +5,11 @@ var Knight = Actor.extend({
         this.addEffect(cc.vec3(0, 0, 0), CelLine, -1);
         this.setRotation3D(cc.vec3(90, 0, 0));
         this.setRotation(-90);
+        this.setDefaultEqt();
+    },
+
+    //set default equipment
+    setDefaultEqt:function(){
+
     }
 });
