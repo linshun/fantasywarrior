@@ -4629,21 +4629,24 @@ bool jsval_to_TTFConfig(JSContext *cx, jsval v, TTFConfig* ret) {
     JS::RootedObject tmp(cx);
     JS::RootedValue js_fontFilePath(cx);
     JS::RootedValue js_fontSize(cx);
+    JS::RootedValue js_outlineSize(cx);
     JS::RootedValue js_glyphs(cx);
     JS::RootedValue js_customGlyphs(cx);
     JS::RootedValue js_distanceFieldEnable(cx);
 
     std::string fontFilePath,customGlyphs;
-    double fontSize, glyphs;
+    double fontSize, outlineSize, glyphs;
 
     bool ok = v.isObject() &&
         JS_ValueToObject(cx, JS::RootedValue(cx, v), &tmp) &&
         JS_GetProperty(cx, tmp, "fontFilePath", &js_fontFilePath) &&
         JS_GetProperty(cx, tmp, "fontSize", &js_fontSize) &&
+        JS_GetProperty(cx, tmp, "outlineSize", &js_outlineSize) &&
         JS_GetProperty(cx, tmp, "glyphs", &js_glyphs) &&
         JS_GetProperty(cx, tmp, "customGlyphs", &js_customGlyphs) &&
         JS_GetProperty(cx, tmp, "distanceFieldEnable", &js_distanceFieldEnable) &&
         JS::ToNumber(cx, js_fontSize, &fontSize) &&
+        JS::ToNumber(cx, js_outlineSize, &outlineSize) &&
         JS::ToNumber(cx, js_glyphs, &glyphs) &&
         jsval_to_std_string(cx,js_fontFilePath,&ret->fontFilePath) &&
         jsval_to_std_string(cx,js_customGlyphs,&customGlyphs);
@@ -4652,6 +4655,7 @@ bool jsval_to_TTFConfig(JSContext *cx, jsval v, TTFConfig* ret) {
     JSB_PRECONDITION3(ok, cx, false, "Error processing arguments");
 
     ret->fontSize = (int)fontSize;
+    ret->outlineSize = (int)outlineSize;
     ret->glyphs = GlyphCollection((int)glyphs);
     ret->distanceFieldEnabled = distanceFieldEnable;
     if(ret->glyphs == GlyphCollection::CUSTOM && customGlyphs.length() > 0)
@@ -5163,7 +5167,7 @@ void register_cocos2dx_js_core(JSContext* cx, JS::HandleObject global)
 void register_cocos2dx_js_extensions(JSContext* cx, JS::HandleObject global)
 {
     JS::RootedObject labelProto(cx, jsb_cocos2d_Label_prototype);
-    JS_DefineFunction(cx, labelProto, "createWithTTF", js_cocos2dx_Label_createWithTTF, 4, JSPROP_ENUMERATE | JSPROP_PERMANENT);
+    //JS_DefineFunction(cx, labelProto, "createWithTTF", js_cocos2dx_Label_createWithTTF, 4, JSPROP_ENUMERATE | JSPROP_PERMANENT);
     JS_DefineFunction(cx, labelProto, "setTTFConfig", js_cocos2dx_Label_setTTFConfig, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);
 
     JS::RootedObject nodeGridProto(cx, jsb_cocos2d_NodeGrid_prototype);
@@ -5251,6 +5255,10 @@ void register_cocos2dx_js_extensions(JSContext* cx, JS::HandleObject global)
     JS_DefineFunction(cx, fileUtilsProto, "getDataFromFile", js_cocos2dx_CCFileUtils_getDataFromFile, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);
 
     JS::RootedObject tmpObj(cx);
+
+    tmpObj = anonEvaluate(cx, global, "(function () { return cc.Label; })()").toObjectOrNull();
+    JS_DefineFunction(cx, tmpObj, "createWithTTF", js_cocos2dx_Label_createWithTTF, 4, JSPROP_READONLY | JSPROP_PERMANENT);
+
     tmpObj = anonEvaluate(cx, global, "(function () { return cc.EventListenerTouchOneByOne; })()").toObjectOrNull();
     JS_DefineFunction(cx, tmpObj, "create", js_EventListenerTouchOneByOne_create, 0, JSPROP_READONLY | JSPROP_PERMANENT);
     
