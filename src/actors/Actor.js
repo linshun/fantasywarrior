@@ -1,4 +1,4 @@
-var Actor = cc.Sprite3D.extend({
+var Actor = cc.EffectSprite3D.extend({
     _stateMachine:null,
 
     ctor:function(modelpath){

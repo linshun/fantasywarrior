@@ -1,21 +1,12 @@
-var particleRes = {
-    "iceTrail" : "FX/iceTrail.plist",
-    "magic" : "FX/magic.plist",
-    "pixi" : "FX/pixi.plist",
-    "puffRing" : "FX/puffRing.plist",
-    "puffRing2" : "FX/puffRing2.plist",
-    "walkpuff" : "FX/walkingPuff.plist"
-}
-
-var spriteFrameRes = [
-    "FX/FX.plist",
-    "chooseRole/chooserole.plist",
-    "battlefieldUI/battleFieldUI.plist",
-    "mainmenuscene/mainmenuscene.plist",
-];
-
 var LoadingLayer = cc.Layer.extend({
     _loading:[],
+    _slime:null,
+    _slimeOriginX:0,
+    _slimeOriginY:0,
+    _loadingbar:null,
+    _num:0,
+    _totalResource:0,
+
 
     ctor:function () {
         this._super();
@@ -23,6 +14,7 @@ var LoadingLayer = cc.Layer.extend({
     },
 
     init:function(){
+        this._totalResource = spriteFrameRes.length + Object.keys(particleRes).length;
         var size = cc.winSize;
         //add background
         var background = new cc.Sprite("loadingscene/bg.jpg");
@@ -40,7 +32,10 @@ var LoadingLayer = cc.Layer.extend({
         loadingbar.setColor(cc.color(0, 0, 0));
         loadingbar.setOpacity(70);
         loadingbar.setPercent(0);
+        this._loadingbarSize = loadingbar.getContentSize().width*3;
         this.addChild(loadingbar);
+
+        this._loadingbar = loadingbar;
 
         //add label
         this.addLoadingText();
@@ -49,11 +44,34 @@ var LoadingLayer = cc.Layer.extend({
         this.slimeAction();
 
         this.scheduleUpdate();
+
         return true;
     },
 
     update:function(dt){
+        this._num++;
+        if(this._num > this._totalResource){
+            this.unscheduleUpdate();
+            //replace scene
+            cc.director.replaceScene(new MainMenuScene());
+            return;
+        }
 
+        this._loadingbar.setPercent(this._num/this._totalResource * 100);
+
+        //loading text action
+        var loadingAction = cc.jumpBy(0.016, cc.p(0, 0), 50, 1);
+        var loadingIndex = this._num%this._loading.length;
+        this._loading[loadingIndex].runAction(loadingAction);
+
+        //slime action
+        this._slime.runAction(cc.moveTo(dt, cc.p(this._slimeOriginX+this._loadingbarSize*this._loadingbar.getPercent()/100, this._slimeOriginY)))
+
+        //loading resource
+        if(this._num < spriteFrameRes.length)
+            this.cacheTexture(this._num);
+        else
+            this.cacheParticle(this._num - spriteFrameRes.length);
     },
 
     addLoadingText:function(){
@@ -71,10 +89,35 @@ var LoadingLayer = cc.Layer.extend({
 
     slimeAction:function(){
         var slime = new Slime();
-        slime.setRotation3D(cc.vec3(-90, -90, 0));
+        // slime.setAIEnabled(false);
+        slime.setRotation3D(cc.vec3(0, 30, 0));
         this.addChild(slime, 33);
-        slime.setPosition(cc.winSize.width/2, cc.winSize.height/2 - 100);
-        //todo
+        this._slimeOriginX = cc.winSize.width * 0.2;
+        this._slimeOriginY = cc.winSize.height * 0.3;
+        slime.setPosition(this._slimeOriginX, this._slimeOriginY);
+        this._slime = slime;
+        
+        var dur = 0.6, bsc = 27;
+        slime.runAction(cc.spawn(
+            cc.sequence(cc.delayTime(dur/8), cc.JumpBy3D.create(dur*7/8, cc.vec3(0, 0, 0), 30, 1)),
+
+            cc.sequence(
+                cc.scaleTo(dur/8, bsc*1.4, bsc*1.4, bsc*0.75).easing(cc.easeSineOut()),
+                cc.scaleTo(dur/8, bsc*0.85, bsc*0.85, bsc*1.3).easing(cc.easeSineOut()),
+                cc.scaleTo(dur/8, bsc*1.2, bsc*1.2, bsc*0.9).easing(cc.easeSineOut()),
+                cc.scaleTo(dur/8, bsc*0.95, bsc*0.95, bsc*1.1).easing(cc.easeSineOut()),
+                cc.scaleTo(dur*4/8, bsc, bsc, bsc).easing(cc.easeSineOut())
+            )
+        ).repeatForever());
+    },
+
+    cacheParticle:function(index){
+        var keys = Object.keys(particleRes);
+        ParticleManager.addPlistData(keys[index], particleRes[keys[index]]);
+    },
+
+    cacheTexture:function(index){
+        cc.spriteFrameCache.addSpriteFrames(spriteFrameRes[index]);
     }
 });
 
