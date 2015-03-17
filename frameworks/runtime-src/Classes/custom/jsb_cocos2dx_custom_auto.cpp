@@ -447,6 +447,22 @@ void js_cocos2d_EffectSprite3D_finalize(JSFreeOp *fop, JSObject *obj) {
     CCLOGINFO("jsbindings: finalizing JS object %p (EffectSprite3D)", obj);
 }
 
+static bool js_cocos2d_EffectSprite3D_ctor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
+    cocos2d::EffectSprite3D *nobj = new (std::nothrow) cocos2d::EffectSprite3D();
+    if (nobj) {
+        nobj->autorelease();
+    }
+    js_proxy_t* p = jsb_new_proxy(nobj, obj);
+    AddNamedObjectRoot(cx, &p->obj, "cocos2d::EffectSprite3D");
+    bool isFound = false;
+    if (JS_HasProperty(cx, obj, "_ctor", &isFound) && isFound)
+        ScriptingCore::getInstance()->executeFunctionWithOwner(OBJECT_TO_JSVAL(obj), "_ctor", args);
+    args.rval().setUndefined();
+    return true;
+}
 void js_register_cocos2dx_custom_EffectSprite3D(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_EffectSprite3D_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_EffectSprite3D_class->name = "EffectSprite3D";
@@ -470,6 +486,7 @@ void js_register_cocos2dx_custom_EffectSprite3D(JSContext *cx, JS::HandleObject 
         JS_FN("addEffect", js_cocos2dx_custom_EffectSprite3D_addEffect, 3, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getMesh", js_cocos2dx_custom_EffectSprite3D_getMesh, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getMeshNum", js_cocos2dx_custom_EffectSprite3D_getMeshNum, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("ctor", js_cocos2d_EffectSprite3D_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
 
