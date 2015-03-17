@@ -134,13 +134,14 @@ def main():
         tojs_root = '%s/tools/tojs' % project_root
         output_dir = '%s/frameworks/js-bindings/bindings/auto' % project_root
 
-        cmd_args = {'cocos2dx.ini' : ('cocos2d-x', 'jsb_cocos2dx_auto'), \
-                    'cocos2dx_extension.ini' : ('cocos2dx_extension', 'jsb_cocos2dx_extension_auto'), \
-                    'cocos2dx_builder.ini' : ('cocos2dx_builder', 'jsb_cocos2dx_builder_auto'), \
-                    'cocos2dx_ui.ini' : ('cocos2dx_ui', 'jsb_cocos2dx_ui_auto'), \
-                    'cocos2dx_studio.ini' : ('cocos2dx_studio', 'jsb_cocos2dx_studio_auto'), \
-                    'cocos2dx_spine.ini' : ('cocos2dx_spine', 'jsb_cocos2dx_spine_auto'), \
-                    'cocos2dx_3d.ini' : ('cocos2dx_3d', 'jsb_cocos2dx_3d_auto')
+        cmd_args = {
+                    # 'cocos2dx.ini' : ('cocos2d-x', 'jsb_cocos2dx_auto'), \
+                    # 'cocos2dx_extension.ini' : ('cocos2dx_extension', 'jsb_cocos2dx_extension_auto'), \
+                    # 'cocos2dx_builder.ini' : ('cocos2dx_builder', 'jsb_cocos2dx_builder_auto'), \
+                    # 'cocos2dx_ui.ini' : ('cocos2dx_ui', 'jsb_cocos2dx_ui_auto'), \
+                    # 'cocos2dx_studio.ini' : ('cocos2dx_studio', 'jsb_cocos2dx_studio_auto'), \
+                    # 'cocos2dx_spine.ini' : ('cocos2dx_spine', 'jsb_cocos2dx_spine_auto'), \
+                    # 'cocos2dx_3d.ini' : ('cocos2dx_3d', 'jsb_cocos2dx_3d_auto')
                     }
         target = 'spidermonkey'
         generator_py = '%s/generator.py' % cxx_generator_root
@@ -156,9 +157,11 @@ def main():
                 _run_cmd('dos2unix *')
 
         
-        custom_cmd_args = {}
+        custom_cmd_args = {
+            'cocos2dx_custom.ini' : ('cocos2dx_custom', 'jsb_cocos2dx_custom_auto')
+        }
         if len(custom_cmd_args) > 0:
-            output_dir = '%s/frameworks/custom/auto' % project_root
+            output_dir = '%s/frameworks/runtime-src/Classes/custom' % project_root
             for key in custom_cmd_args.keys():
                 args = custom_cmd_args[key]
                 cfg = '%s/%s' % (tojs_root, key)
