@@ -1,5 +1,8 @@
 var Mage = Actor.extend({
     _type:"Mage",
+    _useWeaponId:ReSkin.mage.weapon,
+    _useArmourId:ReSkin.mage.armour,
+    _useHelmetId:ReSkin.mage.helmet,
     
     ctor:function(){
         this._super("model/mage/mage.c3b");
@@ -12,7 +15,54 @@ var Mage = Actor.extend({
     },
 
     setDefaultEqt:function(){
-        
+        this.updateWeapon();
+        this.updateHelmet();
+        this.updateArmour();
+    },
+
+    updateWeapon:function(){
+        if(this._useWeaponId === 0){
+            this.getMeshByName("fashi_wuqi01").setVisible(true);
+            this.getMeshByName("fashi_wuqi2").setVisible(false);
+        }else{
+            this.getMeshByName("fashi_wuqi01").setVisible(false);
+            this.getMeshByName("fashi_wuqi2").setVisible(true);
+        }
+    },
+
+    updateHelmet:function(){
+        if(this._useHelmetId === 0){
+            this.getMeshByName("fashi_tou01").setVisible(true);
+            this.getMeshByName("fashi_tou2").setVisible(false);
+        }else{
+            this.getMeshByName("fashi_tou01").setVisible(false);
+            this.getMeshByName("fashi_tou2").setVisible(true);
+        }
+    },
+
+    updateArmour:function(){
+        if(this._useArmourId === 0){
+            this.getMeshByName("fashi_shenti01").setVisible(true);
+            this.getMeshByName("fashi_shenti2").setVisible(false);
+        }else{
+            this.getMeshByName("fashi_shenti01").setVisible(false);
+            this.getMeshByName("fashi_shenti2").setVisible(true);
+        }
+    },
+
+    switchWeapon:function(){
+        this._useWeaponId = (this._useWeaponId + 1) % 2;
+        this.updateWeapon();
+    },
+
+    switchHelmet:function(){
+        this._useHelmetId = (this._useHelmetId + 1) % 2;
+        this.updateHelmet();
+    },
+
+    switchArmour:function(){
+        this._useArmourId = (this._useArmourId + 1) % 2;
+        this.updateArmour();
     }
 });
 

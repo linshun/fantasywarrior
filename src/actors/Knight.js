@@ -1,5 +1,8 @@
 var Knight = Actor.extend({
     _type:"Knight",
+    _useWeaponId:ReSkin.knight.weapon,
+    _useArmourId:ReSkin.knight.armour,
+    _useHelmetId:ReSkin.knight.helmet,
 
     ctor:function(){
         this._super("model/knight/knight.c3b");
@@ -11,7 +14,54 @@ var Knight = Actor.extend({
 
     //set default equipment
     setDefaultEqt:function(){
+        this.updateWeapon();
+        this.updateHelmet();
+        this.updateArmour();
+    },
 
+    updateWeapon:function(){
+        if(this._useWeaponId === 0){
+            this.getMeshByName("zhanshi_wuqi01").setVisible(true);
+            this.getMeshByName("zhanshi_wuqi02").setVisible(false);
+        }else{
+            this.getMeshByName("zhanshi_wuqi01").setVisible(false);
+            this.getMeshByName("zhanshi_wuqi02").setVisible(true);
+        }
+    },
+
+    updateHelmet:function(){
+        if(this._useHelmetId === 0){
+            this.getMeshByName("zhanshi_tou01").setVisible(true);
+            this.getMeshByName("zhanshi_tou02").setVisible(false);
+        }else{
+            this.getMeshByName("zhanshi_tou01").setVisible(false);
+            this.getMeshByName("zhanshi_tou02").setVisible(true);
+        }
+    },
+
+    updateArmour:function(){
+        if(this._useArmourId === 0){
+            this.getMeshByName("zhanshi_shenti01").setVisible(true);
+            this.getMeshByName("zhanshi_shenti02").setVisible(false);
+        }else{
+            this.getMeshByName("zhanshi_shenti01").setVisible(false);
+            this.getMeshByName("zhanshi_shenti02").setVisible(true);
+        }
+    },
+
+    switchWeapon:function(){
+        this._useWeaponId = (this._useWeaponId + 1) % 2;
+        this.updateWeapon();
+    },
+
+    switchHelmet:function(){
+        this._useHelmetId = (this._useHelmetId + 1) % 2;
+        this.updateHelmet();
+    },
+
+    switchArmour:function(){
+        this._useArmourId = (this._useArmourId + 1) % 2;
+        this.updateArmour();
     }
 });
 

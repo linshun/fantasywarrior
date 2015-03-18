@@ -1,5 +1,8 @@
 var Archer = Actor.extend({
     _type:"Archer",
+    _useWeaponId:ReSkin.archer.weapon,
+    _useArmourId:ReSkin.archer.armour,
+    _useHelmetId:ReSkin.archer.helmet,
     
     ctor:function(){
         this._super("model/archer/archer.c3b");
@@ -12,8 +15,71 @@ var Archer = Actor.extend({
     },
 
     setDefaultEqt:function(){
-        
+        this.updateWeapon();
+        this.updateHelmet();
+        this.updateArmour();
+        this.showOrHideArrow(false, 0);
+    },
+
+    updateWeapon:function(){
+        if(this._useWeaponId === 0){
+            this.getMeshByName("gongjianshou_gong01").setVisible(true);
+            this.getMeshByName("gongjianshou_gong02").setVisible(false);
+        }else{
+            this.getMeshByName("gongjianshou_gong01").setVisible(false);
+            this.getMeshByName("gongjianshou_gong02").setVisible(true);
+        }
+    },
+
+    updateHelmet:function(){
+        if(this._useHelmetId === 0){
+            this.getMeshByName("gongjianshou_tou01").setVisible(true);
+            this.getMeshByName("gonajingshou_tou02").setVisible(false);
+        }else{
+            this.getMeshByName("gongjianshou_tou01").setVisible(false);
+            this.getMeshByName("gonajingshou_tou02").setVisible(true);
+        }
+    },
+
+    updateArmour:function(){
+        if(this._useArmourId === 0){
+            this.getMeshByName("gongjianshou_shenti01").setVisible(true);
+            this.getMeshByName("gonjianshou_shenti02").setVisible(false);
+        }else{
+            this.getMeshByName("gongjianshou_shenti01").setVisible(false);
+            this.getMeshByName("gonjianshou_shenti02").setVisible(true);
+        }
+    },
+
+    //show/hide arrow
+    //isShow: true:Show false:Hide
+    //type: 0:show/hide all 1:show/hide 1 2:show/hide 2
+    showOrHideArrow:function(isShow, arrowType){
+        if(arrowType === 0){
+            this.getMeshByName("gongjiashou_jian01").setVisible(isShow);
+            this.getMeshByName("gongjianshou_jian02").setVisible(isShow);  
+        }else if(arrowType === 1){
+            this.getMeshByName("gongjiashou_jian01").setVisible(isShow);
+        }else if(arrowType === 2){
+            this.getMeshByName("gongjianshou_jian02").setVisible(isShow);
+        }
+    },
+
+    switchWeapon:function(){
+        this._useWeaponId = (this._useWeaponId + 1) % 2;
+        this.updateWeapon();
+    },
+
+    switchHelmet:function(){
+        this._useHelmetId = (this._useHelmetId + 1) % 2;
+        this.updateHelmet();
+    },
+
+    switchArmour:function(){
+        this._useArmourId = (this._useArmourId + 1) % 2;
+        this.updateArmour();
     }
+
 });
 
 Archer.Actions = {
