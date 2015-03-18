@@ -183,7 +183,7 @@ bool js_cocos2dx_custom_Effect3DOutline_setOutlineWidth(JSContext *cx, uint32_t 
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_Effect3DOutline_setOutlineWidth : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_Effect3DOutline_setOutlineWidth : Error processing arguments");
         cobj->setOutlineWidth(arg0);
         args.rval().setUndefined();
@@ -341,7 +341,7 @@ bool js_cocos2dx_custom_EffectSprite3D_addEffect(JSContext *cx, uint32_t argc, j
         double arg1;
         ssize_t arg2;
         ok &= jsval_to_vector3(cx, args.get(0), &arg0);
-        ok &= JS::ToNumber( cx, args.get(1), &arg1) && !isnan(arg1);
+        ok &= JS::ToNumber( cx, args.get(1), &arg1) && !std::isnan(arg1);
         ok &= jsval_to_ssize(cx, args.get(2), &arg2);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_EffectSprite3D_addEffect : Error processing arguments");
         cobj->addEffect(arg0, arg1, arg2);
@@ -629,7 +629,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setRotatePerSecondVar(JSContext 
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setRotatePerSecondVar : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setRotatePerSecondVar : Error processing arguments");
         cobj->setRotatePerSecondVar(arg0);
         args.rval().setUndefined();
@@ -703,7 +703,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setRotation(JSContext *cx, uint3
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setRotation : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setRotation : Error processing arguments");
         cobj->setRotation(arg0);
         args.rval().setUndefined();
@@ -723,7 +723,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setTangentialAccel(JSContext *cx
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setTangentialAccel : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setTangentialAccel : Error processing arguments");
         cobj->setTangentialAccel(arg0);
         args.rval().setUndefined();
@@ -743,7 +743,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setScaleY(JSContext *cx, uint32_
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setScaleY : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setScaleY : Error processing arguments");
         cobj->setScaleY(arg0);
         args.rval().setUndefined();
@@ -763,7 +763,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setScaleX(JSContext *cx, uint32_
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setScaleX : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setScaleX : Error processing arguments");
         cobj->setScaleX(arg0);
         args.rval().setUndefined();
@@ -801,7 +801,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setStartRadius(JSContext *cx, ui
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setStartRadius : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setStartRadius : Error processing arguments");
         cobj->setStartRadius(arg0);
         args.rval().setUndefined();
@@ -821,7 +821,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setRotatePerSecond(JSContext *cx
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setRotatePerSecond : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setRotatePerSecond : Error processing arguments");
         cobj->setRotatePerSecond(arg0);
         args.rval().setUndefined();
@@ -841,7 +841,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setEndSize(JSContext *cx, uint32
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setEndSize : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setEndSize : Error processing arguments");
         cobj->setEndSize(arg0);
         args.rval().setUndefined();
@@ -897,7 +897,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setEndRadius(JSContext *cx, uint
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setEndRadius : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setEndRadius : Error processing arguments");
         cobj->setEndRadius(arg0);
         args.rval().setUndefined();
@@ -973,7 +973,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setStartSpin(JSContext *cx, uint
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setStartSpin : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setStartSpin : Error processing arguments");
         cobj->setStartSpin(arg0);
         args.rval().setUndefined();
@@ -993,7 +993,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setDuration(JSContext *cx, uint3
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setDuration : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setDuration : Error processing arguments");
         cobj->setDuration(arg0);
         args.rval().setUndefined();
@@ -1148,7 +1148,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setLifeVar(JSContext *cx, uint32
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setLifeVar : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setLifeVar : Error processing arguments");
         cobj->setLifeVar(arg0);
         args.rval().setUndefined();
@@ -1273,7 +1273,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setStartSpinVar(JSContext *cx, u
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setStartSpinVar : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setStartSpinVar : Error processing arguments");
         cobj->setStartSpinVar(arg0);
         args.rval().setUndefined();
@@ -1329,7 +1329,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setTangentialAccelVar(JSContext 
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setTangentialAccelVar : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setTangentialAccelVar : Error processing arguments");
         cobj->setTangentialAccelVar(arg0);
         args.rval().setUndefined();
@@ -1405,7 +1405,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setRadialAccelVar(JSContext *cx,
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setRadialAccelVar : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setRadialAccelVar : Error processing arguments");
         cobj->setRadialAccelVar(arg0);
         args.rval().setUndefined();
@@ -1425,7 +1425,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setStartSize(JSContext *cx, uint
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setStartSize : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setStartSize : Error processing arguments");
         cobj->setStartSize(arg0);
         args.rval().setUndefined();
@@ -1445,7 +1445,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setSpeed(JSContext *cx, uint32_t
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setSpeed : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setSpeed : Error processing arguments");
         cobj->setSpeed(arg0);
         args.rval().setUndefined();
@@ -1521,7 +1521,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setEndRadiusVar(JSContext *cx, u
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setEndRadiusVar : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setEndRadiusVar : Error processing arguments");
         cobj->setEndRadiusVar(arg0);
         args.rval().setUndefined();
@@ -1617,7 +1617,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setLife(JSContext *cx, uint32_t 
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setLife : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setLife : Error processing arguments");
         cobj->setLife(arg0);
         args.rval().setUndefined();
@@ -1637,7 +1637,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setAngleVar(JSContext *cx, uint3
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setAngleVar : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setAngleVar : Error processing arguments");
         cobj->setAngleVar(arg0);
         args.rval().setUndefined();
@@ -1677,7 +1677,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setEndSizeVar(JSContext *cx, uin
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setEndSizeVar : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setEndSizeVar : Error processing arguments");
         cobj->setEndSizeVar(arg0);
         args.rval().setUndefined();
@@ -1697,7 +1697,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setAngle(JSContext *cx, uint32_t
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setAngle : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setAngle : Error processing arguments");
         cobj->setAngle(arg0);
         args.rval().setUndefined();
@@ -1753,7 +1753,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setEndSpinVar(JSContext *cx, uin
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setEndSpinVar : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setEndSpinVar : Error processing arguments");
         cobj->setEndSpinVar(arg0);
         args.rval().setUndefined();
@@ -1865,7 +1865,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setSpeedVar(JSContext *cx, uint3
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setSpeedVar : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setSpeedVar : Error processing arguments");
         cobj->setSpeedVar(arg0);
         args.rval().setUndefined();
@@ -1905,7 +1905,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setEmissionRate(JSContext *cx, u
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setEmissionRate : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setEmissionRate : Error processing arguments");
         cobj->setEmissionRate(arg0);
         args.rval().setUndefined();
@@ -1961,7 +1961,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setScale(JSContext *cx, uint32_t
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setScale : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setScale : Error processing arguments");
         cobj->setScale(arg0);
         args.rval().setUndefined();
@@ -2062,7 +2062,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setStartSizeVar(JSContext *cx, u
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setStartSizeVar : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setStartSizeVar : Error processing arguments");
         cobj->setStartSizeVar(arg0);
         args.rval().setUndefined();
@@ -2176,7 +2176,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setEndSpin(JSContext *cx, uint32
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setEndSpin : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setEndSpin : Error processing arguments");
         cobj->setEndSpin(arg0);
         args.rval().setUndefined();
@@ -2196,7 +2196,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setRadialAccel(JSContext *cx, ui
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setRadialAccel : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setRadialAccel : Error processing arguments");
         cobj->setRadialAccel(arg0);
         args.rval().setUndefined();
@@ -2216,7 +2216,7 @@ bool js_cocos2dx_custom_BillboardParticleSystem_setStartRadiusVar(JSContext *cx,
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setStartRadiusVar : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_BillboardParticleSystem_setStartRadiusVar : Error processing arguments");
         cobj->setStartRadiusVar(arg0);
         args.rval().setUndefined();
@@ -3046,7 +3046,7 @@ bool js_cocos2dx_custom_EffectNormalMapped_setKBump(JSContext *cx, uint32_t argc
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_custom_EffectNormalMapped_setKBump : Invalid Native Object");
     if (argc == 1) {
         double arg0;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_EffectNormalMapped_setKBump : Error processing arguments");
         cobj->setKBump(arg0);
         args.rval().setUndefined();
@@ -3461,9 +3461,9 @@ bool js_cocos2dx_custom_JumpBy3D_initWithDuration(JSContext *cx, uint32_t argc, 
         cocos2d::Vec3 arg1;
         double arg2;
         int arg3;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         ok &= jsval_to_vector3(cx, args.get(1), &arg1);
-        ok &= JS::ToNumber( cx, args.get(2), &arg2) && !isnan(arg2);
+        ok &= JS::ToNumber( cx, args.get(2), &arg2) && !std::isnan(arg2);
         ok &= jsval_to_int32(cx, args.get(3), (int32_t *)&arg3);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_JumpBy3D_initWithDuration : Error processing arguments");
         bool ret = cobj->initWithDuration(arg0, arg1, arg2, arg3);
@@ -3485,9 +3485,9 @@ bool js_cocos2dx_custom_JumpBy3D_create(JSContext *cx, uint32_t argc, jsval *vp)
         cocos2d::Vec3 arg1;
         double arg2;
         int arg3;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         ok &= jsval_to_vector3(cx, args.get(1), &arg1);
-        ok &= JS::ToNumber( cx, args.get(2), &arg2) && !isnan(arg2);
+        ok &= JS::ToNumber( cx, args.get(2), &arg2) && !std::isnan(arg2);
         ok &= jsval_to_int32(cx, args.get(3), (int32_t *)&arg3);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_JumpBy3D_create : Error processing arguments");
         cocos2d::JumpBy3D* ret = cocos2d::JumpBy3D::create(arg0, arg1, arg2, arg3);
@@ -3611,9 +3611,9 @@ bool js_cocos2dx_custom_JumpTo3D_create(JSContext *cx, uint32_t argc, jsval *vp)
         cocos2d::Vec3 arg1;
         double arg2;
         int arg3;
-        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !isnan(arg0);
+        ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
         ok &= jsval_to_vector3(cx, args.get(1), &arg1);
-        ok &= JS::ToNumber( cx, args.get(2), &arg2) && !isnan(arg2);
+        ok &= JS::ToNumber( cx, args.get(2), &arg2) && !std::isnan(arg2);
         ok &= jsval_to_int32(cx, args.get(3), (int32_t *)&arg3);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_JumpTo3D_create : Error processing arguments");
         cocos2d::JumpTo3D* ret = cocos2d::JumpTo3D::create(arg0, arg1, arg2, arg3);
@@ -3892,9 +3892,9 @@ bool js_cocos2dx_custom_Water_create(JSContext *cx, uint32_t argc, jsval *vp)
         ok &= jsval_to_std_string(cx, args.get(1), &arg1);
         ok &= jsval_to_std_string(cx, args.get(2), &arg2);
         ok &= jsval_to_ccsize(cx, args.get(3), &arg3);
-        ok &= JS::ToNumber( cx, args.get(4), &arg4) && !isnan(arg4);
-        ok &= JS::ToNumber( cx, args.get(5), &arg5) && !isnan(arg5);
-        ok &= JS::ToNumber( cx, args.get(6), &arg6) && !isnan(arg6);
+        ok &= JS::ToNumber( cx, args.get(4), &arg4) && !std::isnan(arg4);
+        ok &= JS::ToNumber( cx, args.get(5), &arg5) && !std::isnan(arg5);
+        ok &= JS::ToNumber( cx, args.get(6), &arg6) && !std::isnan(arg6);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_custom_Water_create : Error processing arguments");
         cocos2d::Water* ret = cocos2d::Water::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
         jsval jsret = JSVAL_NULL;
