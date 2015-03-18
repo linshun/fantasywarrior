@@ -1,4 +1,6 @@
 var Slime = Actor.extend({
+    _type:"Slime",
+    
     ctor:function(){
         this._super("model/slime/slime.c3b");
         this.setTexture("model/slime/baozi.jpg");
