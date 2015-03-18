@@ -100,6 +100,7 @@ var ChooseRoleLayer = (function(){
                 ReSkin.archer = {weapon:this._archer._useWeaponId, armour:this._archer._useArmourId, helmet:this._archer._useHelmetId};
                 ReSkin.mage = {weapon:this._mage._useWeaponId, armour:this._mage._useArmourId, helmet:this._mage._useHelmetId};
 
+                cc.audioEngine.stopMusic();
                 cc.audioEngine.playEffect(BGM_RES.MAINMENUSTART);
                 this.unschedule(this._hero_rotate);
                 cc.director.replaceScene(new BattleScene);

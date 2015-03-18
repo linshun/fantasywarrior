@@ -19,6 +19,7 @@
         "src/MainMenuScene.js",
         "src/ChooseRoleScene.js",
         "src/BattleScene.js",
+        "src/BattleFieldUI.js",
 
         "src/actors/Actor.js",
         "src/actors/FSM.js",
