@@ -68,10 +68,10 @@ var LoadingLayer = cc.Layer.extend({
         this._slime.runAction(cc.moveTo(dt, cc.p(this._slimeOriginX+this._loadingbarSize*this._loadingbar.getPercent()/100, this._slimeOriginY)))
 
         //loading resource
-        if(this._num < spriteFrameRes.length)
-            this.cacheTexture(this._num);
+        if(this._num <= spriteFrameRes.length)
+            this.cacheTexture(this._num-1);
         else
-            this.cacheParticle(this._num - spriteFrameRes.length);
+            this.cacheParticle(this._num - spriteFrameRes.length -1);
     },
 
     addLoadingText:function(){
