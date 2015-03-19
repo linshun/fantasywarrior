@@ -24,7 +24,7 @@
 
 cmake_minimum_required(VERSION 2.8)
 
-set(APP_NAME MyGame)
+set(APP_NAME js-fantasywarrior3d)
 project (${APP_NAME})
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/js-bindings/cocos2d-x/cmake/Modules/")
@@ -256,6 +256,17 @@ endif()
 set(GAME_SRC
   frameworks/runtime-src/proj.linux/main.cpp
   frameworks/runtime-src/Classes/AppDelegate.cpp
+  frameworks/runtime-src/Classes/custom/BillboardParticleSystem.cpp
+  frameworks/runtime-src/Classes/custom/DrawNode3D.cpp
+  frameworks/runtime-src/Classes/custom/EffectSprite3D.cpp
+  frameworks/runtime-src/Classes/custom/JumpBy3D.cpp
+  frameworks/runtime-src/Classes/custom/JumpTo3D.cpp
+  frameworks/runtime-src/Classes/custom/Water.cpp
+  frameworks/runtime-src/Classes/custom/EffectSprite.cpp
+  frameworks/runtime-src/Classes/custom/ShadowSprite.cpp
+  frameworks/runtime-src/Classes/custom/CCSequence3D.cpp
+  frameworks/runtime-src/Classes/custom/GreyShader.cpp
+  frameworks/runtime-src/Classes/custom/jsb_cocos2dx_custom_auto.cpp
 )
 
 # cocos2d
