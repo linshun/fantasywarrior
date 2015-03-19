@@ -1,6 +1,7 @@
 UIZorder = 2000
 FXZorder = 1999
 CelLine = 0.009
+currentLayer = null;
 
 var particleRes = {
     "iceTrail" : "FX/iceTrail.plist",

@@ -1,10 +1,20 @@
-var BattleLayer = cc.Layer.extend({
+var BattleLayer = (function(){
+
+    var specialCamera = {valid:false, position:cc.p(0, 0)};
+    var cameraOffset = cc.vec3(150, 0, 0);
+    var cameraOffsetMin = cc.p(-300, -400);
+    var cameraOffsetMax = cc.p(300, 400);
+
+    return cc.Layer.extend({
     _uiLayer:null,
     _camera:null,
+    _gameMaster:null,
 
     ctor:function(){
         this._super();
         this.setCascadeColorEnabled(true);
+        this._gameMaster = new GameMaster(this);
+        this.scheduleUpdate();
 
         cc.eventManager.addListener({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
@@ -40,14 +50,45 @@ var BattleLayer = cc.Layer.extend({
         this._camera.setGlobalZOrder(10);
         this.addChild(this._camera);
 
-        /*    for val = HeroManager.first, HeroManager.last do
-        local sprite = HeroManager[val]
-        if sprite._puff then
-            sprite._puff:setCamera(camera)
-        end
-    end    */
+        for(var i = 0; i < this._gameMaster.heroes.length; ++i){
+            this._gameMaster.heroes[i]._puff.setCamera(this._camera);
+        }
 
         this._camera.addChild(uiLayer);
+        // this._camera.setPosition3D(cc.vec3(-2800, -110, 300));
+        // this._camera.lookAt(cc.vec3(-2800, 200, 50))
+    },
+
+    update:function(dt){
+        this._gameMaster.update(dt);
+        // this.collisionDetect(dt)
+        // this.solveAttacks(dt)
+        this.moveCamera(dt)
+    },
+
+    collisionDetect:function(dt){
+
+    },
+
+    solveAttacks:function(dt){
+
+    },
+
+    moveCamera:function(dt){
+        if(!this._camera)
+            return;
+
+        var cameraPostion = this._camera.getPosition();
+        var focusPoint = this._gameMaster.getFocusPointOfHeros();
+        
+        if(specialCamera.valid == true){
+            //todo actor::updateAttack sent the message
+        }else if(this._gameMaster.heroes.length > 0){
+            var temp = cc.pLerp(cameraPostion, cc.p(focusPoint.x+cameraOffset.x, cameraOffset.y + focusPoint.y-cc.winSize.height*3/4), 2*dt);
+            var position = cc.vec3(temp.x, temp.y, cc.winSize.height/2-0);
+            this._camera.setPosition3D(position);
+            this._camera.lookAt(cc.vec3(position.x, focusPoint.y, 50.0), cc.vec3(0, 0, 1));
+        }
     },
 
     onTouchBegan:function(touch, event){
@@ -62,6 +103,7 @@ var BattleLayer = cc.Layer.extend({
 
     }
 });
+})();
 
 var BattleScene = cc.Scene.extend({
     onEnter:function () {
@@ -69,5 +111,7 @@ var BattleScene = cc.Scene.extend({
         cc.Texture2D.setDefaultAlphaPixelFormat(4);//RGB565
         var layer = new BattleLayer();
         this.addChild(layer);
+        //this is an ugly way
+        currentLayer = layer;
     }
 });
