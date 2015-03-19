@@ -1,5 +1,6 @@
 var BattleLayer = cc.Layer.extend({
-    uiLayer:null,
+    _uiLayer:null,
+    _camera:null,
 
     ctor:function(){
         this._super();
@@ -32,9 +33,21 @@ var BattleLayer = cc.Layer.extend({
         uiLayer.setScale(0.25);
         uiLayer.ignoreAnchorPointForPosition(false);
         uiLayer.setGlobalZOrder(3000);
-        this.uiLayer = uiLayer;
+        this._uiLayer = uiLayer;
 
         //set camera
+        this._camera = cc.Camera.createPerspective(60.0, cc.winSize.width/cc.winSize.height, 10.0, 4000.0);
+        this._camera.setGlobalZOrder(10);
+        this.addChild(this._camera);
+
+        /*    for val = HeroManager.first, HeroManager.last do
+        local sprite = HeroManager[val]
+        if sprite._puff then
+            sprite._puff:setCamera(camera)
+        end
+    end    */
+
+        this._camera.addChild(uiLayer);
     },
 
     onTouchBegan:function(touch, event){
