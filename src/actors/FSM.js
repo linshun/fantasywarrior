@@ -1,10 +1,10 @@
 var State = function(){
-
+    this._type = "Base state";
 }
 
 State.prototype = {
     onEnter:function(actor){
-
+        cc.log(actor._type + " enter state : " + this._type);
     },
 
     execute:function(actor, dt){
@@ -12,8 +12,40 @@ State.prototype = {
     },
 
     onExit:function(actor){
-
+        cc.log(actor._type + " exit state : " + this._type);
     }
+}
+
+var StateIDLE = function(){
+    State.call(this);
+    this._type = "Idle State";
+};
+
+StateIDLE.prototype = Object.create(State.prototype);
+StateIDLE.prototype.constructor = StateIDLE;
+
+StateIDLE.prototype.execute = function(actor, dt){
+    //todo
+}
+
+var StateWalk = function(){
+    State.call(this);
+    this._type = "Walk State";
+};
+StateWalk.prototype = Object.create(State.prototype);
+StateWalk.prototype.constructor = StateWalk;
+StateWalk.prototype.execute = function(actor, dt){
+
+}
+
+var StateAttack = function(){
+    State.call(this);
+    this._type = "Attack State";
+}
+StateAttack.prototype = Object.create(State.prototype);
+StateAttack.prototype.constructor = StateAttack;
+StateAttack.prototype.execute = function(actor, dt){
+
 }
 
 var StateMachine = function(owner){
@@ -33,3 +65,4 @@ StateMachine.prototype = {
             this._state.execute(this._owner, dt);
     }
 }
+

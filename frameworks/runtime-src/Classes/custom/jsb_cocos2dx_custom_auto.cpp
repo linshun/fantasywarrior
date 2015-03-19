@@ -12,6 +12,10 @@
 #include "ShadowSprite.h"
 #include "Water.h"
 
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#define isnan std::isnan
+#endif
+
 template<class T>
 static bool dummy_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
