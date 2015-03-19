@@ -55,8 +55,12 @@ var BattleLayer = (function(){
         }
 
         this._camera.addChild(uiLayer);
-        // this._camera.setPosition3D(cc.vec3(-2800, -110, 300));
-        // this._camera.lookAt(cc.vec3(-2800, 200, 50))
+
+        MessageDispatcher.registerMessage(MessageDispatcher.MessageType.SPECIAL_PERSPECTIVE, this.specialPerspective, this);
+    },
+
+    specialPerspective:function(param){
+
     },
 
     update:function(dt){
@@ -96,11 +100,35 @@ var BattleLayer = (function(){
     },
 
     onTouchMoved:function(touch, event){
-
+        if(this.UIcontainsPoint(touch.getLocation()) == null){
+            var delta = touch.getDelta();
+            cameraOffset = cc.pGetClampPoint(cc.pSub(cameraOffset, delta), cameraOffsetMin, cameraOffsetMax);
+        }
     },
 
     onTouchEnded:function(touch, event){
+        var location = touch.getLocation();
+        var message = this.UIcontainsPoint(location);
+        if(message !== null){
+            MessageDispatcher.dispatchMessage(message, [1]);
+        }
+    },
 
+    UIcontainsPoint:function(position){
+        var message = null;
+
+        var rectKnight = this._uiLayer.knightPngFrame.getBoundingBox();
+        var rectArcher = this._uiLayer.archerPngFrame.getBoundingBox();
+        var rectMage = this._uiLayer.magePngFrame.getBoundingBox();
+
+        if(cc.rectContainsPoint(rectKnight, position) && this._uiLayer.knightAngry.getPercentage() == 100)
+            message = MessageDispatcher.MessageType.SPECIAL_KNIGHT;
+        else if(cc.rectContainsPoint(rectArcher, position) && this._uiLayer.archerAngry.getPercentage() == 100)
+            message = MessageDispatcher.MessageType.SPECIAL_ARCHER;
+        else if(cc.rectContainsPoint(rectMage, position) && this._uiLayer.mageAngry.getPercentage() == 100)
+            message = MessageDispatcher.MessageType.SPECIAL_MAGE
+
+        return message;
     }
 });
 })();

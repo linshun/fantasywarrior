@@ -8,6 +8,18 @@ var BattleFieldUI = cc.Layer.extend({
         this.timeInit();
 
         cc.audioEngine.playMusic(BGM_RES.BATTLEFIELDBGM);
+
+        MessageDispatcher.registerMessage(MessageDispatcher.MessageType.BLOOD_MINUS, this.bloodMinus, this);
+        MessageDispatcher.registerMessage(MessageDispatcher.MessageType.ANGRY_CHANGE, this.angryChange, this);
+    },
+
+
+    bloodMinus:function(heroActor){
+
+    },
+
+    angryChange:function(angry){
+
     },
 
     avatarInit:function(){

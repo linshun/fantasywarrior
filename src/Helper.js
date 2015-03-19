@@ -13,4 +13,8 @@
             animate3d.retain();
         return animate3d;
     }
+    
+    cc.pGetClampPoint = function(pt1, pt2, pt3){
+        return cc.p(cc.clampf(pt1.x, pt2.x, pt3.x), cc.clampf(pt1.y, pt2.y, pt3.y));
+    }
 })(this);
