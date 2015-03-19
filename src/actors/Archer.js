@@ -8,10 +8,10 @@ var Archer = Actor.extend({
         this._super("model/archer/archer.c3b");
         this.setScale(1.6);
         this.addEffect(cc.vec3(0, 0, 0), CelLine, -1);
-        this.setRotation3D(cc.vec3(0, 0, 0));
-        // this.setRotation(-90);
         this.setDefaultEqt();
         this.idleMode();
+        this.initShadow();
+        this.initPuff();
     },
 
     setDefaultEqt:function(){

@@ -12,6 +12,8 @@ var Mage = Actor.extend({
         // this.setRotation(-90);
         this.setDefaultEqt();
         this.idleMode();
+        this.initShadow();
+        this.initPuff();
     },
 
     setDefaultEqt:function(){

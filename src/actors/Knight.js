@@ -10,6 +10,8 @@ var Knight = Actor.extend({
         this.addEffect(cc.vec3(0, 0, 0), CelLine, -1);
         this.setDefaultEqt();
         this.idleMode();
+        this.initShadow();
+        this.initPuff();
     },
 
     //set default equipment
