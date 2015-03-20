@@ -14,8 +14,8 @@
         this._layer = layer;
         _G.HeroManager = [];
         _G.MonsterManager = [];
-
         this.init();
+
     };
     _G.GameMaster = GameMaster;
 
@@ -24,7 +24,7 @@
             this.addHeroes();
             this.addMonsters();
 
-            for(var i=0; i < 4; ++i)
+            for(var i=0; i < 1; ++i)
                 this.randomshowMonster(true);
 
             stage=1;
@@ -36,6 +36,7 @@
             knight.setRotation3D(cc.vec3(90, 0, -90));
             this._layer.addChild(knight);
             knight.idleMode();
+            knight.setAIEnabled(true);
             HeroManager.push(knight);
 
             var mage = new Mage();
@@ -56,8 +57,8 @@
         addMonsters:function(){
             this.addDragon();
             this.addSlime();
-            // this.addPiglet();
-            // this.addRat();
+            this.addPiglet();
+            this.addRat();
         },
 
         addDragon:function(){
@@ -166,7 +167,7 @@
                         cc.delayTime(Math.random()),
                         cc.callFunc(function(){obj.setVisible(true);}),
                         cc.JumpBy3D.create(0.5, cc.vec3(-200*(Math.random()*0.6+0.7), -1700 + 300*Math.random(), 0),150, 1),
-                        cc.callFunc(function(){cc.log(obj.y);obj.setAIEnabled(true);})
+                        cc.callFunc(function(){obj.setAIEnabled(true);})
                     ));
                 obj.setFacing(135);
             }else{

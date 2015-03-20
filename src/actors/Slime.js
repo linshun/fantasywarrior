@@ -20,7 +20,7 @@ var Slime = Actor.extend({
         copyObject(ActorCommonValues, this);
         copyObject(SlimeValues, this);
 
-        this._findEnemy(this._racetype);
+        this._target = this._findEnemy(this._racetype);
         this.walkMode();
         this.setVertexZ(0);
     },

@@ -14,8 +14,13 @@ var Actor = cc.EffectSprite3D.extend({
         copyObject(ActorCommonValues, this);
 
         //todo HPCounter
+        this._hpCounter = new HPCounter();
+        this.addChild(this._hpCounter);
 
         this._effectNode = new cc.Node();
+        this._monsterHeight = 70;
+        this._heroHeight = 150;
+        
         if(currentLayer != null)
             currentLayer.addChild(this._effectNode);
 
@@ -79,8 +84,12 @@ var Actor = cc.EffectSprite3D.extend({
     },
 
     walkUpdate:function(dt){
-        cc.log()
+        cc.log("walk update")
         if(this._target && this._target._isalive){
+            cc.log("target position : " + this._target._myPos.x + "," + this._target._myPos.y)
+            cc.log("my position : " + this._myPos.x + "," + this._myPos.y)
+            this._targetFacing = cc.pToAngleSelf(cc.pSub(this._target._myPos,this._myPos));
+            cc.log(this._targetFacing)
             if(this._inRange())
                 this.attackMode();
         }else{
@@ -97,12 +106,47 @@ var Actor = cc.EffectSprite3D.extend({
 
     attackUpdate:function(dt){
         cc.log("attack update")
+        this._attackTimer += dt;
+        if(this._attackTimer > this._attackFrequency){
+            this._attackTimer -= this._attackFrequency;
+
+            // time for an attack, which attack should i do?
+            var random_special = Math.random();
+            if(random_special > this._specialAttackChance){
+                var attackAction = cc.sequence(
+                    this.__proto__.constructor.Actions.attack1.clone(),
+                    cc.callFunc(function(){this.normalAttack()}, this),
+                    this.__proto__.constructor.Actions.attack2.clone(),
+                    cc.callFunc(function(){this.playAnimation("idle", true); this._cooldown = false;}, this)
+                    );
+                this.stopAction(this._curAnimation3d);
+                this.runAction(attackAction);
+                this._curAnimation = attackAction;
+                this._cooldown = true;
+            }else{
+                this.setCascadeColorEnabled(true);
+                //todo special message
+                // MessageDispatcher.dispatchMessage(MessageDispatchCenter.MessageType.SPECIAL_PERSPECTIVE, []);
+
+                var attackAction = cc.sequence(
+                    this.__proto__.constructor.Actions.specialattack1.clone(),
+                    cc.callFunc(function(){this.specialAttack()}, this),
+                    this.__proto__.constructor.Actions.specialattack2.clone(),
+                    cc.callFunc(function(){this.playAnimation("idle", true); this._cooldown = false;}, this)
+                    );
+                this.stopAction(this._curAnimation3d);
+                this.runAction(attackAction);
+                this._curAnimation = attackAction;
+                this._cooldown = true;
+            }
+        }
     },
 
     movementUpdate:function(dt){
-        cc.log("movementUpdate")
         //facing
         if(this._curFacing != this._targetFacing){
+            cc.log(this._curFacing)
+            cc.log(this._targetFacing)
             var angleDt = this._curFacing - this._targetFacing;
             angleDt %= Math.PI*2;
             var turnleft = (angleDt - Math.PI) < 0;
@@ -115,21 +159,19 @@ var Actor = cc.EffectSprite3D.extend({
                 this._curFacing = this._curFacing - turnby;
             else
                 this._curFacing = this._curFacing + turnby;
-            cc.log("face : " + this._curFacing)
             this.setRotation(-cc.radiansToDegrees(this._curFacing));
         }
         //position
-        cc.log(this._curSpeed)
-        cc.log(this._speed)
         if(this._statetype != EnumStateType.WALKING)
+            //if I am not walking, i need to slow down
             this._curSpeed = cc.clampf(this._curSpeed - this._decceleration*dt, 0, this._speed)
         else if(this._curSpeed < this._speed)
+            //I am in walk mode, if i can speed up, then speed up
             this._curSpeed = cc.clampf(this._curSpeed + this._acceleration*dt, 0, this._speed);
 
-        cc.log(this._curSpeed)
         if(this._curSpeed > 0){
-            var targetPostion = cc.pRotateByAngle(cc.pAdd(cc.p(this._curSpeed*dt, 0), this._myPos), this._myPos, this._curFacing);
-            cc.log("target position " +targetPostion.x + "," +targetPostion.y)
+            var p1 = this._myPos;
+            var targetPostion = cc.pRotateByAngle(cc.pAdd(cc.p(this._curSpeed*dt, 0), p1), p1, this._curFacing)
             this.setPosition(targetPostion);
         }
     },
@@ -154,11 +196,19 @@ var Actor = cc.EffectSprite3D.extend({
     setStateType:function(type){
         this._statetype = type;
         if(this._puff){
-            if(type == EnumStateType.WALKING)
-                this._puff.setEmissionRate(5);
-            else
-                this._puff.setEmissionRate(0);
+            // if(type == EnumStateType.WALKING)
+                // this._puff.setEmissionRate(5);
+            // else
+                // this._puff.setEmissionRate(0);
         }
+    },
+
+    normalAttack:function(){
+        //todo
+    },
+
+    specialAttack:function(){
+        //todo
     },
 
     idleMode:function(){
@@ -206,6 +256,7 @@ var Actor = cc.EffectSprite3D.extend({
     },
 
     _findEnemy:function(heroOrMonster){
+        cc.log("find enemy ing..")
         var shortest = this._searchDistance,
             target = null, allDead = true;
         var list;
@@ -217,7 +268,7 @@ var Actor = cc.EffectSprite3D.extend({
         for(var i = 0; i < list.length; ++i){
             var temp = list[i];
             var dis = cc.pDistance(this._myPos, temp._myPos)
-            cc.log("distance"+dis)
+            cc.log(temp._name + " distance : "+dis)
             if(temp._isalive){
                 if(dis < shortest){
                     shortest = dis;
@@ -226,6 +277,7 @@ var Actor = cc.EffectSprite3D.extend({
                 allDead = false;
             }
         }
+        cc.log("fine enmy end: " + target._name)
         return target;//{target:target, allDead:allDead};
     },
 

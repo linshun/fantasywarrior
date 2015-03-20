@@ -6,6 +6,12 @@ gameMaster = null;
 HeroManager = null;
 MonsterManager = null;
 
+G =
+{
+    bloodPercentDropSpeed : 2,
+    activearea : {left : -2800, right : 1000, bottom : 100, top : 700},
+}
+
 var particleRes = {
     "iceTrail" : "FX/iceTrail.plist",
     "magic" : "FX/magic.plist",

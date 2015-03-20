@@ -17,7 +17,7 @@ var Knight = Actor.extend({
         this.initShadow();
         this.initPuff();
 
-        // this.schedule(this.update, 0);
+        this.schedule(this.update, 0);
     },
 
     //set default equipment

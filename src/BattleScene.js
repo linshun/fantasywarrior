@@ -5,6 +5,55 @@ var BattleLayer = (function(_G){
     var cameraOffsetMin = cc.p(-300, -400);
     var cameraOffsetMax = cc.p(300, 400);
 
+    function collision(object){
+        for(var i = 0; i < HeroManager.length; ++i){
+            var sprite = HeroManager[i];
+            if(sprite._isalive && sprite != object)
+                solveCollision(sprite, object);
+        }
+
+        for(var i = 0; i < MonsterManager.length; ++i){
+            var sprite = MonsterManager[i];
+            if(sprite._isalive && sprite != object)
+                solveCollision(sprite, object);
+        }
+    }
+
+    function solveCollision(object1, object2){
+        var miniDistance = object1._radius + object2._radius;
+        var obj1Pos = object1.getPosition();
+        var obj2Pos = object2.getPosition();
+        var tempDistance = cc.pDistance(obj1Pos, obj2Pos);
+
+        if(tempDistance < miniDistance){
+            var angle = cc.pToAngleSelf(cc.pSub(obj1Pos, obj2Pos));
+            var distance = miniDistance - tempDistance + 1;
+            var distance1 = (1 - object1._mass/(object1._mass + object2._mass))*distance;
+            var distance2 = distance - distance1;
+
+            object1.setPosition(cc.pRotateByAngle(cc.pAdd(cc.p(distance1, 0), obj1Pos), obj1Pos, angle));
+            object2.setPosition(cc.pRotateByAngle(cc.pAdd(cc.p(cc.p(-distance2, 0)), obj2Pos), obj2Pos, angle));
+        }
+    }
+
+    function isOutOfBound(object){
+        var currentPos = object.getPosition();
+        
+        if(currentPos.x < G.activearea.left)
+            currentPos.x = G.activearea.left;
+
+        if(currentPos.x > G.activearea.right)
+            currentPos.x = G.activearea.right;
+
+        if(currentPos.y < G.activearea.bottom)
+            currentPos.y = G.activearea.bottom;
+
+        if(currentPos.y > G.activearea.top)
+            currentPos.y = G.activearea.top;
+
+        object.setPosition(currentPos);
+    }
+
     return cc.Layer.extend({
     _uiLayer:null,
     _camera:null,
@@ -66,13 +115,22 @@ var BattleLayer = (function(_G){
 
     update:function(dt){
         this._gameMaster.update(dt);
-        // this.collisionDetect(dt)
+        this.collisionDetect(dt)
         // this.solveAttacks(dt)
         this.moveCamera(dt)
     },
 
     collisionDetect:function(dt){
-
+        for(var i = 0; i < HeroManager.length; ++i){
+            var sprite = HeroManager[i];
+            if(sprite._isalive){
+                collision(sprite);
+                isOutOfBound(sprite);
+                // sprite._effectNode.setPosition(sprite._myPos);
+            }else{
+                HeroManager.splice(i, 1);
+            }
+        }
     },
 
     solveAttacks:function(dt){
