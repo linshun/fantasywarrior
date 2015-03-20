@@ -2,6 +2,9 @@ UIZorder = 2000
 FXZorder = 1999
 CelLine = 0.009
 currentLayer = null;
+gameMaster = null;
+HeroManager = null;
+MonsterManager = null;
 
 var particleRes = {
     "iceTrail" : "FX/iceTrail.plist",
@@ -69,8 +72,93 @@ MageProperty = {
     dead : "audios/effects/mage/dead.mp3"
 }
 
+EnumRaceType = 
+    { 
+        HERO:"HERO",  //only this
+        MONSTER:"MONSTER" //and this
+    }
+
+
+EnumStateType =
+    {
+        IDLE:"IDLE",
+        WALKING:"WALKING",
+        ATTACKING:"ATTACKING",
+        DEFENDING:"DEFENDING",
+        KNOCKING:"KNOCKING",
+        DYING:"DYING",
+        DEAD:"DEAD"
+    }
+
+ActorCommonValues =
+{
+    _aliveTime      : 0, //time the actor is alive in seconds
+    _curSpeed       : 0, //current speed the actor is traveling in units/seconds
+    
+    //runtime modified values
+    _curFacing      : 0, // current direction the actor is facing, in radians, 0 is to the right
+    _isalive        : true,
+    _AITimer        : 0, // accumulated timer before AI will execute, in seconds
+    _AIEnabled      : false, //if false, AI will not run
+    _attackTimer    : 0, //accumulated timer to decide when to attack, in seconds
+    _timeKnocked    : 0, //accumulated timer to recover from knock, in seconds
+    _cooldown       : false, //if its true, then you are currently playing attacking animation,
+    _hp             : 1000, //current hit point
+    _goRight        : true,
+    
+    //target variables
+    _targetFacing   : 0, //direction the actor Wants to turn to
+    
+    _target         : null, //the enemy actor 
+
+    _myPos : cc.p(0, 0),
+    
+    _angry          : 0,
+    _angryMax       : 500
+}
+ActorDefaultValues =
+{
+    _racetype       : EnumRaceType.HERO, //type of the actor
+    _statetype      : null, // AI state machine
+    _sprite3d       : null, //place to hold 3d model
+    
+    _radius         : 50, //actor collider size
+    _mass           : 100, //weight of the role, it affects collision
+    _shadowSize     : 70, //the size of the shadow under the actor
+
+    //character strength
+    _maxhp          : 1000,
+    _defense        : 100,
+    _specialAttackChance : 0, 
+    _recoverTime    : 0.8,//time takes to recover from knock, in seconds
+    
+    _speed          : 500, //actor maximum movement speed in units/seconds
+    _turnSpeed      : cc.degreesToRadians(225), //actor turning speed in radians/seconds
+    _acceleration   : 750, //actor movement acceleration, in units/seconds
+    _decceleration  : 750*1.7, //actor movement decceleration, in units/seconds
+    
+    _AIFrequency    : 1.0, //how often AI executes in seconds
+    _attackFrequency : 0.01, //an attack move every few seconds
+    _searchDistance : 5000, //distance which enemy can be found
+
+    _attackRange    : 100, //distance the actor will stop and commence attack
+    
+    //attack collider info, it can be customized
+    _normalAttack   : {//data for normal attack
+        minRange : 0, // collider inner radius
+        maxRange : 130, //collider outer radius
+        angle    : cc.degreesToRadians(30), // collider angle, 360 for full circle, other wise, a fan shape is created
+        knock    : 50, //attack knock back distance
+        damage   : 800, // attack damage
+        mask     : EnumRaceType.HERO, // who created this attack collider
+        duration : 0, // 0 duration means it will be removed upon calculation
+        speed    : 0, // speed the collider is traveling
+        criticalChance:0
+    } 
+}
+
 KnightValues = {
-    // _racetype       : EnumRaceType.HERO,
+    _racetype       : EnumRaceType.HERO,
     _name           : "Knight",
     _radius         : 50,
     _mass           : 1000,
@@ -92,7 +180,7 @@ KnightValues = {
         angle    : cc.degreesToRadians(70),
         knock    : 60,
         damage   : 250,
-        // mask     : EnumRaceType.HERO,
+        mask     : EnumRaceType.HERO,
         duration : 0,
         speed    : 0,
         criticalChance : 0.15
@@ -103,7 +191,7 @@ KnightValues = {
         angle    : cc.degreesToRadians(160),
         knock    : 150,
         damage   : 350,
-        // mask     : EnumRaceType.HERO,
+        mask     : EnumRaceType.HERO,
         duration : 0,
         speed    : 0,
         criticalChance : 0.35
@@ -111,7 +199,7 @@ KnightValues = {
 }
 
 ArcherValues = {
-    // _racetype       : EnumRaceType.HERO,
+    _racetype       : EnumRaceType.HERO,
     _name           : "Archer",
     _radius         : 50,
     _mass           : 800,
@@ -134,7 +222,7 @@ ArcherValues = {
         angle    : cc.degreesToRadians(360),
         knock    : 100,
         damage   : 200,
-        // mask     : EnumRaceType.HERO,
+        mask     : EnumRaceType.HERO,
         duration : 1.3,
         speed    : 900,
         criticalChance : 0.33
@@ -145,7 +233,7 @@ ArcherValues = {
         angle    : cc.degreesToRadians(360),
         knock    : 100,
         damage   : 200,
-        // mask     : EnumRaceType.HERO,
+        mask     : EnumRaceType.HERO,
         duration : 1.5,
         speed    : 850,
         criticalChance : 0.5,
@@ -156,7 +244,7 @@ ArcherValues = {
 }
 
 MageValues = {
-    // _racetype       : EnumRaceType.HERO,
+    _racetype       : EnumRaceType.HERO,
     _name           : "Mage",
     _radius         : 50,
     _mass           : 800,
@@ -178,7 +266,7 @@ MageValues = {
         angle    : cc.degreesToRadians(360),
         knock    : 10,
         damage   : 280,
-        // mask     : EnumRaceType.HERO,
+        mask     : EnumRaceType.HERO,
         duration : 2,
         speed    : 400,
         criticalChance : 0.05
@@ -197,6 +285,183 @@ MageValues = {
         curDOTTime : 0.75,
         DOTApplied : false
     }, 
+}
+
+
+DragonValues = {
+    _racetype       : EnumRaceType.MONSTER,
+    _name           : "Dragon",
+    _radius         : 50,
+    _mass           : 100,
+    _shadowSize     : 70,
+
+    _hp             : 600,
+    _maxhp          : 600,
+    _defense        : 130,
+    _attackFrequency : 5.2,
+    _recoverTime    : 0.8,
+    _AIFrequency    : 1.337,
+    _attackRange    : 350,
+    
+    _speed          : 300,
+    _turnSpeed      : cc.degreesToRadians(180),
+    _acceleration   : 250,
+    _decceleration  : 750*1.7,
+
+    _normalAttack   : {
+        minRange : 0,
+        maxRange : 40,
+        angle    : cc.degreesToRadians(360),
+        knock    : 50,
+        damage   : 400,
+        mask     : EnumRaceType.MONSTER,
+        duration : 1,
+        speed    : 350,
+        criticalChance : 0.15
+    }
+}
+SlimeValues = {
+    _racetype       : EnumRaceType.MONSTER,
+    _name           : "Slime",
+    _radius         : 35,
+    _mass           : 20,
+    _shadowSize     : 45,
+
+    _hp             : 300,
+    _maxhp          : 300,
+    _defense        : 65,
+    _attackFrequency : 1.5,
+    _recoverTime    : 0.7,
+    _AIFrequency    : 3.3,
+    _AITimer        : 2.0,
+    _attackRange    : 50,
+    
+    _speed          : 150,
+    _turnSpeed      : cc.degreesToRadians(270),
+    _acceleration   : 9999,
+    _decceleration  : 9999,
+
+    _normalAttack   : {
+        minRange : 0,
+        maxRange : 50,
+        angle    : cc.degreesToRadians(360),
+        knock    : 0,
+        damage   : 135,
+        mask     : EnumRaceType.MONSTER,
+        duration : 0,
+        speed    : 0,
+        criticalChance : 0.13
+    }
+}
+PigletValues = {
+    _racetype       : EnumRaceType.MONSTER,
+    _name           : "Piglet",
+    _radius         : 50,
+    _mass           : 69,
+    _shadowSize     : 60,
+
+    _hp             : 400,
+    _maxhp          : 400,
+    _defense        : 65,
+    _attackFrequency : 4.73,
+    _recoverTime    : 0.9,
+    _AIFrequency    : 2.3,
+    _attackRange    : 120,
+
+    _speed          : 350,
+    _turnSpeed      : cc.degreesToRadians(270),
+
+    _normalAttack   : {
+        minRange : 0,
+        maxRange : 120,
+        angle    : cc.degreesToRadians(50),
+        knock    : 0,
+        damage   : 150,
+        mask     : EnumRaceType.MONSTER,
+        duration : 0,
+        speed    : 0,
+        criticalChance : 0.15
+    }
+}
+RatValues = {
+    _racetype       : EnumRaceType.MONSTER,
+    _name           : "Rat",
+    _radius         : 70,
+    _mass           : 990,
+    _shadowSize     : 90,
+
+    _hp             : 2800,
+    _maxhp          : 2800,
+    _defense        : 200,
+    _attackFrequency : 3.0,
+    _recoverTime    : 0.4,
+    _AIFrequency    : 5.3,
+    _AITimer        : 5.0,
+    _attackRange    : 150,
+
+    _speed          : 400,
+    _turnSpeed      : cc.degreesToRadians(180),
+    _acceleration   : 200,
+    _decceleration  : 750*1.7,
+
+    _normalAttack   : {
+        minRange : 0,
+        maxRange : 150,
+        angle    : cc.degreesToRadians(100),
+        knock    : 250,
+        damage   : 210,
+        mask     : EnumRaceType.MONSTER,
+        duration : 0,
+        speed    : 0,
+        criticalChance :1
+    }
+}
+BossValues = {
+    _racetype       : EnumRaceType.MONSTER,
+    _name           : "Boss",
+    _radius         : 50,
+    _mass           : 100,
+    _shadowSize     : 65,
+
+    _hp             : 400,
+    _maxhp          : 450,
+    _defense        : 170,
+    _attackFrequency : 3.7,
+    _recoverTime    : 0.4,
+    _AIFrequency    : 5.3,
+    _AITimer        : 5.0,
+    _attackRange    : 110,
+
+    _speed          : 300,
+    _turnSpeed      : cc.degreesToRadians(225),
+    _acceleration   : 450,
+    _decceleration  : 750*1.7,
+
+    _normalAttack   : {
+        minRange : 0,
+        maxRange : 110,
+        angle    : cc.degreesToRadians(100),
+        knock    : 50,
+        damage   : 200,
+        mask     : EnumRaceType.MONSTER,
+        duration : 0,
+        speed    : 0,
+        criticalChance : 0.15
+    }, 
+    nova   : {
+        minRange : 0,
+        maxRange : 250,
+        angle    : cc.degreesToRadians(360),
+        knock    : 120,
+        damage   : 250,
+        mask     : EnumRaceType.MONSTER,
+        duration : 0.5,
+        speed    : 0,
+        criticalChance : 0.15,
+        DOTTimer : 0.3,
+        curDOTTime : 0.3,
+        DOTApplied : false
+    }
 }
 
 ReSkin = {

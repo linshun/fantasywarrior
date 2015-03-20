@@ -1,17 +1,23 @@
 var Knight = Actor.extend({
-    _type:"Knight",
-    _useWeaponId:ReSkin.knight.weapon,
-    _useArmourId:ReSkin.knight.armour,
-    _useHelmetId:ReSkin.knight.helmet,
 
     ctor:function(){
+        copyObject(ActorCommonValues, this);
+        copyObject(KnightValues, this);
+
         this._super("model/knight/knight.c3b");
+
+        this._useWeaponId = ReSkin.knight.weapon;
+        this._useArmourId = ReSkin.knight.armour;
+        this._useHelmetId = ReSkin.knight.helmet;
+        
         this.setScale(25);
         this.addEffect(cc.vec3(0, 0, 0), CelLine, -1);
         this.setDefaultEqt();
         this.idleMode();
         this.initShadow();
         this.initPuff();
+
+        // this.schedule(this.update, 0);
     },
 
     //set default equipment

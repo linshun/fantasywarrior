@@ -1,4 +1,4 @@
-var BattleLayer = (function(){
+var BattleLayer = (function(_G){
 
     var specialCamera = {valid:false, position:cc.p(0, 0)};
     var cameraOffset = cc.vec3(150, 0, 0);
@@ -14,6 +14,7 @@ var BattleLayer = (function(){
         this._super();
         this.setCascadeColorEnabled(true);
         this._gameMaster = new GameMaster(this);
+        _G.gameMaster = this._gameMaster;
         this.scheduleUpdate();
 
         cc.eventManager.addListener({
@@ -50,8 +51,8 @@ var BattleLayer = (function(){
         this._camera.setGlobalZOrder(10);
         this.addChild(this._camera);
 
-        for(var i = 0; i < this._gameMaster.heroes.length; ++i){
-            this._gameMaster.heroes[i]._puff.setCamera(this._camera);
+        for(var i = 0; i < HeroManager.length; ++i){
+            HeroManager[i]._puff.setCamera(this._camera);
         }
 
         this._camera.addChild(uiLayer);
@@ -87,7 +88,7 @@ var BattleLayer = (function(){
         
         if(specialCamera.valid == true){
             //todo actor::updateAttack sent the message
-        }else if(this._gameMaster.heroes.length > 0){
+        }else if(HeroManager.length > 0){
             var temp = cc.pLerp(cameraPostion, cc.p(focusPoint.x+cameraOffset.x, cameraOffset.y + focusPoint.y-cc.winSize.height*3/4), 2*dt);
             var position = cc.vec3(temp.x, temp.y, cc.winSize.height/2-0);
             this._camera.setPosition3D(position);
@@ -131,7 +132,7 @@ var BattleLayer = (function(){
         return message;
     }
 });
-})();
+})(this);
 
 var BattleScene = cc.Scene.extend({
     onEnter:function () {

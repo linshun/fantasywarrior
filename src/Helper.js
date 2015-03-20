@@ -13,8 +13,19 @@
             animate3d.retain();
         return animate3d;
     }
+
+    _G.copyObject = function(o1, o2){
+        for(var i in o1)
+            o2[i] = o1[i];
+    }
     
     cc.pGetClampPoint = function(pt1, pt2, pt3){
         return cc.p(cc.clampf(pt1.x, pt2.x, pt3.x), cc.clampf(pt1.y, pt2.y, pt3.y));
     }
+
+    cc.pToAngleSelf = function(self){
+        return Math.atan2(self.y, self.x)    
+    }
+    
+
 })(this);

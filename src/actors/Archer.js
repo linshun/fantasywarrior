@@ -1,17 +1,21 @@
 var Archer = Actor.extend({
-    _type:"Archer",
-    _useWeaponId:ReSkin.archer.weapon,
-    _useArmourId:ReSkin.archer.armour,
-    _useHelmetId:ReSkin.archer.helmet,
     
     ctor:function(){
+        copyObject(ActorCommonValues, this);
+        copyObject(ArcherValues, this);
         this._super("model/archer/archer.c3b");
+
+        this._useWeaponId = ReSkin.archer.weapon;
+        this._useArmourId = ReSkin.archer.armour;
+        this._useHelmetId = ReSkin.archer.helmet;
+        
         this.setScale(1.6);
         this.addEffect(cc.vec3(0, 0, 0), CelLine, -1);
         this.setDefaultEqt();
         this.idleMode();
         this.initShadow();
         this.initPuff();
+
     },
 
     setDefaultEqt:function(){

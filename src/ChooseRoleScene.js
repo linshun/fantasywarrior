@@ -147,7 +147,7 @@ var ChooseRoleLayer = (function(){
         switchTextWhenRotate:function(){
             //get hero type
             var hero = this.getChildByTag(TAG_middle);
-            var type = hero._type;
+            var type = hero._name;
             //get bag , bagSize and judge if has child
             var bag = this._bag, size = this._bag.getContentSize();
             var actor = bag.getChildByTag(101);
@@ -185,7 +185,7 @@ var ChooseRoleLayer = (function(){
 
         switchItemtextureWhenRotate:function(){
             var hero = this.getChildByTag(TAG_middle);
-            var type = hero._type;
+            var type = hero._name;
             var weaponTexture, armourTexture, helmetTexture;
 
             if(type === "Knight"){
@@ -214,29 +214,29 @@ var ChooseRoleLayer = (function(){
             var touchbeginPt;
 
             function getWeaponTextureName(hero){
-                if(hero._type === "Knight")
+                if(hero._name === "Knight")
                     return (hero._useWeaponId === 0) ? "knight_w_1.png" : "knight_w_0.png";
-                else if(hero._type === "Archer")
+                else if(hero._name === "Archer")
                     return (hero._useWeaponId === 0) ? "archer_w_1.png" : "archer_w_0.png";
-                else if(hero._type === "Mage")
+                else if(hero._name === "Mage")
                     return (hero._useWeaponId === 0) ? "mage_w_1.png" : "mage_w_0.png";
             }
 
             function getArmourTextureName(hero){
-                if(hero._type === "Knight")
+                if(hero._name === "Knight")
                     return (hero._useArmourId === 0) ? "knight_a_1.png" : "knight_a_0.png";
-                else if(hero._type === "Archer")
+                else if(hero._name === "Archer")
                     return (hero._useArmourId === 0) ? "archer_a_1.png" : "archer_a_0.png";
-                else if(hero._type === "Mage")
+                else if(hero._name === "Mage")
                     return (hero._useArmourId === 0) ? "mage_a_1.png" : "mage_a_0.png";
             }
 
             function getHelmetTextureName(hero){
-                if(hero._type === "Knight")
+                if(hero._name === "Knight")
                     return (hero._useHelmetId === 0) ? "knight_h_1.png" : "knight_h_0.png";
-                else if(hero._type === "Archer")
+                else if(hero._name === "Archer")
                     return (hero._useHelmetId === 0) ? "archer_h_1.png" : "archer_h_0.png";
-                else if(hero._type === "Mage")
+                else if(hero._name === "Mage")
                     return (hero._useHelmetId === 0) ? "mage_h_1.png" : "mage_h_0.png";
             }
 
@@ -343,7 +343,7 @@ var ChooseRoleLayer = (function(){
                         cc.spawn(cc.moveTo(rotatetime, pos[2]).easing(cc.easeCircleActionInOut())),
                         cc.callFunc(function(){
                             isMoving = false;
-                            playAudioWhenRotate(left._type);
+                            playAudioWhenRotate(left._name);
                         })
                     ));
                 left.runAction(cc.moveTo(rotatetime, pos[1]).easing(cc.easeCircleActionInOut()));
@@ -358,7 +358,7 @@ var ChooseRoleLayer = (function(){
                         cc.spawn(cc.moveTo(rotatetime, pos[0]).easing(cc.easeCircleActionInOut())),
                         cc.callFunc(function(){
                             isMoving = false;
-                            playAudioWhenRotate(right._type);
+                            playAudioWhenRotate(right._name);
                         })
                     ));
                 left.runAction(cc.moveTo(rotatetime, pos[2]).easing(cc.easeCircleActionInOut()));

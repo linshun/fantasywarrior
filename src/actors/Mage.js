@@ -1,11 +1,14 @@
 var Mage = Actor.extend({
-    _type:"Mage",
-    _useWeaponId:ReSkin.mage.weapon,
-    _useArmourId:ReSkin.mage.armour,
-    _useHelmetId:ReSkin.mage.helmet,
     
     ctor:function(){
+        copyObject(ActorCommonValues, this);
+        copyObject(MageValues, this);
         this._super("model/mage/mage.c3b");
+
+        this._useWeaponId = ReSkin.mage.weapon;
+        this._useArmourId = ReSkin.mage.armour;
+        this._useHelmetId = ReSkin.mage.helmet;
+
         this.setScale(1.9);
         this.addEffect(cc.vec3(0, 0, 0), CelLine, -1);
         this.setRotation3D(cc.vec3(0, 0, 0));
@@ -14,6 +17,7 @@ var Mage = Actor.extend({
         this.idleMode();
         this.initShadow();
         this.initPuff();
+
     },
 
     setDefaultEqt:function(){

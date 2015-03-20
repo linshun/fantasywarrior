@@ -30,6 +30,9 @@
         "src/actors/Slime.js",
         "src/actors/Knight.js",
         "src/actors/Mage.js",
-        "src/actors/Archer.js"
+        "src/actors/Archer.js",
+        "src/actors/Dragon.js",
+        "src/actors/Rat.js",
+        "src/actors/Piglet.js"
     ]
 }

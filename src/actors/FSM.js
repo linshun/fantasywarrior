@@ -4,7 +4,7 @@ var State = function(){
 
 State.prototype = {
     onEnter:function(actor){
-        cc.log(actor._type + " enter state : " + this._type);
+        cc.log(actor._name + " enter state : " + this._type);
     },
 
     execute:function(actor, dt){
@@ -12,7 +12,7 @@ State.prototype = {
     },
 
     onExit:function(actor){
-        cc.log(actor._type + " exit state : " + this._type);
+        cc.log(actor._name + " exit state : " + this._type);
     }
 }
 
@@ -61,6 +61,15 @@ StateMachine.prototype = {
     },
 
     update:function(dt){
+        // this._owner._myPos = this._owner.getPosition();
+        // this._owner._aliveTime += dt;
+        // if(this._AIEnabled){
+        //     this._AITimer += dt;
+        //     if(this._AITimer > this._AIFrequency){
+        //         this._AITimer -= this._AIFrequency;
+        //         this.AI(); //AI function does not run every tick
+        //     }
+        // }
         if(this._state)
             this._state.execute(this._owner, dt);
     }
