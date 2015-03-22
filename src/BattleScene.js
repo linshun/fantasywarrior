@@ -62,8 +62,6 @@ var BattleLayer = (function(_G){
     ctor:function(){
         this._super();
         this.setCascadeColorEnabled(true);
-        this._gameMaster = new GameMaster(this);
-        _G.gameMaster = this._gameMaster;
         this.scheduleUpdate();
 
         cc.eventManager.addListener({
@@ -95,6 +93,10 @@ var BattleLayer = (function(_G){
         uiLayer.setGlobalZOrder(3000);
         this._uiLayer = uiLayer;
 
+
+        this._gameMaster = new GameMaster(this);
+        _G.gameMaster = this._gameMaster;
+        
         //set camera
         this._camera = cc.Camera.createPerspective(60.0, cc.winSize.width/cc.winSize.height, 10.0, 4000.0);
         this._camera.setGlobalZOrder(10);

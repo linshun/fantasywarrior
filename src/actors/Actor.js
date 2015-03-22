@@ -8,7 +8,8 @@ var Actor = cc.EffectSprite3D.extend({
 
     ctor:function(modelpath){
         this._super(modelpath);
-        // this._stateMachine = new StateMachine(this);
+        
+        this.setCascadeColorEnabled(true);
 
         copyObject(ActorDefaultValues, this);
         copyObject(ActorCommonValues, this);
@@ -22,24 +23,181 @@ var Actor = cc.EffectSprite3D.extend({
         this._heroHeight = 150;
         
         if(currentLayer != null)
-            currentLayer.addChild(this._effectNode);
+            currentLayer._uiLayer.addChild(this._effectNode);
 
     },
 
-    update:function(dt){
-        //baseUpdate
-        this._myPos = this.getPosition();
-        this._aliveTime += dt;
-        if(this._AIEnabled){
-            this._AITimer += dt;
-            if(this._AITimer > this._AIFrequency){
-                this._AITimer -= this._AIFrequency;
-                this.AI(); //AI function does not run every tick
+    // addEffect:function(effect){
+    //     effect.setPosition(cc.pAdd(this.getPosition(), effect.getPosition()));
+    //     if(this._racetype != EnumRaceType.MONSTER)
+    //         effect.setVertexZ(this.getVertexZ() + this._heroHeight);
+    //     else
+    //         effect.setVertexZ(this.getVertexZ() + this._monsterHeight + effect.getVertexZ());
+    //     currentLayer.addChild(effect);
+    // },
+
+
+    initPuff:function(){
+        var puff = cc.BillboardParticleSystem.create(ParticleManager.getPlistData("walkpuff"));
+        var puffFrame = cc.spriteFrameCache.getSpriteFrame("walkingPuff.png");
+        puff.setTextureWithRect(puffFrame.getTexture(), puffFrame.getRect());
+        puff.setScale(1.5);
+        puff.setGlobalZOrder(0);
+        this._puff = puff;
+        this._effectNode.addChild(puff);
+    },
+
+
+    initShadow:function(){
+        this._circle = new cc.Sprite(
+            "#shadow.png");
+        //use Shadow size for aesthetic, use radius to see collision size
+        this._circle.setScale(25/this.getScale()*0.2)
+        this._circle.setOpacity(255*0.7);
+        // this._circle.setRotation3D(cc.vec3(90, 0, 0));
+        this.addChild(this._circle);
+    },
+
+
+    playAnimation:function(name, loop){
+        if(name == this._curAnimation)
+            return;
+
+        this.stopAllActions();
+        if(loop)
+            this._curAnimation3d = cc.repeatForever(this.__proto__.constructor.Actions[name].clone());
+        else
+            this._curAnimation3d = this.__proto__.constructor.Actions[name].clone();
+        
+        this.runAction(this._curAnimation3d);
+        this._curAnimation = name;
+    },
+
+
+    setStateType:function(type){
+        this._statetype = type;
+        if(this._puff){
+            // if(type == EnumStateType.WALKING)
+                // this._puff.setEmissionRate(5);
+            // else
+                // this._puff.setEmissionRate(0);
+        }
+    },
+
+    setAIEnabled:function(b){
+        this._AIEnabled = b;
+    },
+
+    setFacing:function(degrees){
+        this._curFacing = cc.degreesToRadians(degrees);
+        this._targetFacing = this._curFacing;
+        this.setRotation(degrees);
+    },
+
+
+    hurt:function(collider, dirKnockMode){
+        //todo
+    },
+
+    hurtSoundEffects:function(){
+
+    },
+
+    normalAttackSoundEffects:function(){
+
+    },
+
+    specialAttackSoundEffects:function(){
+
+    },
+
+    normalAttack:function(){
+        //todo
+        // BasicCollider.create(self._myPos, self._curFacing, self._normalAttack)
+        this.normalAttackSoundEffects();
+    },
+
+    specialAttack:function(){
+        //todo
+        //BasicCollider.create(self._myPos, self._curFacing, self._specialAttack)
+        this.specialAttackSoundEffects();
+    },
+
+
+    idleMode:function(){
+        this.setStateType(EnumStateType.IDLE)
+        this.playAnimation("idle", true);
+    },
+
+    walkMode:function(){
+        this.setStateType(EnumStateType.WALKING)
+        this.playAnimation("walk", true);
+    },
+
+    attackMode:function(){
+        this.setStateType(EnumStateType.ATTACKING)
+        this.playAnimation("idle", true); 
+        this._attackTimer = this._attackFrequency*3/4
+    },
+
+    knockMode:function(){
+        this.setStateType(EnumStateType.KNOCKING)
+        //todo
+    },
+
+    dyingMode:function(){
+        this.setStateType(EnumStateType.DYING)
+        //todo
+    },
+
+    playDyingEffects:function(){
+
+    },
+
+
+    stateMachineUpdate:function(dt){
+        var state = this._statetype;
+        if(state == EnumStateType.WALKING)
+            this.walkUpdate(dt);
+        else if(state == EnumStateType.KNOCKING)
+            this.knockingUpdate(dt);
+        else if(state == EnumStateType.ATTACKING)
+            this.attackUpdate(dt);
+    },
+
+    _findEnemy:function(heroOrMonster){
+        cc.log("find enemy ing..")
+        var shortest = this._searchDistance,
+            target = null, allDead = true;
+        var list;
+        if(heroOrMonster == EnumRaceType.MONSTER)
+            list = HeroManager;
+        else
+            list = MonsterManager;
+        
+        for(var i = 0; i < list.length; ++i){
+            var temp = list[i];
+            var dis = cc.pDistance(this._myPos, temp._myPos)
+            if(temp._isalive){
+                if(dis < shortest){
+                    shortest = dis;
+                    target = temp;
+                }
+                allDead = false;
             }
         }
-        // this._stateMachine.update(dt);
-        this.stateMachineUpdate(dt);
-        this.movementUpdate(dt);
+        cc.log("fine enmy end: " + target._name)
+        return target;//{target:target, allDead:allDead};
+    },
+
+    _inRange:function(){
+        if(!this._target)
+            return false;
+
+        if(this._target._isalive){
+            var attackDistance = this._attackRange + this._target._radius -1;
+            return (cc.pDistance(this._myPos, this._target._myPos) < attackDistance);
+        }
     },
 
     AI:function(){
@@ -73,39 +231,35 @@ var Actor = cc.EffectSprite3D.extend({
         }
     },
 
-    stateMachineUpdate:function(dt){
-        var state = this._statetype;
-        if(state == EnumStateType.WALKING)
-            this.walkUpdate(dt);
-        else if(state == EnumStateType.KNOCKING)
-            this.knockingUpdate(dt);
-        else if(state == EnumStateType.ATTACKING)
-            this.attackUpdate(dt);
-    },
 
-    walkUpdate:function(dt){
-        cc.log("walk update")
-        if(this._target && this._target._isalive){
-            cc.log("target position : " + this._target._myPos.x + "," + this._target._myPos.y)
-            cc.log("my position : " + this._myPos.x + "," + this._myPos.y)
-            this._targetFacing = cc.pToAngleSelf(cc.pSub(this._target._myPos,this._myPos));
-            cc.log(this._targetFacing)
-            if(this._inRange())
-                this.attackMode();
-        }else{
-            if(this._goRight)
-                this._targetFacing = 0;
-            else
-                this.idleMode();
+    update:function(dt){
+        //baseUpdate
+        this._myPos = this.getPosition();
+        this._aliveTime += dt;
+        if(this._AIEnabled){
+            this._AITimer += dt;
+            if(this._AITimer > this._AIFrequency){
+                this._AITimer -= this._AIFrequency;
+                this.AI(); //AI function does not run every tick
+            }
         }
+        // this._stateMachine.update(dt);
+        this.stateMachineUpdate(dt);
+        this.movementUpdate(dt);
     },
 
     knockingUpdate:function(dt){
-
+        if(this._aliveTime - this._timeKnocked > this._recoverTime){
+            this._timeKnocked = 0;
+            if(this._inRange())
+                this.attackMode();
+            else
+                this.walkMode();
+        }
     },
 
     attackUpdate:function(dt){
-        cc.log("attack update")
+        // cc.log(this._name + " attack update")
         this._attackTimer += dt;
         if(this._attackTimer > this._attackFrequency){
             this._attackTimer -= this._attackFrequency;
@@ -120,8 +274,9 @@ var Actor = cc.EffectSprite3D.extend({
                     cc.callFunc(function(){this.playAnimation("idle", true); this._cooldown = false;}, this)
                     );
                 this.stopAction(this._curAnimation3d);
+                // this.stopActionByTag(101);
                 this.runAction(attackAction);
-                this._curAnimation = attackAction;
+                this._curAnimation = "attack";
                 this._cooldown = true;
             }else{
                 this.setCascadeColorEnabled(true);
@@ -136,17 +291,34 @@ var Actor = cc.EffectSprite3D.extend({
                     );
                 this.stopAction(this._curAnimation3d);
                 this.runAction(attackAction);
-                this._curAnimation = attackAction;
+                this._curAnimation = "attack";
                 this._cooldown = true;
             }
+        }
+    },
+
+    walkUpdate:function(dt){
+        // cc.log(this._name + " walk update")
+        if(this._target && this._target._isalive){
+            
+            this._targetFacing = cc.pToAngleSelf(cc.pSub(this._target._myPos,this._myPos));
+            cc.log(this._targetFacing)
+            
+            if(this._inRange()){
+                cc.log("in attack range, ready to attack")
+                this.attackMode();
+            }
+        }else{
+            if(this._goRight)
+                this._targetFacing = 0;
+            else
+                this.idleMode();
         }
     },
 
     movementUpdate:function(dt){
         //facing
         if(this._curFacing != this._targetFacing){
-            cc.log(this._curFacing)
-            cc.log(this._targetFacing)
             var angleDt = this._curFacing - this._targetFacing;
             angleDt %= Math.PI*2;
             var turnleft = (angleDt - Math.PI) < 0;
@@ -159,7 +331,7 @@ var Actor = cc.EffectSprite3D.extend({
                 this._curFacing = this._curFacing - turnby;
             else
                 this._curFacing = this._curFacing + turnby;
-            this.setRotation(-cc.radiansToDegrees(this._curFacing));
+            this.setRotation(-cc.radiansToDegrees(this._curFacing) - 90);
         }
         //position
         if(this._statetype != EnumStateType.WALKING)
@@ -176,130 +348,6 @@ var Actor = cc.EffectSprite3D.extend({
         }
     },
 
-    getFSM:function(){
-        return this._stateMachine;
-    },
-
-    playAnimation:function(name, loop){
-        if(name == this._curAnimation)
-            return;
-
-        this.stopAllActions();
-        if(loop)
-            this._curAnimation3d = cc.repeatForever(this.__proto__.constructor.Actions[name].clone());
-        else
-            this._curAnimation3d = this.__proto__.constructor.Actions[name].clone();
-        this.runAction(this._curAnimation3d);
-        this._curAnimation = name;
-    },
-
-    setStateType:function(type){
-        this._statetype = type;
-        if(this._puff){
-            // if(type == EnumStateType.WALKING)
-                // this._puff.setEmissionRate(5);
-            // else
-                // this._puff.setEmissionRate(0);
-        }
-    },
-
-    normalAttack:function(){
-        //todo
-    },
-
-    specialAttack:function(){
-        //todo
-    },
-
-    idleMode:function(){
-        this.setStateType(EnumStateType.IDLE)
-        this.playAnimation("idle", true);
-    },
-
-    walkMode:function(){
-        this.setStateType(EnumStateType.WALKING)
-        this.playAnimation("walk", true);
-    },
-
-    attackMode:function(){
-        this.setStateType(EnumStateType.ATTACKING)
-        this.playAnimation("idle", true); // idle? not attack?
-        self._attackTimer = self._attackFrequency*3/4
-    },
-
-    knockMode:function(){
-        //todo
-    },
-
-    dyingMode:function(){
-        //todo
-    },
-
-    initShadow:function(){
-        this._circle = new cc.Sprite(
-            "#shadow.png");
-        //use Shadow size for aesthetic, use radius to see collision size
-        this._circle.setScale(25/this.getScale()*0.2)
-        this._circle.setOpacity(255*0.7);
-        this._circle.setRotation3D(cc.vec3(90, 0, 0));
-        this.addChild(this._circle);
-    },
-
-    initPuff:function(){
-        var puff = cc.BillboardParticleSystem.create(ParticleManager.getPlistData("walkpuff"));
-        var puffFrame = cc.spriteFrameCache.getSpriteFrame("walkingPuff.png");
-        puff.setTextureWithRect(puffFrame.getTexture(), puffFrame.getRect());
-        puff.setScale(1.5);
-        puff.setGlobalZOrder(0);
-        this._puff = puff;
-        this._effectNode.addChild(puff);
-    },
-
-    _findEnemy:function(heroOrMonster){
-        cc.log("find enemy ing..")
-        var shortest = this._searchDistance,
-            target = null, allDead = true;
-        var list;
-        if(heroOrMonster == EnumRaceType.MONSTER)
-            list = HeroManager;
-        else
-            list = MonsterManager;
-        cc.log(list.length)
-        for(var i = 0; i < list.length; ++i){
-            var temp = list[i];
-            var dis = cc.pDistance(this._myPos, temp._myPos)
-            cc.log(temp._name + " distance : "+dis)
-            if(temp._isalive){
-                if(dis < shortest){
-                    shortest = dis;
-                    target = temp;
-                }
-                allDead = false;
-            }
-        }
-        cc.log("fine enmy end: " + target._name)
-        return target;//{target:target, allDead:allDead};
-    },
-
-    _inRange:function(){
-        if(!this._target)
-            return;
-
-        if(this._target._isalive){
-            var attackDistance = this._attackRange + this._target._radius -1;
-            return (cc.pDistance(this._myPos, this._target._myPos) < attackDistance);
-        }
-    },
-
-    setAIEnabled:function(b){
-        this._AIEnabled = b;
-    },
-
-    setFacing:function(degrees){
-        this._curFacing = cc.degreesToRadians(degrees);
-        this._targetFacing = this._curFacing;
-        this.setRotation(degrees);
-    },
 
     //cc.pool will invoke this when put into pool
     unuse:function(){

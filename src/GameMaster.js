@@ -33,25 +33,25 @@
         addHeroes:function(){
             var knight = new Knight();
             knight.setPosition(battleSiteX[0], 270);
-            knight.setRotation3D(cc.vec3(90, 0, -90));
+            // knight.setRotation3D(cc.vec3(90, 0, -90));
             this._layer.addChild(knight);
             knight.idleMode();
             knight.setAIEnabled(true);
             HeroManager.push(knight);
 
-            var mage = new Mage();
-            mage.setPosition(battleSiteX[0], 400);
-            mage.setRotation3D(cc.vec3(90, 0, -90));
-            this._layer.addChild(mage);
-            mage.idleMode();
-            HeroManager.push(mage);
+            // var mage = new Mage();
+            // mage.setPosition(battleSiteX[0], 400);
+            // mage.setRotation3D(cc.vec3(90, 0, -90));
+            // this._layer.addChild(mage);
+            // mage.idleMode();
+            // HeroManager.push(mage);
 
-            var archer = new Archer();
-            archer.setPosition(battleSiteX[0], 150);
-            archer.setRotation3D(cc.vec3(90, 0, -90));
-            this._layer.addChild(archer);
-            archer.idleMode();
-            HeroManager.push(archer);
+            // var archer = new Archer();
+            // archer.setPosition(battleSiteX[0], 150);
+            // archer.setRotation3D(cc.vec3(90, 0, -90));
+            // this._layer.addChild(archer);
+            // archer.idleMode();
+            // HeroManager.push(archer);
         },
 
         addMonsters:function(){
@@ -167,7 +167,7 @@
                         cc.delayTime(Math.random()),
                         cc.callFunc(function(){obj.setVisible(true);}),
                         cc.JumpBy3D.create(0.5, cc.vec3(-200*(Math.random()*0.6+0.7), -1700 + 300*Math.random(), 0),150, 1),
-                        cc.callFunc(function(){obj.setAIEnabled(true);})
+                        cc.callFunc(function(){obj.setAIEnabled(true); obj._myPos = obj.getPosition()})
                     ));
                 obj.setFacing(135);
             }else{

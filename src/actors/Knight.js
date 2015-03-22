@@ -10,14 +10,27 @@ var Knight = Actor.extend({
         this._useArmourId = ReSkin.knight.armour;
         this._useHelmetId = ReSkin.knight.helmet;
         
+        if(currentLayer != null){
+            this._bloodBar = currentLayer._uiLayer.knightBlood
+            this._bloodBarClone = currentLayer._uiLayer.knightBloodClone
+            this._avatar = currentLayer._uiLayer.knightPng;
+        }
+
+
+
         this.setScale(25);
         this.addEffect(cc.vec3(0, 0, 0), CelLine, -1);
+        this.setRotation3D(cc.vec3(90, 0, 0));
+        this.setRotation(-90);
         this.setDefaultEqt();
         this.idleMode();
         this.initShadow();
         this.initPuff();
 
         this.schedule(this.update, 0);
+
+        //todo
+        //special attack message 
     },
 
     //set default equipment

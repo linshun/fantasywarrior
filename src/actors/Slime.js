@@ -4,6 +4,8 @@ var Slime = Actor.extend({
         copyObject(ActorCommonValues, this);
         copyObject(SlimeValues, this);
 
+        this._angryFace = false;
+
         this._super("model/slime/slime.c3b");
         this.setTexture("model/slime/baozi.jpg");
         this.setScale(17);
@@ -13,7 +15,7 @@ var Slime = Actor.extend({
 
         this.runAction(cc.repeatForever(createAnimation("model/slime/slime.c3b", 0, 22, 0.7)));
 
-        this.schedule(this.update, 0.5);
+        // this.schedule(this.update, 0);
     },
 
     reset:function(){
