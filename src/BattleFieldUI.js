@@ -7,7 +7,7 @@ var BattleFieldUI = cc.Layer.extend({
         this.touchButtonInit();
         this.timeInit();
 
-        cc.audioEngine.playMusic(BGM_RES.BATTLEFIELDBGM);
+        cc.audioEngine.playMusic(BGM_RES.BATTLEFIELDBGM, true);
 
         MessageDispatcher.registerMessage(MessageDispatcher.MessageType.BLOOD_MINUS, this.bloodMinus, this);
         MessageDispatcher.registerMessage(MessageDispatcher.MessageType.ANGRY_CHANGE, this.angryChange, this);

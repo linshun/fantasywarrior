@@ -54,7 +54,7 @@ var Actor = cc.EffectSprite3D.extend({
         //use Shadow size for aesthetic, use radius to see collision size
         this._circle.setScale(25/this.getScale()*0.2)
         this._circle.setOpacity(255*0.7);
-        // this._circle.setRotation3D(cc.vec3(90, 0, 0));
+        this._circle.setRotation3D(cc.vec3(90, 0, 0));
         this.addChild(this._circle);
     },
 
@@ -261,11 +261,14 @@ var Actor = cc.EffectSprite3D.extend({
     attackUpdate:function(dt){
         // cc.log(this._name + " attack update")
         this._attackTimer += dt;
+        if(this._curAnimation == "attack")
+            return;
         if(this._attackTimer > this._attackFrequency){
             this._attackTimer -= this._attackFrequency;
 
             // time for an attack, which attack should i do?
             var random_special = Math.random();
+
             if(random_special > this._specialAttackChance){
                 var attackAction = cc.sequence(
                     this.__proto__.constructor.Actions.attack1.clone(),
@@ -273,26 +276,26 @@ var Actor = cc.EffectSprite3D.extend({
                     this.__proto__.constructor.Actions.attack2.clone(),
                     cc.callFunc(function(){this.playAnimation("idle", true); this._cooldown = false;}, this)
                     );
+                cc.log("curanimation:"+this._curAnimation)
                 this.stopAction(this._curAnimation3d);
-                // this.stopActionByTag(101);
                 this.runAction(attackAction);
                 this._curAnimation = "attack";
                 this._cooldown = true;
             }else{
-                this.setCascadeColorEnabled(true);
-                //todo special message
-                // MessageDispatcher.dispatchMessage(MessageDispatchCenter.MessageType.SPECIAL_PERSPECTIVE, []);
+                // this.setCascadeColorEnabled(true);
+                // //todo special message
+                // // MessageDispatcher.dispatchMessage(MessageDispatchCenter.MessageType.SPECIAL_PERSPECTIVE, []);
 
-                var attackAction = cc.sequence(
-                    this.__proto__.constructor.Actions.specialattack1.clone(),
-                    cc.callFunc(function(){this.specialAttack()}, this),
-                    this.__proto__.constructor.Actions.specialattack2.clone(),
-                    cc.callFunc(function(){this.playAnimation("idle", true); this._cooldown = false;}, this)
-                    );
-                this.stopAction(this._curAnimation3d);
-                this.runAction(attackAction);
-                this._curAnimation = "attack";
-                this._cooldown = true;
+                // var attackAction = cc.sequence(
+                //     this.__proto__.constructor.Actions.specialattack1.clone(),
+                //     cc.callFunc(function(){this.specialAttack()}, this),
+                //     this.__proto__.constructor.Actions.specialattack2.clone(),
+                //     cc.callFunc(function(){this.playAnimation("idle", true); this._cooldown = false;}, this)
+                //     );
+                // this.stopAction(this._curAnimation3d);
+                // this.runAction(attackAction);
+                // this._curAnimation = "attack";
+                // this._cooldown = true;
             }
         }
     },
@@ -302,7 +305,6 @@ var Actor = cc.EffectSprite3D.extend({
         if(this._target && this._target._isalive){
             
             this._targetFacing = cc.pToAngleSelf(cc.pSub(this._target._myPos,this._myPos));
-            cc.log(this._targetFacing)
             
             if(this._inRange()){
                 cc.log("in attack range, ready to attack")
@@ -344,6 +346,7 @@ var Actor = cc.EffectSprite3D.extend({
         if(this._curSpeed > 0){
             var p1 = this._myPos;
             var targetPostion = cc.pRotateByAngle(cc.pAdd(cc.p(this._curSpeed*dt, 0), p1), p1, this._curFacing)
+            
             this.setPosition(targetPostion);
         }
     },

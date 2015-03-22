@@ -15,7 +15,7 @@ var Slime = Actor.extend({
 
         this.runAction(cc.repeatForever(createAnimation("model/slime/slime.c3b", 0, 22, 0.7)));
 
-        // this.schedule(this.update, 0);
+        this.schedule(this.update, 0);
     },
 
     reset:function(){
@@ -79,16 +79,16 @@ var Slime = Actor.extend({
     idle.retain();
     
     var attack1 = cc.spawn(
-        cc.moveBy(dur/2, cc.vec3(0, 0, 20)),
-        cc.rotateBy(dur/2, cc.vec3(70, 0, 0)),
-        cc.moveTo(dur/2, cc.p(40, 0)).easing(cc.easeBounceOut())
+        cc.moveBy(dur/2, cc.vec3(0, 0, 20)).easing(cc.easeBounceOut()),
+        cc.rotateBy(dur/2, cc.vec3(70, 0, 0)).easing(cc.easeBounceOut())
+        // cc.moveBy(dur/2, cc.p(-40, 0)).easing(cc.easeBounceOut())
         );
     attack1.retain();
 
     var attack2 = cc.spawn(
-        cc.moveTo(dur, cc.vec3(0, 0, 0)),
-        cc.rotateBy(dur*3/4, cc.vec3(-70, 0, 0)),
-        cc.moveTo(dur, cc.p(0, 0)).easing(cc.easeBackOut())
+        cc.moveBy(dur, cc.vec3(0, 0, -20)).easing(cc.easeBounceOut()),
+        cc.rotateBy(dur*3/4, cc.vec3(-70, 0, 0))
+        // cc.moveBy(dur, cc.p(-40, 0)).easing(cc.easeBounceOut())
         );
     attack2.retain();
 

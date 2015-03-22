@@ -11,13 +11,15 @@ var Mage = Actor.extend({
 
         this.setScale(1.9);
         this.addEffect(cc.vec3(0, 0, 0), CelLine, -1);
-        this.setRotation3D(cc.vec3(0, 0, 0));
-        // this.setRotation(-90);
+        this.setRotation3D(cc.vec3(90, 0, 0));
+        this.setRotation(-90);
+
         this.setDefaultEqt();
         this.idleMode();
         this.initShadow();
         this.initPuff();
 
+        this.scheduleUpdate();
     },
 
     setDefaultEqt:function(){

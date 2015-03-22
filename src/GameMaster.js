@@ -33,25 +33,24 @@
         addHeroes:function(){
             var knight = new Knight();
             knight.setPosition(battleSiteX[0], 270);
-            // knight.setRotation3D(cc.vec3(90, 0, -90));
             this._layer.addChild(knight);
             knight.idleMode();
             knight.setAIEnabled(true);
             HeroManager.push(knight);
 
-            // var mage = new Mage();
-            // mage.setPosition(battleSiteX[0], 400);
-            // mage.setRotation3D(cc.vec3(90, 0, -90));
-            // this._layer.addChild(mage);
-            // mage.idleMode();
-            // HeroManager.push(mage);
+            var mage = new Mage();
+            mage.setPosition(battleSiteX[0], 400);
+            this._layer.addChild(mage);
+            mage.idleMode();
+            mage.setAIEnabled(true);
+            HeroManager.push(mage);
 
-            // var archer = new Archer();
-            // archer.setPosition(battleSiteX[0], 150);
-            // archer.setRotation3D(cc.vec3(90, 0, -90));
-            // this._layer.addChild(archer);
-            // archer.idleMode();
-            // HeroManager.push(archer);
+            var archer = new Archer();
+            archer.setPosition(battleSiteX[0], 150);
+            this._layer.addChild(archer);
+            archer.idleMode();
+            archer.setAIEnabled(true);
+            HeroManager.push(archer);
         },
 
         addMonsters:function(){
