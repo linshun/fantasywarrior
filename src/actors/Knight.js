@@ -19,6 +19,8 @@ var Knight = Actor.extend({
         this.initShadow();
         this.initPuff();
 
+        this.initAttackEffect();
+
         this.schedule(this.update, 0);
 
         MessageDispatcher.registerMessage(MessageDispatcher.MessageType.SPECIAL_KNIGHT, function(){
@@ -43,6 +45,20 @@ var Knight = Actor.extend({
 
     specialAttack:function(){
         this._specialAttackChance = 0;
+        this._angry = ActorCommonValues._angry;
+        MessageDispatcher.dispatchMessage(MessageDispatcher.MessageType.ANGRY_CHANGE, [this]);
+
+        //knight will create 2 attacks one by one
+        var attack = this._specialAttack;
+        attack.knock = 0;
+        cc.audioEngine.playEffect(WarriorProperty.specialAttackShout);
+
+        currentLayer.addChild(new KnightNormalAttack(this.getPosition(), this._curFacing, attack, this));
+        this.//todo
+    },
+
+    initAttackEffect:function(){
+        //todo
     },
 
     hurt : function(collider, dirKnockMode){

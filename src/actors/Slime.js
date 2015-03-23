@@ -23,6 +23,8 @@ var Slime = Actor.extend({
         copyObject(SlimeValues, this);
 
         this._target = this._findEnemy(this._racetype);
+        this.setRotation3D(cc.vec3(90, 0, 0));
+        this.setRotation(-90);
         this.walkMode();
         this.setVertexZ(0);
     },

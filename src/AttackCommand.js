@@ -76,7 +76,7 @@
         },
 
         playHitAudio:function(){
-            cc.audioEngine.playEffect(CommonAudios.hit);
+            // cc.audioEngine.playEffect(CommonAudios.hit);
         },
 
         hurtEffect:function(target){

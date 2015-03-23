@@ -14,7 +14,6 @@
         "src/resource.js",
         "src/LoadingScene.js",
         "src/ParticleManager.js",
-        "src/Manager.js",
         "src/GameMaster.js",
         "src/MessageDispatcher.js",
         "src/Helper.js",
@@ -27,7 +26,6 @@
         "src/HPCounter.js",
 
         "src/actors/Actor.js",
-        "src/actors/FSM.js",
         "src/actors/Slime.js",
         "src/actors/Knight.js",
         "src/actors/Mage.js",

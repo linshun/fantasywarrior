@@ -40,19 +40,19 @@
             knight.setAIEnabled(true);
             HeroManager.push(knight);
 
-            // var mage = new Mage();
-            // mage.setPosition(battleSiteX[0], 400);
-            // this._layer.addChild(mage);
-            // mage.idleMode();
-            // mage.setAIEnabled(true);
-            // HeroManager.push(mage);
+            var mage = new Mage();
+            mage.setPosition(battleSiteX[0], 400);
+            this._layer.addChild(mage);
+            mage.idleMode();
+            mage.setAIEnabled(true);
+            HeroManager.push(mage);
 
-            // var archer = new Archer();
-            // archer.setPosition(battleSiteX[0], 150);
-            // this._layer.addChild(archer);
-            // archer.idleMode();
-            // archer.setAIEnabled(true);
-            // HeroManager.push(archer);
+            var archer = new Archer();
+            archer.setPosition(battleSiteX[0], 150);
+            this._layer.addChild(archer);
+            archer.idleMode();
+            archer.setAIEnabled(true);
+            HeroManager.push(archer);
         },
 
         addMonsters:function(){

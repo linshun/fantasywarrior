@@ -62,6 +62,8 @@ var BattleLayer = (function(_G){
     ctor:function(){
         this._super();
         this.setCascadeColorEnabled(true);
+        cc.Texture2D.setDefaultAlphaPixelFormat(4);//RGB565
+
         this.scheduleUpdate();
 
         cc.eventManager.addListener({
@@ -222,7 +224,7 @@ var BattleLayer = (function(_G){
 var BattleScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
-        cc.Texture2D.setDefaultAlphaPixelFormat(4);//RGB565
+        
         var layer = new BattleLayer();
         this.addChild(layer);
         //this is an ugly way
