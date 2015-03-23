@@ -405,7 +405,7 @@ str
 
 /**
  * @method getMovementCount
- * @return {int}
+ * @return {long}
  */
 getMovementCount : function (
 )
@@ -1834,7 +1834,7 @@ bool
 
 /**
  * @method getMovementCount
- * @return {int}
+ * @return {long}
  */
 getMovementCount : function (
 )
@@ -1869,6 +1869,16 @@ ArmatureAnimation : function (
  * @class ArmatureDataManager
  */
 ccs.ArmatureDataManager = {
+
+/**
+ * @method getAnimationDatas
+ * @return {map_object}
+ */
+getAnimationDatas : function (
+)
+{
+    return map_object;
+},
 
 /**
  * @method removeAnimationData
@@ -2020,16 +2030,6 @@ texturedata,
 str 
 )
 {
-},
-
-/**
- * @method getAnimationDatas
- * @return {map_object}
- */
-getAnimationDatas : function (
-)
-{
-    return map_object;
 },
 
 /**

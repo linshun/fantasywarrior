@@ -8603,7 +8603,7 @@ bool js_cocos2dx_ui_UICCTextField_onTextFieldDeleteBackward(JSContext *cx, uint3
     if (argc == 3) {
         cocos2d::TextFieldTTF* arg0;
         const char* arg1;
-        unsigned int arg2;
+        unsigned long arg2;
         do {
             if (!args.get(0).isObject()) { ok = false; break; }
             js_proxy_t *jsProxy;
@@ -8613,7 +8613,7 @@ bool js_cocos2dx_ui_UICCTextField_onTextFieldDeleteBackward(JSContext *cx, uint3
             JSB_PRECONDITION2( arg0, cx, false, "Invalid Native Object");
         } while (0);
         std::string arg1_tmp; ok &= jsval_to_std_string(cx, args.get(1), &arg1_tmp); arg1 = arg1_tmp.c_str();
-        ok &= jsval_to_uint32(cx, args.get(2), &arg2);
+        ok &= jsval_to_ulong(cx, args.get(2), &arg2);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_ui_UICCTextField_onTextFieldDeleteBackward : Error processing arguments");
         bool ret = cobj->onTextFieldDeleteBackward(arg0, arg1, arg2);
         jsval jsret = JSVAL_NULL;
@@ -8799,9 +8799,9 @@ bool js_cocos2dx_ui_UICCTextField_insertText(JSContext *cx, uint32_t argc, jsval
     JSB_PRECONDITION2( cobj, cx, false, "js_cocos2dx_ui_UICCTextField_insertText : Invalid Native Object");
     if (argc == 2) {
         const char* arg0;
-        unsigned int arg1;
+        unsigned long arg1;
         std::string arg0_tmp; ok &= jsval_to_std_string(cx, args.get(0), &arg0_tmp); arg0 = arg0_tmp.c_str();
-        ok &= jsval_to_uint32(cx, args.get(1), &arg1);
+        ok &= jsval_to_ulong(cx, args.get(1), &arg1);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_ui_UICCTextField_insertText : Error processing arguments");
         cobj->insertText(arg0, arg1);
         args.rval().setUndefined();
@@ -8842,7 +8842,7 @@ bool js_cocos2dx_ui_UICCTextField_onTextFieldInsertText(JSContext *cx, uint32_t 
     if (argc == 3) {
         cocos2d::TextFieldTTF* arg0;
         const char* arg1;
-        unsigned int arg2;
+        unsigned long arg2;
         do {
             if (!args.get(0).isObject()) { ok = false; break; }
             js_proxy_t *jsProxy;
@@ -8852,7 +8852,7 @@ bool js_cocos2dx_ui_UICCTextField_onTextFieldInsertText(JSContext *cx, uint32_t 
             JSB_PRECONDITION2( arg0, cx, false, "Invalid Native Object");
         } while (0);
         std::string arg1_tmp; ok &= jsval_to_std_string(cx, args.get(1), &arg1_tmp); arg1 = arg1_tmp.c_str();
-        ok &= jsval_to_uint32(cx, args.get(2), &arg2);
+        ok &= jsval_to_ulong(cx, args.get(2), &arg2);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_ui_UICCTextField_onTextFieldInsertText : Error processing arguments");
         bool ret = cobj->onTextFieldInsertText(arg0, arg1, arg2);
         jsval jsret = JSVAL_NULL;
@@ -10857,11 +10857,11 @@ bool js_cocos2dx_ui_Helper_getSubStringOfUTF8String(JSContext *cx, uint32_t argc
     bool ok = true;
     if (argc == 3) {
         std::string arg0;
-        unsigned int arg1;
-        unsigned int arg2;
+        unsigned long arg1;
+        unsigned long arg2;
         ok &= jsval_to_std_string(cx, args.get(0), &arg0);
-        ok &= jsval_to_uint32(cx, args.get(1), &arg1);
-        ok &= jsval_to_uint32(cx, args.get(2), &arg2);
+        ok &= jsval_to_ulong(cx, args.get(1), &arg1);
+        ok &= jsval_to_ulong(cx, args.get(2), &arg2);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_ui_Helper_getSubStringOfUTF8String : Error processing arguments");
         std::string ret = cocos2d::ui::Helper::getSubStringOfUTF8String(arg0, arg1, arg2);
         jsval jsret = JSVAL_NULL;
@@ -15724,18 +15724,9 @@ void js_register_cocos2dx_ui_LayoutComponent(JSContext *cx, JS::HandleObject glo
 }
 
 void register_all_cocos2dx_ui(JSContext* cx, JS::HandleObject obj) {
-    // first, try to get the ns
-    JS::RootedValue nsval(cx);
+    // Get the ns
     JS::RootedObject ns(cx);
-    JS_GetProperty(cx, obj, "ccui", &nsval);
-    if (nsval == JSVAL_VOID) {
-        ns = JS_NewObject(cx, NULL, JS::NullPtr(), JS::NullPtr());
-        nsval = OBJECT_TO_JSVAL(ns);
-        JS_SetProperty(cx, obj, "ccui", nsval);
-    } else {
-        JS_ValueToObject(cx, nsval, &ns);
-    }
-    //obj = ns;
+    get_or_create_js_obj(cx, obj, "ccui", &ns);
 
     js_register_cocos2dx_ui_Widget(cx, ns);
     js_register_cocos2dx_ui_Layout(cx, ns);
