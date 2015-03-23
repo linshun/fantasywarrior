@@ -1,7 +1,7 @@
 var BattleLayer = (function(_G){
 
     var specialCamera = {valid:false, position:cc.p(0, 0)};
-    var cameraOffset = cc.vec3(150, 0, 0);
+    var cameraOffset = cc.math.vec3(150, 0, 0);
     var cameraOffsetMin = cc.p(-300, -400);
     var cameraOffsetMax = cc.p(300, 400);
 
@@ -77,13 +77,13 @@ var BattleLayer = (function(_G){
         var spriteBg = new cc.Sprite3D("model/scene/changing.c3b");
         this.addChild(spriteBg);
         spriteBg.setScale(2.65);
-        spriteBg.setPosition3D(cc.vec3(-2300, -1000, 0));
-        spriteBg.setRotation3D(cc.vec3(90, 0, 0));
+        spriteBg.setPosition3D(cc.math.vec3(-2300, -1000, 0));
+        spriteBg.setRotation3D(cc.math.vec3(90, 0, 0));
         spriteBg.setGlobalZOrder(-10);
 
         var water = cc.Water.create("shader3D/water.png", "shader3D/wave1.jpg", "shader3D/18.jpg", cc.size(5500, 400), 0.77, 0.3797, 1.2);
         this.addChild(water);
-        water.setPosition3D(cc.vec3(-3500, -580, -110));
+        water.setPosition3D(cc.math.vec3(-3500, -580, -110));
         water.setAnchorPoint(0, 0);
         water.setGlobalZOrder(-10);
 
@@ -174,12 +174,12 @@ var BattleLayer = (function(_G){
         if(specialCamera.valid == true){
             var position = cc.pLerp(cameraPostion, cc.p(specialCamera.position.x, (cameraOffset.y + focusPoint.y-cc.winSize.height*3/4)*0.5), 5*dt)
             this._camera.setPosition(position);
-            this._camera.lookAt(cc.vec3(position.x, specialCamera.position.y, 50), cc.vec3(0, 1, 0));
+            this._camera.lookAt(cc.math.vec3(position.x, specialCamera.position.y, 50), cc.math.vec3(0, 1, 0));
         }else if(HeroManager.length > 0){
             var temp = cc.pLerp(cameraPostion, cc.p(focusPoint.x+cameraOffset.x, cameraOffset.y + focusPoint.y-cc.winSize.height*3/4), 2*dt);
-            var position = cc.vec3(temp.x, temp.y, cc.winSize.height/2-0);
+            var position = cc.math.vec3(temp.x, temp.y, cc.winSize.height/2-0);
             this._camera.setPosition3D(position);
-            this._camera.lookAt(cc.vec3(position.x, focusPoint.y, 50.0), cc.vec3(0, 0, 1));
+            this._camera.lookAt(cc.math.vec3(position.x, focusPoint.y, 50.0), cc.math.vec3(0, 0, 1));
         }
     },
 

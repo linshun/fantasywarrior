@@ -90,7 +90,7 @@ var LoadingLayer = cc.Layer.extend({
     slimeAction:function(){
         var slime = new Slime();
         // slime.setAIEnabled(false);
-        slime.setRotation3D(cc.vec3(0, 30, 0));
+        slime.setRotation3D(cc.math.vec3(0, 30, 0));
         this.addChild(slime, 33);
         this._slimeOriginX = cc.winSize.width * 0.2;
         this._slimeOriginY = cc.winSize.height * 0.3;
@@ -99,7 +99,7 @@ var LoadingLayer = cc.Layer.extend({
         
         var dur = 0.6, bsc = 27;
         slime.runAction(cc.spawn(
-            cc.sequence(cc.delayTime(dur/8), cc.JumpBy3D.create(dur*7/8, cc.vec3(0, 0, 0), 30, 1)),
+            cc.sequence(cc.delayTime(dur/8), cc.JumpBy3D.create(dur*7/8, cc.math.vec3(0, 0, 0), 30, 1)),
 
             cc.sequence(
                 cc.scaleTo(dur/8, bsc*1.4, bsc*1.4, bsc*0.75).easing(cc.easeSineOut()),

@@ -211,7 +211,7 @@
                 obj.runAction(cc.sequence(
                         cc.delayTime(Math.random()),
                         cc.callFunc(function(){obj.setVisible(true);}),
-                        cc.JumpBy3D.create(0.5, cc.vec3(-200*(Math.random()*0.6+0.7), -1700 + 300*Math.random(), 0),150, 1),
+                        cc.JumpBy3D.create(0.5, cc.math.vec3(-200*(Math.random()*0.6+0.7), -1700 + 300*Math.random(), 0),150, 1),
                         cc.callFunc(function(){obj.setAIEnabled(true); obj._myPos = obj.getPosition()})
                     ));
                 obj.setFacing(135);
@@ -220,7 +220,7 @@
                     obj.runAction(cc.sequence(
                         cc.delayTime(Math.random()),
                         cc.callFunc(function(){obj.setVisible(true);}),
-                        cc.JumpBy3D.create(0.5, cc.vec3(0, -1700 + 300*Math.random(), 0),150, 1),
+                        cc.JumpBy3D.create(0.5, cc.math.vec3(0, -1700 + 300*Math.random(), 0),150, 1),
                         cc.callFunc(function(){obj.setAIEnabled(true); obj._myPos = obj.getPosition()})
                     ));
                     obj.setFacing(135);
@@ -228,7 +228,7 @@
                     obj.runAction(cc.sequence(
                         cc.delayTime(Math.random()),
                         cc.callFunc(function(){obj.setVisible(true);}),
-                        cc.JumpBy3D.create(0.5, cc.vec3(200*(Math.random()*0.6+0.7), -1700 + 300*Math.random(), 0),150, 1),
+                        cc.JumpBy3D.create(0.5, cc.math.vec3(200*(Math.random()*0.6+0.7), -1700 + 300*Math.random(), 0),150, 1),
                         cc.callFunc(function(){obj.setAIEnabled(true); obj._myPos = obj.getPosition()})
                     ));
                     obj.setFacing(45);

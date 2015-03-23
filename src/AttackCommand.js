@@ -88,7 +88,7 @@
                 hurtAction,
                 cc.callFunc(function(){hurtEffect.removeFromParent();})));
             var pos = target.getPosition3D();
-            hurtEffect.setPosition3D(cc.vec3(pos.x, pos.y, pos.z + 50)); 
+            hurtEffect.setPosition3D(cc.math.vec3(pos.x, pos.y, pos.z + 50)); 
             currentLayer.addChild(hurtEffect);           
         },
 

@@ -54,7 +54,7 @@ var Actor = cc.EffectSprite3D.extend({
         //use Shadow size for aesthetic, use radius to see collision size
         this._circle.setScale(25/this.getScale()*0.2)
         this._circle.setOpacity(255*0.7);
-        this._circle.setRotation3D(cc.vec3(90, 0, 0));
+        this._circle.setRotation3D(cc.math.vec3(90, 0, 0));
         this.addChild(this._circle);
     },
 
@@ -204,7 +204,7 @@ var Actor = cc.EffectSprite3D.extend({
 
             this.runAction(cc.sequence(
                 cc.delayTime(3),
-                cc.moveBy(1.0, cc.vec3(0, 0, -50)),
+                cc.moveBy(1.0, cc.math.vec3(0, 0, -50)),
                 cc.callFunc(function(){this.removeFromParent();}, this)
                 ));
             this._angry = 0;
@@ -219,7 +219,7 @@ var Actor = cc.EffectSprite3D.extend({
             }
             this.runAction(cc.sequence(
                 cc.delayTime(3),
-                cc.moveBy(1.0, cc.vec3(0, 0, -50)),
+                cc.moveBy(1.0, cc.math.vec3(0, 0, -50)),
                 cc.callFunc(function(){
                     this.setVisible(false);
                     cc.pool.putInPool(this);

@@ -6,11 +6,11 @@ var ChooseRoleLayer = (function(){
 
     var TAG_middle = 2, TAG_left = 1, TAG_right = 3,
         TAG_bag = 10, TAG_weapon = 11, TAG_armour = 12, TAG_helmet = 13;
-    // var rtt = [cc.vec3(-90, -60, 0), cc.vec3(0, 30, 0), cc.vec3(-90, -60, 0)];
+    // var rtt = [cc.math.vec3(-90, -60, 0), cc.math.vec3(0, 30, 0), cc.math.vec3(-90, -60, 0)];
     var visibleSize = cc.director.getVisibleSize();
-    var pos = [cc.vec3(visibleSize.width*0.14, visibleSize.height*0.35, -180),
-               cc.vec3(visibleSize.width*0.34, visibleSize.height*0.25, -40),
-               cc.vec3(visibleSize.width*0.5, visibleSize.height*0.35, -180)];
+    var pos = [cc.math.vec3(visibleSize.width*0.14, visibleSize.height*0.35, -180),
+               cc.math.vec3(visibleSize.width*0.34, visibleSize.height*0.25, -40),
+               cc.math.vec3(visibleSize.width*0.5, visibleSize.height*0.35, -180)];
 
     var weapon_item_pos = cc.p(832, 280), 
         armour_item_pos = cc.p(916, 280),
@@ -58,7 +58,7 @@ var ChooseRoleLayer = (function(){
             var knight = new Knight();
             knight.setTag(TAG_middle);
             knight.setPosition3D(pos[1]);
-            knight.setRotation3D(cc.vec3(0, 30, 0));
+            knight.setRotation3D(cc.math.vec3(0, 30, 0));
             knight.setScale(knight.getScale()*1.3);
             // knight.setAIEnabled(false);
             this.addChild(knight);
@@ -67,7 +67,7 @@ var ChooseRoleLayer = (function(){
             var archer = new Archer();
             archer.setTag(TAG_left);
             archer.setPosition3D(pos[0]);
-            archer.setRotation3D(cc.vec3(0, 30, 0));
+            archer.setRotation3D(cc.math.vec3(0, 30, 0));
             archer.setScale(archer.getScale()*1.3);
             // archer.setAIEnabled(false);
             this.addChild(archer);
@@ -76,7 +76,7 @@ var ChooseRoleLayer = (function(){
             var mage = new Mage();
             mage.setTag(TAG_right);
             mage.setPosition3D(pos[2]);
-            mage.setRotation3D(cc.vec3(0, 30, 0));
+            mage.setRotation3D(cc.math.vec3(0, 30, 0));
             mage.setScale(mage.getScale()*1.3);
             // mage.setAIEnabled(false);
             this.addChild(mage);
@@ -88,7 +88,7 @@ var ChooseRoleLayer = (function(){
         _hero_rotate:function(dt){
             var hero = this.getChildByTag(TAG_middle);
             var rotation = hero.getRotation3D();
-            hero.setRotation3D(cc.vec3(rotation.x, rotation.y + 0.5, rotation.z));
+            hero.setRotation3D(cc.math.vec3(rotation.x, rotation.y + 0.5, rotation.z));
         },
 
         addButton:function(){
@@ -325,7 +325,7 @@ var ChooseRoleLayer = (function(){
             var middle = this.getChildByTag(TAG_middle);
             var right = this.getChildByTag(TAG_right);
 
-            middle.setRotation3D(cc.vec3(0, 30, 0));
+            middle.setRotation3D(cc.math.vec3(0, 30, 0));
 
             function playAudioWhenRotate(type){
                 if(type === "Knight")

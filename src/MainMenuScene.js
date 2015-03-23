@@ -93,7 +93,7 @@ var MainMenuLayer = cc.Layer.extend({
             var rand_x = 0.1 * Math.sin(cc.degreesToRadians(time*0.5+4356));
             var rand_y = 0.1 * Math.sin(cc.degreesToRadians(time*0.37+5436));
             var rand_z = 0.1 * Math.sin(cc.degreesToRadians(time*0.2+54325));
-            logo.setRotation3D(cc.vec3(cc.radiansToDegrees(rand_x), cc.radiansToDegrees(rand_y), cc.radiansToDegrees(rand_z)));
+            logo.setRotation3D(cc.math.vec3(cc.radiansToDegrees(rand_x), cc.radiansToDegrees(rand_y), cc.radiansToDegrees(rand_z)));
             time++;
         }, 0);
     },
@@ -102,7 +102,7 @@ var MainMenuLayer = cc.Layer.extend({
         var ls = new cc.Sprite("#light.png");
         ls.setBlendFunc(cc.ONE, cc.ONE_MINUS_SRC_ALPHA);
         ls.setScale(1.2);
-        ls.setPosition3D(cc.vec3(cc.winSize.width*0.5, cc.winSize.height*0.5, 0));
+        ls.setPosition3D(cc.math.vec3(cc.winSize.width*0.5, cc.winSize.height*0.5, 0));
         this._lightSprite = ls;
 
         var light_size = ls.getContentSize(),
@@ -170,7 +170,7 @@ var MainMenuLayer = cc.Layer.extend({
 
     addPointLight:function(){
         // add point light
-        this._pointLight = cc.PointLight.create(cc.vec3(0, 0, -100), cc.color(255, 255, 255), 10000);
+        this._pointLight = cc.PointLight.create(cc.math.vec3(0, 0, -100), cc.color(255, 255, 255), 10000);
         this._pointLight.setCameraMask(1);
         this._pointLight.setEnabled(true);
 

@@ -14,7 +14,7 @@ var HPCounter = cc.Node.extend({
             var randx = 20*Math.sin(cc.degreesToRadians(time*0.5+4356)),
                 randy = 20*Math.sin(cc.degreesToRadians(time*0.37+5436)),
                 randz = 20*Math.sin(cc.degreesToRadians(time*0.2+54325));
-            return cc.vec3(randx, randy, randz);
+            return cc.math.vec3(randx, randy, randz);
         }
 
         function getBlood(){
@@ -50,7 +50,7 @@ var HPCounter = cc.Node.extend({
                     );
                 var spawn = cc.spawn(
                     seq,
-                    cc.moveBy(tm, cc.vec3(0, 0, pointZ)),
+                    cc.moveBy(tm, cc.math.vec3(0, 0, pointZ)),
                     cc.rotateBy(tm, cc.randomMinus1To1()*40)
                     );
                 return spawn;

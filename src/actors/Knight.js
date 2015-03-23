@@ -11,8 +11,8 @@ var Knight = Actor.extend({
         this._useHelmetId = ReSkin.knight.helmet;
 
         this.setScale(25);
-        this.addEffect(cc.vec3(0, 0, 0), CelLine, -1);
-        this.setRotation3D(cc.vec3(90, 0, 0));
+        this.addEffect(cc.math.vec3(0, 0, 0), CelLine, -1);
+        this.setRotation3D(cc.math.vec3(90, 0, 0));
         this.setRotation(-90);
         this.setDefaultEqt();
         this.idleMode();
@@ -54,7 +54,7 @@ var Knight = Actor.extend({
         cc.audioEngine.playEffect(WarriorProperty.specialAttackShout);
 
         currentLayer.addChild(new KnightNormalAttack(this.getPosition(), this._curFacing, attack, this));
-        this.//todo
+        // this.//todo
     },
 
     initAttackEffect:function(){

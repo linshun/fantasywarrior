@@ -6,8 +6,8 @@ var Dragon = Actor.extend({
         copyObject(DragonValues, this);
 
         this.setScale(10);
-        this.addEffect(cc.vec3(0, 0, 0), CelLine, -1);
-        this.setRotation3D(cc.vec3(90, 0, 0));
+        this.addEffect(cc.math.vec3(0, 0, 0), CelLine, -1);
+        this.setRotation3D(cc.math.vec3(90, 0, 0));
         this.setRotation(-90);
 
         this.scheduleUpdate();
