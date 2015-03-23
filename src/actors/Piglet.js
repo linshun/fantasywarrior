@@ -2,10 +2,24 @@ var Piglet = Actor.extend({
     ctor:function(){
         this._super("model/piglet/piglet.c3b");
 
+        copyObject(ActorCommonValues, this);
+        copyObject(PigletValues, this);
+
         this.setTexture("model/piglet/zhu0928.jpg");
         this.setScale(1.3);
         this.addEffect(cc.vec3(0, 0, 0), CelLine, -1);
+        this.setRotation3D(cc.vec3(90, 0, 0));
+        this.setRotation(-90)
         this.initShadow();
+
+        this.scheduleUpdate();
+    },
+
+    reset:function(){
+        copyObject(ActorCommonValues, this);
+        copyObject(PigletValues, this);
+        this.walkMode();
+        this.setVertexZ(0);
     }
 })
 

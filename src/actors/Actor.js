@@ -27,14 +27,14 @@ var Actor = cc.EffectSprite3D.extend({
 
     },
 
-    // addEffect:function(effect){
-    //     effect.setPosition(cc.pAdd(this.getPosition(), effect.getPosition()));
-    //     if(this._racetype != EnumRaceType.MONSTER)
-    //         effect.setVertexZ(this.getVertexZ() + this._heroHeight);
-    //     else
-    //         effect.setVertexZ(this.getVertexZ() + this._monsterHeight + effect.getVertexZ());
-    //     currentLayer.addChild(effect);
-    // },
+    addBloodEffect:function(effect){
+        effect.setPosition(cc.pAdd(this.getPosition(), effect.getPosition()));
+        if(this._racetype != EnumRaceType.MONSTER)
+            effect.setVertexZ(this.getVertexZ() + this._heroHeight);
+        else
+            effect.setVertexZ(this.getVertexZ() + this._monsterHeight + effect.getVertexZ());
+        currentLayer.addChild(effect);
+    },
 
 
     initPuff:function(){
@@ -96,7 +96,40 @@ var Actor = cc.EffectSprite3D.extend({
 
 
     hurt:function(collider, dirKnockMode){
-        //todo
+        if(this._isalive){
+            var damage = collider.damage;
+            var critical = false;
+            var knock = collider.knock;
+            if(Math.random() < collider.criticalChance){
+                damage *= 1.5;
+                critical = true;
+                knock *= 2;
+            }
+            damage = damage + damage * cc.randomMinus1To1() * 0.15;
+            damage -= this._defense;
+            damage = Math.floor(damage);
+
+            if(damage <= 0)
+                damage = 1;
+
+            this._hp -= damage;
+
+            if(this._hp > 0){
+                if(collider.knock && damage != 1){
+                    this.knockMode(collider, dirKnockMode);
+                }
+                this.hurtSoundEffects();
+            }else{
+                this._hp = 0;
+                this._isalive = false;
+                this.dyingMode(collider.getPosition(), knock);
+            }
+
+            var blood = this._hpCounter.showBloodLossNum(damage, this, critical);
+            this.addBloodEffect(blood);
+
+            return damage;
+        }
     },
 
     hurtSoundEffects:function(){
@@ -112,16 +145,15 @@ var Actor = cc.EffectSprite3D.extend({
     },
 
     normalAttack:function(){
-        //todo
-        // BasicCollider.create(self._myPos, self._curFacing, self._normalAttack)
+        currentLayer.addChild(new BasicCollider(this._myPos, this._curFacing, this._normalAttack), -10);
         this.normalAttackSoundEffects();
     },
 
-    specialAttack:function(){
-        //todo
-        //BasicCollider.create(self._myPos, self._curFacing, self._specialAttack)
-        this.specialAttackSoundEffects();
-    },
+    // specialAttack:function(){
+    //     //todo
+    //     //BasicCollider.create(self._myPos, self._curFacing, self._specialAttack)
+    //     this.specialAttackSoundEffects();
+    // },
 
 
     idleMode:function(){
@@ -140,14 +172,69 @@ var Actor = cc.EffectSprite3D.extend({
         this._attackTimer = this._attackFrequency*3/4
     },
 
-    knockMode:function(){
+    knockMode:function(collider, dirKnockMode){
+        cc.log("knock mode")
         this.setStateType(EnumStateType.KNOCKING)
-        //todo
+        this.playAnimation("knocked");
+        this._timeKnocked = this._aliveTime;
+        var p = this._myPos, angle;
+        if(dirKnockMode)
+            angle = collider.facing;
+        else
+            angle = cc.pToAngleSelf(cc.pSub(p, collider.getPosition()));
+
+        var newPos = cc.pRotateByAngle(cc.pAdd(cc.p(collider.knock, 0), p), p, angle);
+        this.runAction(cc.moveTo(this.__proto__.constructor.Actions.knocked.getDuration()*3, newPos).easing(cc.easeCubicActionOut()));
     },
 
-    dyingMode:function(){
-        this.setStateType(EnumStateType.DYING)
-        //todo
+    dyingMode:function(knockSource, knockAmount){
+        cc.log("dying mode")
+        this.setStateType(EnumStateType.DYING);
+        this.playAnimation("dead");
+        this.playDyingEffects();
+        if(this._racetype === EnumRaceType.HERO){
+            currentLayer._uiLayer.heroDead(this);
+            //remove from HeroManager
+            for(let i = 0; i < HeroManager.length; ++i){
+                if(this == HeroManager[i]){
+                    HeroManager.splice(i, 1);
+                    break;
+                }
+            }
+
+            this.runAction(cc.sequence(
+                cc.delayTime(3),
+                cc.moveBy(1.0, cc.vec3(0, 0, -50)),
+                cc.callFunc(function(){this.removeFromParent();}, this)
+                ));
+            this._angry = 0;
+            //todo Message
+        }else{
+            //remove from MonsterManager
+            for(let i = 0; i < MonsterManager.length; ++i){
+                if(this == MonsterManager[i]){
+                    MonsterManager.splice(i, 1);
+                    break;
+                }
+            }
+            this.runAction(cc.sequence(
+                cc.delayTime(3),
+                cc.moveBy(1.0, cc.vec3(0, 0, -50)),
+                cc.callFunc(function(){
+                    this.setVisible(false);
+                    cc.pool.putInPool(this);
+                }, this)
+                ));
+        }
+
+        if(knockAmount){
+            var p = this._myPos;
+            var angle = cc.pToAngleSelf(cc.pSub(p, knockSource));
+            var newpos = cc.pRotateByAngle(cc.pAdd(cc.p(knockAmount, 0), p), p, angle);
+            this.runAction(cc.moveTo(this.__proto__.constructor.Actions.knocked.getDuration()*3, newpos).easing(cc.easeCubicActionOut()));
+        }
+
+        this._AIEnabled = false;
     },
 
     playDyingEffects:function(){
@@ -186,7 +273,8 @@ var Actor = cc.EffectSprite3D.extend({
                 allDead = false;
             }
         }
-        cc.log("fine enmy end: " + target._name)
+        if(target != null)
+            cc.log("fine enmy end: " + target._name)
         return target;//{target:target, allDead:allDead};
     },
 
@@ -261,7 +349,7 @@ var Actor = cc.EffectSprite3D.extend({
     attackUpdate:function(dt){
         // cc.log(this._name + " attack update")
         this._attackTimer += dt;
-        if(this._curAnimation == "attack")
+        if(this._curAnimation == "attack" || this._curAnimation == "special")
             return;
         if(this._attackTimer > this._attackFrequency){
             this._attackTimer -= this._attackFrequency;
@@ -276,26 +364,28 @@ var Actor = cc.EffectSprite3D.extend({
                     this.__proto__.constructor.Actions.attack2.clone(),
                     cc.callFunc(function(){this.playAnimation("idle", true); this._cooldown = false;}, this)
                     );
-                cc.log("curanimation:"+this._curAnimation)
                 this.stopAction(this._curAnimation3d);
                 this.runAction(attackAction);
+                this._curAnimation3d = attackAction;
                 this._curAnimation = "attack";
                 this._cooldown = true;
             }else{
-                // this.setCascadeColorEnabled(true);
-                // //todo special message
-                // // MessageDispatcher.dispatchMessage(MessageDispatchCenter.MessageType.SPECIAL_PERSPECTIVE, []);
+                this.setCascadeColorEnabled(false);
 
-                // var attackAction = cc.sequence(
-                //     this.__proto__.constructor.Actions.specialattack1.clone(),
-                //     cc.callFunc(function(){this.specialAttack()}, this),
-                //     this.__proto__.constructor.Actions.specialattack2.clone(),
-                //     cc.callFunc(function(){this.playAnimation("idle", true); this._cooldown = false;}, this)
-                //     );
-                // this.stopAction(this._curAnimation3d);
-                // this.runAction(attackAction);
-                // this._curAnimation = "attack";
-                // this._cooldown = true;
+                var args = [0.2, this._myPos, this._specialSlowTime, this];
+                MessageDispatcher.dispatchMessage(MessageDispatcher.MessageType.SPECIAL_PERSPECTIVE, args);
+
+                var attackAction = cc.sequence(
+                    this.__proto__.constructor.Actions.specialattack1.clone(),
+                    cc.callFunc(function(){this.specialAttack()}, this),
+                    this.__proto__.constructor.Actions.specialattack2.clone(),
+                    cc.callFunc(function(){this.playAnimation("idle", true); this._cooldown = false;}, this)
+                    );
+                this.stopAction(this._curAnimation3d);
+                this.runAction(attackAction);
+                this._curAnimation3d = attackAction;
+                this._curAnimation = "special";
+                this._cooldown = true;
             }
         }
     },

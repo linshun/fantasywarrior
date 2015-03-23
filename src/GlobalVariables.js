@@ -6,6 +6,19 @@ gameMaster = null;
 HeroManager = null;
 MonsterManager = null;
 
+cc.spriteFrameCache.addSpriteFrames("res/FX/FX.plist");
+RECTS = {
+
+};
+
+
+var hurtAnimation = new cc.Animation();
+for(var i = 1; i < 6; ++i){
+    hurtAnimation.addSpriteFrame( cc.spriteFrameCache.getSpriteFrame("hit"+i+".png"));
+}
+hurtAnimation.setDelayPerUnit(0.1);
+cc.animationCache.addAnimation(hurtAnimation, "hurtAnimation");
+
 G =
 {
     bloodPercentDropSpeed : 2,
@@ -33,6 +46,50 @@ var BGM_RES = {
     MAINMENUSTART: "audios/effects/magical_3.mp3",
     BATTLEFIELDBGM : "audios/The_Last_Encounter_Short_Loop.mp3",
     CHOOSEROLESCENEBGM : "audios/Imminent Threat Beat B FULL Loop.mp3"
+}
+
+
+//Some common audios
+CommonAudios =
+{
+    hit : "audios/effects/hit20.mp3"
+}
+
+//Monster Slime
+MonsterSlimeValues =
+{
+    fileNameNormal : "model/slime/slimeAnger.c3b",
+    fileNameAnger : "model/slime/slimeAnger.c3b"
+}
+
+//Monster Dragon
+MonsterDragonValues = 
+{
+    fileName : "model/dragon/dragon.c3b",
+    attack : "audios/effects/dragon/Fire.mp3",
+    fireHit : "audios/effects/dragon/fireHit.mp3",
+    wounded : "audios/effects/dragon/hurt.mp3",
+    dead : "audios/effects/dragon/dead.mp3"
+}
+
+//Monster Rat
+MonsterRatValues = 
+    {
+        fileName : "model/rat/rat.c3b",
+        attack : "audios/effects/rat/attack.mp3",
+        dead  : "aduios/effects/rat/dead.mp3",
+        wounded : "audios/effects/rat/ratHurt.mp3"
+    }
+
+//Monster Piglet
+MonsterPigletValues = 
+{
+    fileName : "model/piglet/piglet.c3b",
+    attack1 : "audios/effects/piglet/piglet1.mp3",
+    attack2 : "audios/effects/piglet/piglet2.mp3",
+    attack3 : "audios/effects/piglet/piglet3.mp3",
+    dead : "audios/effects/piglet/dead.mp3",
+    hurt : "audios/effects/piglet/hurt.mp3",
 }
 
 //Warroir property

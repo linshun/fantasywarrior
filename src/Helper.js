@@ -19,6 +19,20 @@
             o2[i] = o1[i];
     }
     
+    _G.radNormalize = function(rad){
+        var pi2 = 2 * Math.PI;
+        rad %= pi2;
+        rand = (rad + pi2) % pi2;
+        if(rad > Math.PI)
+            rad = rad - Math.PI;
+        return rad;
+    }
+
+    _G.delayExecute = function(target, func, delay){
+        var wait = cc.delayTime(delay);
+        target.runAction(cc.sequence(wait, cc.callFunc(func, target)));
+    }
+
     cc.pGetClampPoint = function(pt1, pt2, pt3){
         return cc.p(cc.clampf(pt1.x, pt2.x, pt3.x), cc.clampf(pt1.y, pt2.y, pt3.y));
     }

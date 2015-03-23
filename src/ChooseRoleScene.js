@@ -63,6 +63,8 @@ var ChooseRoleLayer = (function(){
             // knight.setAIEnabled(false);
             this.addChild(knight);
             this._knight = knight;
+            knight.setCascadeColorEnabled(false);
+            this.setColor(cc.color(120, 120, 120))
 
             var archer = new Archer();
             archer.setTag(TAG_left);

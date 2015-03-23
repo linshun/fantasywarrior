@@ -111,14 +111,30 @@ var BattleLayer = (function(_G){
         MessageDispatcher.registerMessage(MessageDispatcher.MessageType.SPECIAL_PERSPECTIVE, this.specialPerspective, this);
     },
 
-    specialPerspective:function(param){
+    specialPerspective:function(speed, pos, dur, target){
+        if(specialCamera.valid == true)
+            return;
 
+        specialCamera.position = pos;
+        specialCamera.valid = true;
+        this.setColor(cc.color(125, 125, 125));
+
+        var self = this;
+        function restoreTimeScale(){
+            specialCamera.valid = false;
+            self.setColor(cc.color(255, 255, 255));
+            cc.director.getScheduler().setTimeScale(1.0);    
+            target.setCascadeColorEnabled(true)
+        }
+        
+        delayExecute(this, restoreTimeScale, dur);
+        cc.director.getScheduler().setTimeScale(speed);
     },
 
     update:function(dt){
         this._gameMaster.update(dt);
         this.collisionDetect(dt)
-        // this.solveAttacks(dt)
+        solveAttacks(dt)
         this.moveCamera(dt)
     },
 
@@ -133,10 +149,17 @@ var BattleLayer = (function(_G){
                 HeroManager.splice(i, 1);
             }
         }
-    },
 
-    solveAttacks:function(dt){
-
+        for(var i = 0; i < MonsterManager.length; ++i){
+            var sprite = MonsterManager[i];
+            if(sprite._isalive){
+                collision(sprite);
+                isOutOfBound(sprite);
+                // sprite._effectNode.setPosition(sprite._myPos);
+            }else{
+                MonsterManager.splice(i, 1);
+            }
+        }
     },
 
     moveCamera:function(dt){
@@ -147,7 +170,9 @@ var BattleLayer = (function(_G){
         var focusPoint = this._gameMaster.getFocusPointOfHeros();
         
         if(specialCamera.valid == true){
-            //todo actor::updateAttack sent the message
+            var position = cc.pLerp(cameraPostion, cc.p(specialCamera.position.x, (cameraOffset.y + focusPoint.y-cc.winSize.height*3/4)*0.5), 5*dt)
+            this._camera.setPosition(position);
+            this._camera.lookAt(cc.vec3(position.x, specialCamera.position.y, 50), cc.vec3(0, 1, 0));
         }else if(HeroManager.length > 0){
             var temp = cc.pLerp(cameraPostion, cc.p(focusPoint.x+cameraOffset.x, cameraOffset.y + focusPoint.y-cc.winSize.height*3/4), 2*dt);
             var position = cc.vec3(temp.x, temp.y, cc.winSize.height/2-0);
@@ -171,7 +196,7 @@ var BattleLayer = (function(_G){
         var location = touch.getLocation();
         var message = this.UIcontainsPoint(location);
         if(message !== null){
-            MessageDispatcher.dispatchMessage(message, [1]);
+            MessageDispatcher.dispatchMessage(message);
         }
     },
 

@@ -9,14 +9,6 @@ var Knight = Actor.extend({
         this._useWeaponId = ReSkin.knight.weapon;
         this._useArmourId = ReSkin.knight.armour;
         this._useHelmetId = ReSkin.knight.helmet;
-        
-        if(currentLayer != null){
-            this._bloodBar = currentLayer._uiLayer.knightBlood
-            this._bloodBarClone = currentLayer._uiLayer.knightBloodClone
-            this._avatar = currentLayer._uiLayer.knightPng;
-        }
-
-
 
         this.setScale(25);
         this.addEffect(cc.vec3(0, 0, 0), CelLine, -1);
@@ -29,9 +21,74 @@ var Knight = Actor.extend({
 
         this.schedule(this.update, 0);
 
-        //todo
-        //special attack message 
+        MessageDispatcher.registerMessage(MessageDispatcher.MessageType.SPECIAL_KNIGHT, function(){
+            if(this._specialAttackChance == 1) return;
+            this._specialAttackChance = 1;
+        }, this);
     },
+
+    playDyingEffects:function(){
+        cc.audioEngine.playEffect(WarriorProperty.dead);
+    },
+
+    hurtSoundEffects:function(){
+        cc.audioEngine.playEffect(WarriorProperty.wounded);
+    },
+
+    normalAttack:function(){
+        cc.audioEngine.playEffect(WarriorProperty.normalAttackShout);
+
+        currentLayer.addChild(new KnightNormalAttack(this.getPosition(), this._curFacing, this._normalAttack, this));
+    },
+
+    specialAttack:function(){
+        this._specialAttackChance = 0;
+    },
+
+    hurt : function(collider, dirKnockMode){
+        if(this._isalive == true){
+            var damage = collider.damage;
+            var critical = false;
+            var knock = collider.knock;
+            if(Math.random() < collider.criticalChance){
+                damage *= 1.5;
+                critical = true;
+                knock *= 2;
+            }
+            damage = damage + damage * cc.randomMinus1To1() * 0.15;
+            damage -= this._defense;
+            damage = Math.floor(damage);
+
+            if(damage <= 0)
+                damage = 1;
+
+            this._hp -= damage;
+
+            if(this._hp > 0){
+                if(critical == true){
+                    this.knockMode(collider, dirKnockMode);
+                }
+                this.hurtSoundEffects();
+            }else{
+                this._hp = 0;
+                this._isalive = false;
+                this.dyingMode(collider.getPosition(), knock);
+            }
+
+            var blood = this._hpCounter.showBloodLossNum(damage, this, critical);
+            this.addBloodEffect(blood);
+
+            //blood
+            MessageDispatcher.dispatchMessage(MessageDispatcher.MessageType.BLOOD_MINUS, [this]);
+
+            //angry
+            MessageDispatcher.dispatchMessage(MessageDispatcher.MessageType.ANGRY_CHANGE, [this]);
+            this._angry += damage;
+
+            return damage;
+        }
+    },
+
 
     //set default equipment
     setDefaultEqt:function(){

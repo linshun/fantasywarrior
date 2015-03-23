@@ -13,13 +13,98 @@ var BattleFieldUI = cc.Layer.extend({
         MessageDispatcher.registerMessage(MessageDispatcher.MessageType.ANGRY_CHANGE, this.angryChange, this);
     },
 
+    shakeAvatar:function(){
+        return cc.Repeat.create(cc.Spawn.create(
+                cc.sequence(
+                    cc.scaleTo(0.075, 0.75),
+                    cc.scaleTo(0.075, 0.7)
+                ),
+                cc.sequence(
+                    cc.moveBy(0.05, cc.p(6.5, 0)),
+                    cc.moveBy(0.05, cc.p(-13, 0)),
+                    cc.moveBy(0.05, cc.p(6.5, 0))
+                )
 
-    bloodMinus:function(heroActor){
+            ),2);
+    },
+
+    bloodMinus:function(hero){
+        var progressTo, progressToClone, tintTo,
+            percent = hero._hp/hero._maxhp*100;
+
+        var bloodBar, bloodBarClone, avatar;
+        if(hero._name == "Knight"){
+            bloodBar = this.knightBlood;
+            bloodBarClone = this.knightBloodClone;
+            avatar = this.knightPng;
+        }else if(hero._name == "Archer"){
+            bloodBar = this.archerBlood;
+            bloodBarClone = this.archerBloodClone;
+            avatar = this.archerPng;
+        }else{
+            bloodBar = this.mageBlood;
+            bloodBarClone = this.mageBloodClone;
+            avatar = this.magePng;
+        }
+
+        bloodBar.stopAllActions();
+        bloodBarClone.stopAllActions();
+        avatar.runAction(this.shakeAvatar());
+
+        if(hero._hp > 0 && percent > 50){
+            progressTo = cc.progressTo(0.3, percent);
+            progressToClone = cc.progressTo(1, percent);
+            bloodBar.runAction(progressTo);
+            bloodBarClone.runAction(progressToClone);
+        }else if(hero._hp > 0 && percent <= 50){
+            progressTo = cc.progressTo(0.3, percent);
+            progressToClone = cc.progressTo(1, percent);
+            tintTo = cc.tintTo(0.5, 254, 225, 26);
+
+            bloodBar.runAction(cc.spawn(progressTo, tintTo));
+            bloodBarClone.runAction(progressToClone);
+        }else if(hero._hp > 0 && percent <= 30){
+            progressTo = cc.progressTo(0.3, percent);
+            progressToClone = cc.progressTo(1, percent);
+            tintTo = cc.tintTo(0.5, 254, 26, 69);
+
+            bloodBar.runAction(cc.spawn(progressTo, tintTo));
+            bloodBarClone.runAction(progressToClone);
+        }else if(hero._hp <= 0){
+            progressTo = cc.progressTo(0.3, 0.1);
+            progressToClone = cc.progressTo(1, 2);
+            bloodBar.runAction(progressTo);
+            bloodBarClone.runAction(progressToClone);
+        }
 
     },
 
-    angryChange:function(angry){
+    angryChange:function(hero){
+        var percent = hero._angry / hero._angryMax * 100;
+        var progressTo = cc.progressTo(0.3, percent);
 
+        var bar;
+        if(hero._name == "Knight"){
+            bar = this.knightAngry;
+            if(percent >= 100)
+                this.knightAngryFullSignal.setVisible(true);
+            else
+                this.knightAngryFullSignal.setVisible(false);
+        }else if(hero._name == "Archer"){
+            bar = this.archerAngry;
+            if(percent >= 100)
+                this.archerAngryFullSignal.setVisible(true);
+            else
+                this.archerAngryFullSignal.setVisible(false);
+        }else{
+            bar = this.mageAngry;
+            if(percent >= 100)
+                this.mageAngryFullSignal.setVisible(true);
+            else
+                this.mageAngryFullSignal.setVisible(false);
+        }
+
+        bar.runAction(progressTo);
     },
 
     avatarInit:function(){
@@ -257,5 +342,24 @@ var BattleFieldUI = cc.Layer.extend({
                 sec = "0" + sec;
             label.setString(min+":"+sec);
         }, 1);
+    },
+
+    heroDead:function(hero){
+        if(hero._name == "Knight"){
+            cc.GreyShader.setGreyShader(this.knightPng)
+            cc.GreyShader.setGreyShader(this.knightPngFrame)    
+            this.knightAngryFullSignal.setVisible(false)   
+            this.knightAngryClone.setVisible(false)
+        }else if(hero._name == "Mage"){
+            cc.GreyShader.setGreyShader(this.magePng)
+            cc.GreyShader.setGreyShader(this.magePngFrame)    
+            this.mageAngryFullSignal.setVisible(false)   
+            this.mageAngryClone.setVisible(false)
+        }else{
+            cc.GreyShader.setGreyShader(this.archerPng)
+            cc.GreyShader.setGreyShader(this.archerPngFrame)    
+            this.archerAngryFullSignal.setVisible(false)   
+            this.archerAngryClone.setVisible(false)
+        }
     }
 });

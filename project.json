@@ -19,6 +19,7 @@
         "src/MessageDispatcher.js",
         "src/Helper.js",
         "src/GlobalVariables.js",
+        "src/AttackCommand.js",
         "src/MainMenuScene.js",
         "src/ChooseRoleScene.js",
         "src/BattleScene.js",

@@ -9,6 +9,8 @@
     var distanceWithHeroX = 150
     var distanceWithHeroY = 150
 
+    var EXIST_MIN_MONSTER = 4
+
     var GameMaster = function(layer){
         this._totaltime = 0;
         this._layer = layer;
@@ -24,7 +26,7 @@
             this.addHeroes();
             this.addMonsters();
 
-            for(var i=0; i < 1; ++i)
+            for(var i=0; i < 4; ++i)
                 this.randomshowMonster(true);
 
             stage=1;
@@ -38,19 +40,19 @@
             knight.setAIEnabled(true);
             HeroManager.push(knight);
 
-            var mage = new Mage();
-            mage.setPosition(battleSiteX[0], 400);
-            this._layer.addChild(mage);
-            mage.idleMode();
-            mage.setAIEnabled(true);
-            HeroManager.push(mage);
+            // var mage = new Mage();
+            // mage.setPosition(battleSiteX[0], 400);
+            // this._layer.addChild(mage);
+            // mage.idleMode();
+            // mage.setAIEnabled(true);
+            // HeroManager.push(mage);
 
-            var archer = new Archer();
-            archer.setPosition(battleSiteX[0], 150);
-            this._layer.addChild(archer);
-            archer.idleMode();
-            archer.setAIEnabled(true);
-            HeroManager.push(archer);
+            // var archer = new Archer();
+            // archer.setPosition(battleSiteX[0], 150);
+            // this._layer.addChild(archer);
+            // archer.idleMode();
+            // archer.setAIEnabled(true);
+            // HeroManager.push(archer);
         },
 
         addMonsters:function(){
@@ -99,8 +101,6 @@
 
         randomshowMonster:function(isFront){
             var rand = Math.random();
-
-            rand = 0.9;
             
             if(rand < 0.15){
                 if(cc.pool.hasObject(Dragon))
@@ -124,25 +124,71 @@
 
         showDragon:function(isFront){
             var dragon = cc.pool.getFromPool(Dragon);
-            cc.log("show dragon" + dragon);
 
             dragon.reset();
-            //todo
+            var appearPos = this.getFocusPointOfHeros();
+            var random = Math.random()*0.2+1;
+            if(stage == 0){
+                appearPos.x += frontDistanceWithHeroX*random;
+                dragon.setFacing(90);
+            }else{
+                if(isFront){
+                    appearPos.x += frontDistanceWithHeroX*1.8*random;
+                    dragon.setFacing(90);
+                }else{
+                    appearPos.x -= backwardDistanceWithHeroX*1.8*random;
+                    dragon.setFacing(-90);
+                }
+            }
+
+            randomY = 2*Math.random()-1;
+            appearPos.y = appearPos.y + randomY*distanceWithHeroY;
+            dragon.setPosition(appearPos);
+            dragon._myPos = appearPos;
+            dragon.setVisible(true);
+            dragon._goRight = false;
+            dragon.setAIEnabled(true);
+            MonsterManager.push(dragon);
         },
 
         showPiglet:function(isFront){
-            var pig = cc.pool.getFromPool(Piglet);
+            var piglet = cc.pool.getFromPool(Piglet);
             cc.log("show piglet" + piglet);
+            piglet.reset();
+            var appearPos = this.getFocusPointOfHeros();
+            var randomX = Math.random()*0.2+1;
+            if(stage == 0){
+                appearPos.x += frontDistanceWithHeroX*randomX;
+                piglet.setFacing(90);
+            }else{
+                if(isFront){
+                    appearPos.x += frontDistanceWithHeroX*1.8*randomX;
+                    piglet.setFacing(90);
+                }else{
+                    appearPos.x -= backwardDistanceWithHeroX*1.8*randomX;
+                    piglet.setFacing(-90)
+                }
+            }
+            var randomY = 2*Math.random()-1;
+            appearPos.y -= randomY*distanceWithHeroY;
+            piglet.setPosition(appearPos);
+            piglet._myPos = appearPos;
+            piglet.setVisible(true);
+            piglet._goRight = false;
+            piglet.setAIEnabled(true);
+            MonsterManager.push(piglet);
         },
 
         showRat:function(isFront){
             var rat = cc.pool.getFromPool(Rat);
-            cc.log("show rat" + rat);
+            rat.reset();
+            rat._goRight = false;
+            this.jumpInto(rat, isFront);
+            MonsterManager.push(rat);
         },
 
         showSlime:function(isFront){
             var slime = cc.pool.getFromPool(Slime);
-            cc.log("show slime" + slime);
             slime.reset();
             slime._goRight = false;
             this.jumpInto(slime, isFront);
@@ -170,7 +216,23 @@
                     ));
                 obj.setFacing(135);
             }else{
-                //todo
+                if(isFront){
+                    obj.runAction(cc.sequence(
+                        cc.delayTime(Math.random()),
+                        cc.callFunc(function(){obj.setVisible(true);}),
+                        cc.JumpBy3D.create(0.5, cc.vec3(0, -1700 + 300*Math.random(), 0),150, 1),
+                        cc.callFunc(function(){obj.setAIEnabled(true); obj._myPos = obj.getPosition()})
+                    ));
+                    obj.setFacing(135);
+                }else{
+                    obj.runAction(cc.sequence(
+                        cc.delayTime(Math.random()),
+                        cc.callFunc(function(){obj.setVisible(true);}),
+                        cc.JumpBy3D.create(0.5, cc.vec3(200*(Math.random()*0.6+0.7), -1700 + 300*Math.random(), 0),150, 1),
+                        cc.callFunc(function(){obj.setAIEnabled(true); obj._myPos = obj.getPosition()})
+                    ));
+                    obj.setFacing(45);
+                }
             }
         },
 
@@ -183,6 +245,25 @@
         },
 
         logicUpdate:function(){
+            if(stage === 1){
+                if(MonsterManager.length < EXIST_MIN_MONSTER){
+                    for(var i = 0; i < 4; ++i)
+                        this.randomshowMonster(true);
+
+                    stage = 2;
+                }
+            }else if(stage === 2){
+                if(MonsterManager.length < EXIST_MIN_MONSTER){
+                    for(var i = 0; i < 4; ++i)
+                        this.randomshowMonster(true);
+
+                    stage = 3;
+                }
+            }else if(stage === 3){
+
+            }else if(stage === 4){
+
+            }
 
         },
 
