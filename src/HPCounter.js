@@ -46,7 +46,8 @@ var HPCounter = cc.Node.extend({
                 var seq = cc.sequence(
                     cc.scaleTo(tm/2, targetScale).easing(cc.easeElasticOut()),
                     cc.fadeOut(tm/2),
-                    cc.callFunc(function(){blood.removeFromParent(); self._isBlooding = false;self._num=0;})
+                    //todo fix error here
+                    cc.callFunc(function(){try{blood.removeFromParent();}catch(e){} self._isBlooding = false;self._num=0;})
                     );
                 var spawn = cc.spawn(
                     seq,

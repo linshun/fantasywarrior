@@ -8,7 +8,10 @@ MonsterManager = null;
 
 cc.spriteFrameCache.addSpriteFrames("res/FX/FX.plist");
 RECTS = {
-
+    iceBolt : cc.spriteFrameCache.getSpriteFrame("icebolt.png").getRect(),
+    iceSpike : cc.spriteFrameCache.getSpriteFrame("iceSpike1.png").getRect(),
+    fireBall : cc.spriteFrameCache.getSpriteFrame("fireball1.png").getRect(),
+    thunderBall : cc.spriteFrameCache.getSpriteFrame("thunderball.png").getRect()
 };
 
 

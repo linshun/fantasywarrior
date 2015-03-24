@@ -1,10 +1,10 @@
 var Knight = Actor.extend({
 
     ctor:function(){
+        this._super("model/knight/knight.c3b");
+
         copyObject(ActorCommonValues, this);
         copyObject(KnightValues, this);
-
-        this._super("model/knight/knight.c3b");
 
         this._useWeaponId = ReSkin.knight.weapon;
         this._useArmourId = ReSkin.knight.armour;
@@ -54,11 +54,51 @@ var Knight = Actor.extend({
         cc.audioEngine.playEffect(WarriorProperty.specialAttackShout);
 
         currentLayer.addChild(new KnightNormalAttack(this.getPosition(), this._curFacing, attack, this));
-        // this.//todo
+        this._sprite.runAction(this.attackEffect.clone());
+
+        var pos = this.getPosition();
+        pos.x += 50;
+        pos = cc.pRotateByAngle(pos, this._myPos, this._curFacing);
+
+        cc.audioEngine.playEffect(WarriorProperty.specialAttack1);
+
+        var self = this;
+        function punch(){
+            currentLayer.addChild(new KnightNormalAttack(pos, self._curFacing, self));
+            self._sprite.runAction(self.attackEffect.clone())
+        }
+        delayExecute(this, punch, 0.2);
     },
 
     initAttackEffect:function(){
-        //todo
+        var speed = 0.15,
+            startRotate = 145,
+            rotate = -60,
+            scale = 0.01,
+            sprite = new cc.Sprite("#specialAttack.jpg");
+
+        sprite.setVisible(false);
+        sprite.setBlendFunc(cc.ONE, cc.ONE);
+        sprite.setScaleX(scale);
+        sprite.setRotation(startRotate);
+        sprite.setOpacity(0);
+        sprite.setAnchorPoint(cc.p(0.5, -0.5));
+        sprite.setPosition3D(cc.math.vec3(10, 0, 50));
+        this.addChild(sprite);
+        this._sprite = sprite;
+
+        var attack = cc.spawn(
+            cc.scaleTo(speed, 2.5, 2.5),
+            cc.rotateBy(speed, rotate),
+            cc.fadeIn(0)
+            );
+        var restore = cc.sequence(
+            cc.fadeOut(0.5),
+            cc.scaleTo(0, scale, 2.5),
+            cc.rotateTo(0, startRotate)
+            );
+        this.attackEffect = cc.sequence(cc.show(), attack, restore);
+        this.attackEffect.retain();
     },
 
     hurt : function(collider, dirKnockMode){

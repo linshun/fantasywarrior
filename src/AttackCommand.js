@@ -112,5 +112,150 @@
         }
     });
     _G.KnightNormalAttack = KnightNormalAttack;
+
+    var ArcherNormalAttack = BasicCollider.extend({
+        ctor:function(pos, facing, attackInfo, owner){
+            this._super(pos, facing, attackInfo);
+            this.owner = owner;
+
+            this.sp = Archer.createArrow();
+            this.sp.setRotation(cc.radiansToDegrees(-facing)-90);
+            this.addChild(this.sp);
+        },
+
+        onCollide:function(target){
+            this.hurtEffect(target);
+            this.playHitAudio();
+            this.owner._angry += target.hurt(this, true)*0.3;
+            MessageDispatcher.dispatchMessage(MessageDispatcher.MessageType.ANGRY_CHANGE, [target]);
+            this.curDuration = this.duration + 1;
+        },
+
+        onUpdate:function(dt){
+            var selfPos = this.getPosition();
+            var nextPos = cc.pRotateByAngle(cc.pAdd(cc.p(this.speed*dt, 0), selfPos), selfPos, this.facing);
+            this.setPosition(nextPos);
+        }
+    });
+    _G.ArcherNormalAttack = ArcherNormalAttack;
     
+
+    var ArcherSpecialAttack = BasicCollider.extend({
+        ctor:function(pos,facing,attackInfo, owner){
+            this._super(pos,facing,attackInfo);
+
+            this.owner = owner;
+            this.sp = Archer.createArrow();
+            this.sp.setRotation(cc.radiansToDegrees(-facing)-90);
+            this.addChild(this.sp);
+        },
+
+        onCollide:function(target){
+            if(this.curDOTTime >= this.DOTTimer){
+                this.hurtEffect(target);
+                this.playHitAudio();
+                this.owner._angry += target.hurt(this, true)*0.3;
+                MessageDispatcher.dispatchMessage(MessageDispatcher.MessageType.ANGRY_CHANGE, [target]);
+                this.DOTApplied = true;
+            }
+        },
+
+        onUpdate:function(dt){
+            var selfPos = this.getPosition();
+            var nextPos = cc.pRotateByAngle(cc.pAdd(cc.p(this.speed*dt, 0), selfPos), selfPos, this.facing);
+            this.setPosition(nextPos);
+
+            this.curDOTTime += dt;
+            if(this.DOTApplied){
+                this.DOTApplied = false;
+                this.curDOTTime = 0;
+            }
+        }
+    });
+    _G.ArcherSpecialAttack = ArcherSpecialAttack;
+
+    var MageNormalAttack = BasicCollider.extend({
+        ctor:function(pos,facing,attackInfo, target, owner){
+            this._super(pos,facing,attackInfo);
+            this._target = target;
+            this.owner = owner;
+
+            this.sp = cc.BillBoard.create("FX/FX.png", RECTS.iceBolt, 0);
+            this.sp.setPosition3D(cc.math.vec3(0, 0, 50));
+            this.sp.setScale(2);
+            this.addChild(this.sp);
+
+            var t = ParticleManager.getPlistData("iceTrail")
+            cc.log("*******************************************************")
+            cc.log(t)
+
+            // var smoke = cc.ParticleSystem.create(ParticleManager.getPlistData("iceTrail"));
+            // var magicf = cc.spriteFrameCache.getSpriteFrame("puff.png");
+            // smoke.setTextureWithRect(magicf.getTexture(), magicf.getRect());
+            // smoke.setScale(2);
+            // this.addChild(smoke);
+            // smoke.setRotation3D(cc.math.vec3(90, 0, 0));
+            // smoke.setGlobalZOrder(0);
+            // smoke.setVertexZ(50);
+
+            // var pixi = cc.ParticleSystem.create(ParticleManager.getPlistData("pixi"));
+            // var pixif = cc.spriteFrameCache.getSpriteFrame("particle.png");
+            // pixi.setTextureWithRect(pixif.getTexture(), pixif.getRect());
+            // pixi.setScale(2);
+            // this.addChild(pixi);
+            // pixi.setRotation3D(cc.math.vec3(90, 0, 0));
+            // pixi.setGlobalZOrder(0);
+            // pixi.setVertexZ(50);
+
+            // this.part1 = smoke;
+            // this.part2 = pixi;
+        },
+
+        onTimeOut:function(){
+            // this.part1.stopSystem();
+            // this.part2.stopSystem();
+            var self = this;
+            this.runAction(cc.sequence(cc.delayTime(1), cc.callFunc(function(){self.removeFromParent()})))
+
+            // var magic = cc.ParticleSystem.create(ParticleManager.getPlistData("magic"));
+            // var magicf = cc.spriteFrameCache.getSpriteFrame("particle.png");
+            // magic.setTextureWithRect(magicf.getTexture(), magicf.getRect());
+            // magic.setScale(1.5);
+            // magic.setRotation3D(cc.math.vec3(90, 0, 0));
+            // this.addChild(magic);
+            // magic.setGlobalZOrder(0);
+            // magic.setVertexZ(0);
+
+            // this.sp.setTextureRect(RECTS.iceSpike);
+            // this.sp.runAction(cc.fadeOut(1));
+            // this.sp.setScale(4);
+        },
+
+        playHitAudio:function(){
+            cc.audioEngine.playEffect(MageProperty.ice_normalAttackHit);
+        },
+
+        onCollide:function(target){
+            this.hurtEffect(target);
+            this.playHitAudio();
+            MessageDispatcher.dispatchMessage(MessageDispatcher.MessageType.ANGRY_CHANGE, [target])
+            this.curDuration = this.duration + 1;
+        },
+
+        onUpdate:function(dt){
+            var nextPos
+            if(!!this._target && this._target._isalive){
+                let selfPos = this.getPosition();
+                var tpos = this._target._myPos;
+                var angle = cc.pToAngleSelf(cc.pSub(tpos, selfPos));
+                nextPos = cc.pRotateByAngle(cc.pAdd(cc.p(this.speed*dt, 0), selfPos), selfPos, angle);
+                this.setPosition(nextPos);
+            }else{
+                let selfPos = this.getPosition();
+                nextPos = cc.pRotateByAngle(cc.pAdd(cc.p(this.speed*dt, 0), selfPos), selfPos, this.facing);
+            }
+            this.setPosition(nextPos);
+        }
+    });
+    _G.MageNormalAttack = MageNormalAttack;
 })(this);

@@ -1,12 +1,13 @@
 var Slime = Actor.extend({
     
     ctor:function(){
+        this._super("model/slime/slime.c3b");
+
         copyObject(ActorCommonValues, this);
         copyObject(SlimeValues, this);
 
         this._angryFace = false;
-
-        this._super("model/slime/slime.c3b");
+        
         this.setTexture("model/slime/baozi.jpg");
         this.setScale(17);
         this.addEffect(cc.math.vec3(0, 0, 0), CelLine, -1);
