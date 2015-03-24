@@ -48,7 +48,19 @@
  */
 
 cc.game.onStart = function(){
-    cc.view.setDesignResolutionSize(1136, 640, cc.ResolutionPolicy.SHOW_ALL);
+    var frameSize = cc.view.getFrameSize();
+    var winSize = {width:1136, height:640};
+    var widthRate = frameSize.width/winSize.width;
+    var heightRate = frameSize.height/winSize.height;
+    if(widthRate>heightRate){
+        cc.view.setDesignResolutionSize(winSize.width, winSize.height*heightRate/widthRate, cc.ResolutionPolicy.NO_BORDER);
+        resolutionRate = heightRate/widthRate;
+    }else{
+        cc.view.setDesignResolutionSize(winSize.width*widthRate/heightRate, winSize.height, cc.ResolutionPolicy.NO_BORDER);
+        resolutionRate = widthRate/heightRate;
+    }
+
+    
     jsb.fileUtils.addSearchPath("res");
     //load resources
     cc.LoaderScene.preload(g_resources, function () {

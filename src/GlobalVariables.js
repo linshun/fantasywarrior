@@ -1,3 +1,4 @@
+resolutionRate = null;
 UIZorder = 2000
 FXZorder = 1999
 CelLine = 0.009
