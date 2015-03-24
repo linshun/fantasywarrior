@@ -88,6 +88,34 @@ var Mage = Actor.extend({
     specialAttack:function(){
         this._specialAttackChance = 0;
         this._angry = ActorCommonValues._angry;
+        MessageDispatcher.dispatchMessage(MessageDispatcher.MessageType.ANGRY_CHANGE, [this])
+
+        //mage will create 3 ice spikes on the ground
+        cc.audioEngine.playEffect(MageProperty.specialAttackShout);
+        cc.audioEngine.playEffect(MageProperty.ice_special)
+
+        var pos1 = this.getPosition();
+        var pos2 = this.getPosition();
+        var pos3 = this.getPosition();
+        pos1.x += 130;
+        pos2.x += 330;
+        pos3.x += 530;
+        pos1 = cc.pRotateByAngle(pos1, this._myPos, this._curFacing);
+        pos2 = cc.pRotateByAngle(pos2, this._myPos, this._curFacing);
+        pos3 = cc.pRotateByAngle(pos3, this._myPos, this._curFacing);
+        currentLayer.addChild(new MageIceSpikes(pos1, this._curFacing, this._specialAttack, this));
+
+        var self = this;
+        function spike2(){
+            currentLayer.addChild(new MageIceSpikes(pos2, self._curFacing, self._specialAttack, self));
+        }
+
+        function spike3(){
+            currentLayer.addChild(new MageIceSpikes(pos3, self._curFacing, self._specialAttack, self));
+        }
+
+        delayExecute(this, spike2, 0.25);
+        delayExecute(this, spike3, 0.5);
     },
 
     setDefaultEqt:function(){

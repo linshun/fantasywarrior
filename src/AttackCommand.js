@@ -185,50 +185,46 @@
             this.sp.setScale(2);
             this.addChild(this.sp);
 
-            var t = ParticleManager.getPlistData("iceTrail")
-            cc.log("*******************************************************")
-            cc.log(t)
+            var smoke = cc.ParticleSystem.create(ParticleManager.getPlistData("iceTrail"));
+            var magicf = cc.spriteFrameCache.getSpriteFrame("puff.png");
+            smoke.setTextureWithRect(magicf.getTexture(), magicf.getRect());
+            smoke.setScale(2);
+            this.addChild(smoke);
+            smoke.setRotation3D(cc.math.vec3(90, 0, 0));
+            smoke.setGlobalZOrder(0);
+            smoke.setVertexZ(50);
 
-            // var smoke = cc.ParticleSystem.create(ParticleManager.getPlistData("iceTrail"));
-            // var magicf = cc.spriteFrameCache.getSpriteFrame("puff.png");
-            // smoke.setTextureWithRect(magicf.getTexture(), magicf.getRect());
-            // smoke.setScale(2);
-            // this.addChild(smoke);
-            // smoke.setRotation3D(cc.math.vec3(90, 0, 0));
-            // smoke.setGlobalZOrder(0);
-            // smoke.setVertexZ(50);
+            var pixi = cc.ParticleSystem.create(ParticleManager.getPlistData("pixi"));
+            var pixif = cc.spriteFrameCache.getSpriteFrame("particle.png");
+            pixi.setTextureWithRect(pixif.getTexture(), pixif.getRect());
+            pixi.setScale(2);
+            this.addChild(pixi);
+            pixi.setRotation3D(cc.math.vec3(90, 0, 0));
+            pixi.setGlobalZOrder(0);
+            pixi.setVertexZ(50);
 
-            // var pixi = cc.ParticleSystem.create(ParticleManager.getPlistData("pixi"));
-            // var pixif = cc.spriteFrameCache.getSpriteFrame("particle.png");
-            // pixi.setTextureWithRect(pixif.getTexture(), pixif.getRect());
-            // pixi.setScale(2);
-            // this.addChild(pixi);
-            // pixi.setRotation3D(cc.math.vec3(90, 0, 0));
-            // pixi.setGlobalZOrder(0);
-            // pixi.setVertexZ(50);
-
-            // this.part1 = smoke;
-            // this.part2 = pixi;
+            this.part1 = smoke;
+            this.part2 = pixi;
         },
 
         onTimeOut:function(){
-            // this.part1.stopSystem();
-            // this.part2.stopSystem();
+            this.part1.stopSystem();
+            this.part2.stopSystem();
             var self = this;
             this.runAction(cc.sequence(cc.delayTime(1), cc.callFunc(function(){self.removeFromParent()})))
 
-            // var magic = cc.ParticleSystem.create(ParticleManager.getPlistData("magic"));
-            // var magicf = cc.spriteFrameCache.getSpriteFrame("particle.png");
-            // magic.setTextureWithRect(magicf.getTexture(), magicf.getRect());
-            // magic.setScale(1.5);
-            // magic.setRotation3D(cc.math.vec3(90, 0, 0));
-            // this.addChild(magic);
-            // magic.setGlobalZOrder(0);
-            // magic.setVertexZ(0);
+            var magic = cc.ParticleSystem.create(ParticleManager.getPlistData("magic"));
+            var magicf = cc.spriteFrameCache.getSpriteFrame("particle.png");
+            magic.setTextureWithRect(magicf.getTexture(), magicf.getRect());
+            magic.setScale(1.5);
+            magic.setRotation3D(cc.math.vec3(90, 0, 0));
+            this.addChild(magic);
+            magic.setGlobalZOrder(0);
+            magic.setVertexZ(0);
 
-            // this.sp.setTextureRect(RECTS.iceSpike);
-            // this.sp.runAction(cc.fadeOut(1));
-            // this.sp.setScale(4);
+            this.sp.setTextureRect(RECTS.iceSpike);
+            this.sp.runAction(cc.fadeOut(1));
+            this.sp.setScale(4);
         },
 
         playHitAudio:function(){
@@ -258,4 +254,100 @@
         }
     });
     _G.MageNormalAttack = MageNormalAttack;
+
+    var MageIceSpikes = BasicCollider.extend({
+        ctor:function(pos, facing, attackInfo, owner){
+            this._super(pos, facing, attackInfo);
+
+            this.sp = cc.ShadowSprite.createWithSpriteFrameName("shadow.png");
+            this.sp.setGlobalZOrder(-this.getPositionY()+FXZorder);
+            this.sp.setOpacity(100);
+            this.sp.setPosition3D(cc.math.vec3(0, 0, 1));
+            this.sp.setScale(this.maxRange/12);
+            this.sp.setGlobalZOrder(-1);
+            this.addChild(this.sp);
+            this.owner = owner;
+
+            //create 3 spikes
+            var x = new cc.Node();
+            this.spikes = x;
+            this.addChild(x);
+            for(let i = 0; i < 10; ++i){
+                let rand = Math.ceil(Math.random()*3);
+                let frameName = "#iceSpike"+rand+".png";
+                var spike = new cc.Sprite(frameName);
+                spike.setAnchorPoint(0.5, 0);
+                spike.setRotation3D(cc.math.vec3(90, 0, 0));
+                x.addChild(spike);
+                if(rand == 3)
+                    spike.setScale(1.5);
+                else
+                    spike.setScale(2);
+                spike.setOpacity(165);
+                spike.setFlippedX(!Math.floor(Math.random()*2));
+                spike.setPosition3D(cc.math.vec3(cc.randomMinus1To1()*100,cc.randomMinus1To1()*100,1));
+                spike.setGlobalZOrder(0);
+                x.setScale(0);
+                x.setVertexZ(-210);
+            }
+            x.runAction(cc.moveBy(0.3, cc.math.vec3()).easing(cc.easeBackOut()));
+            x.runAction(cc.scaleTo(0.4, 1).easing(cc.easeBounceOut()));
+
+            var magic = cc.BillboardParticleSystem.create(ParticleManager.getPlistData("magic"));
+            var magicf = cc.spriteFrameCache.getSpriteFrame("particle.png");
+            magic.setTextureWithRect(magicf.getTexture(), magicf.getRect());
+            magic.setCamera(currentLayer._camera);
+            magic.setScale(1.5);
+            this.addChild(magic);
+            magic.setGlobalZOrder(-this.getPositionY()*2+FXZorder);
+            magic.setVertexZ(0);
+        },
+
+        onTimeOut:function(){
+            this.spikes.setVisible(false);
+            var puff = cc.BillboardParticleSystem.create(ParticleManager.getPlistData("puffRing"));
+            var puffFrame = cc.spriteFrameCache.getSpriteFrame("puff.png");
+            puff.setTextureWithRect(puffFrame.getTexture(), puffFrame.getRect());
+            puff.setCamera(currentLayer._camera);
+            puff.setScale(3);
+            this.addChild(puff);
+            puff.setGlobalZOrder(-this.getPositionY()+FXZorder);
+            puff.setVertexZ(20);
+
+            var magic = cc.BillboardParticleSystem.create(ParticleManager.getPlistData("magic"));
+            var magicf = cc.spriteFrameCache.getSpriteFrame("particle.png");
+            magic.setTextureWithRect(magicf.getTexture(), magicf.getRect());
+            magic.setCamera(currentLayer._camera);
+            magic.setScale(1.5);
+            this.addChild(magic);
+            magic.setGlobalZOrder(-this.getPositionY()+FXZorder);
+            magic.setVertexZ(0);
+
+            this.sp.runAction(cc.fadeOut(1));
+            var self = this;
+            this.runAction(cc.sequence(
+                cc.delayTime(1),
+                cc.callFunc(function(){self.removeFromParent()})
+                ));
+        },
+
+        onCollide:function(target){
+            if(this.curDOTTime > this.DOTTimer){
+                this.hurtEffect(target);
+                this.playHitAudio();
+                this.owner._angry += target.hurt(this)*0.1;
+                MessageDispatcher.dispatchMessage(MessageDispatcher.MessageType.ANGRY_CHANGE, [target]);
+                this.DOTApplied = true;
+            }
+        },
+
+        onUpdate:function(dt){
+            this.curDOTTime += dt;
+            if(this.DOTApplied){
+                this.DOTApplied = false;
+                this.curDOTTime = 0;
+            }
+        }
+    });
+    _G.MageIceSpikes = MageIceSpikes;
 })(this);
