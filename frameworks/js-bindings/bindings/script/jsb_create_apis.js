@@ -1018,7 +1018,7 @@ cc.ParticleSystem.create = function(plistFile){
     var particleSystem =null;
     if (typeof(plistFile) === "number") {
         particleSystem = cc.ParticleSystem.createWithTotalParticles(plistFile);
-    }else if(typeof(plistFile) === "string"){
+    }else{
         particleSystem = cc.ParticleSystem._create(plistFile);
     }
     return particleSystem;
