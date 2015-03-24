@@ -116,7 +116,8 @@ var Actor = cc.EffectSprite3D.extend({
 
             if(this._hp > 0){
                 if(collider.knock && damage != 1){
-                    this.knockMode(collider, dirKnockMode);
+                    if(this._name != "Slime")
+                        this.knockMode(collider, dirKnockMode);
                 }
                 this.hurtSoundEffects();
             }else{
