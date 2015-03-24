@@ -245,25 +245,88 @@
         },
 
         logicUpdate:function(){
+            cc.log("************************************************************ stage: "+stage)
             if(stage === 1){
                 if(MonsterManager.length < EXIST_MIN_MONSTER){
-                    for(var i = 0; i < 4; ++i)
+                    for(let i = 0; i < 4; ++i)
                         this.randomshowMonster(true);
 
                     stage = 2;
                 }
             }else if(stage === 2){
                 if(MonsterManager.length < EXIST_MIN_MONSTER){
-                    for(var i = 0; i < 4; ++i)
+                    for(let i = 0; i < 4; ++i)
                         this.randomshowMonster(true);
 
                     stage = 3;
                 }
             }else if(stage === 3){
-
+                if(MonsterManager.length == 0){
+                    for(let i = 0; i < HeroManager.length; ++i){
+                        HeroManager[i]._goRight = true;
+                    }
+                    stage = 4;
+                }
             }else if(stage === 4){
+                if(this.getFocusPointOfHeros().x > battleSiteX[1]){
+                    for(let i = 0; i < 3; ++i)
+                        this.randomshowMonster(true);
+                    for(let i = 0; i < 4; ++i)
+                        this.randomshowMonster(false)
 
+                    stage = 5;
+                }
+            }else if(stage == 5){
+                if(MonsterManager.length < EXIST_MIN_MONSTER){
+                    for(let i = 0; i < 4; ++i)
+                        this.randomshowMonster(true);
+
+                    stage = 6;
+                }
+            }else if(stage === 6){
+                if(MonsterManager.length < EXIST_MIN_MONSTER){
+                    for(let i = 0; i < 4; ++i)
+                        this.randomshowMonster(false);
+
+                    stage = 7;
+                }
+            }else if(stage === 7){
+                if(MonsterManager.length == 0){
+                    for(let i = 0; i < HeroManager.length; ++i){
+                        let hero = HeroManager[i];
+                        if(hero)
+                            hero._goRight = true;
+                    }
+
+
+                    var d = cc.pool.getFromPool(Dragon);
+                    if(d)
+                        d.removeFromParent();
+                    
+                    for(let i = 0; i < monsterCount.piglet; ++i){
+                        var p = cc.pool.getFromPool(Piglet);
+                        if(p)
+                            p.removeFromParent();
+                    }
+
+                    for(let i = 0; i < monsterCount.slime; ++i){
+                        var s = cc.pool.getFromPool(Slime);
+                        if(s)
+                            s.removeFromParent();
+                    }
+
+                    stage = 8;
+                }
+            }else if(stage === 8){
+                if(this.getFocusPointOfHeros().x > battleSiteX[2]){
+                    this.showWarning();
+                    stage = 9;
+                }
             }
+
+        },
+
+        showWarning:function(){
 
         },
 

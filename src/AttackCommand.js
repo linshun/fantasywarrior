@@ -350,4 +350,54 @@
         }
     });
     _G.MageIceSpikes = MageIceSpikes;
+
+    var DragonAttack = BasicCollider.extend({
+        ctor:function(pos,facing,attackInfo){
+            this._super(pos,facing,attackInfo);
+
+            this.sp = cc.BillBoard.create("FX/FX.png", RECTS.fireBall);
+            this.sp.setPosition3D(cc.math.vec3(0, 0, 48));
+            this.sp.setScale(1.7);
+            this.addChild(this.sp);
+        },
+
+        onTimeOut:function(){
+            this.runAction(cc.sequence(
+                    cc.delayTime(0.5),
+                    cc.callFunc(function(){this.removeFromParent()}, this)
+                ));
+
+            var magic = cc.ParticleSystem.create(ParticleManager.getPlistData("magic"));
+            var magicf = cc.spriteFrameCache.getSpriteFrame("particle.png");
+            magic.setTextureWithRect(magicf.getTexture(), magicf.getRect());
+            magic.setScale(1.5);
+            magic.setRotation3D(cc.math.vec3(90, 0, 0));
+            this.addChild(magic);
+            magic.setGlobalZOrder(-this.y*2+FXZorder);
+            magic.setVertexZ(0);
+            magic.setEndColor(cc.color(255, 128, 0));
+
+            var fireBallAction = new cc.Animate(cc.animationCache.getAnimation("fireBallAnim"));
+            this.sp.runAction(fireBallAction);
+            this.sp.setScale(2);
+        },
+
+        playHitAudio:function(){
+            cc.audioEngine.playEffect(MonsterDragonValues.fireHit);
+        },
+
+        onCollide:function(target){
+            this.hurtEffect(target);
+            this.playHitAudio();
+            target.hurt(this);
+            this.curDuration = this.duration + 1;
+        },
+
+        onUpdate:function(dt){
+            var selfPos = this.getPosition();
+            var nextPos = cc.pRotateByAngle(cc.pAdd(cc.p(this.speed*dt, 0), selfPos), selfPos, this.facing);
+            this.setPosition(nextPos);
+        }
+    });
+    _G.DragonAttack = DragonAttack;
 })(this);

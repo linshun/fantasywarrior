@@ -20,6 +20,24 @@ var Piglet = Actor.extend({
         copyObject(PigletValues, this);
         this.walkMode();
         this.setVertexZ(0);
+    },
+
+    playDyingEffects:function(){
+        cc.audioEngine.playEffect(MonsterPigletValues.dead);
+    },
+
+    hurtSoundEffects:function(){
+        cc.audioEngine.playEffect(MonsterPigletValues.hurt);
+    },
+
+    normalAttackSoundEffects:function(){
+        var rand = Math.random();
+        if(rand < 0.3)
+            cc.audioEngine.playEffect(MonsterPigletValues.attack1);
+        else if(rand < 0.6)
+            cc.audioEngine.playEffect(MonsterPigletValues.attack2);
+        else
+            cc.audioEngine.playEffect(MonsterPigletValues.attack3);
     }
 })
 

@@ -22,6 +22,13 @@ for(var i = 1; i < 6; ++i){
 hurtAnimation.setDelayPerUnit(0.1);
 cc.animationCache.addAnimation(hurtAnimation, "hurtAnimation");
 
+var fireBallAnim = new cc.Animation();
+for(var i = 1; i < 6; ++i){
+    fireBallAnim.addSpriteFrame( cc.spriteFrameCache.getSpriteFrame("fireball"+i+".png"));
+}
+fireBallAnim.setDelayPerUnit(0.1);
+cc.animationCache.addAnimation(fireBallAnim, "fireBallAnim");
+
 G =
 {
     bloodPercentDropSpeed : 2,

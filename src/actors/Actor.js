@@ -174,7 +174,6 @@ var Actor = cc.EffectSprite3D.extend({
     },
 
     knockMode:function(collider, dirKnockMode){
-        cc.log("knock mode")
         this.setStateType(EnumStateType.KNOCKING)
         this.playAnimation("knocked");
         this._timeKnocked = this._aliveTime;
@@ -254,7 +253,6 @@ var Actor = cc.EffectSprite3D.extend({
     },
 
     _findEnemy:function(heroOrMonster){
-        cc.log("find enemy ing..")
         var shortest = this._searchDistance,
             target = null, allDead = true;
         var list;
@@ -274,8 +272,7 @@ var Actor = cc.EffectSprite3D.extend({
                 allDead = false;
             }
         }
-        if(target != null)
-            cc.log("fine enmy end: " + target._name)
+        
         return target;//{target:target, allDead:allDead};
     },
 
@@ -290,7 +287,6 @@ var Actor = cc.EffectSprite3D.extend({
     },
 
     AI:function(){
-        cc.log(this._name + " update ai")
         if(!this._isalive)
             return;
 
@@ -301,20 +297,16 @@ var Actor = cc.EffectSprite3D.extend({
             this._targetFacing = cc.pToAngleSelf(cc.pSub(p2, p1));
             var isInRange = this._inRange();
             if((!this._cooldown || this._statetype != EnumStateType.WALKING) && !isInRange){
-                cc.log(this._name + " walk")
                 this.walkMode();
                 return;
             }else if(isInRange && this._statetype != EnumStateType.ATTACKING){
-                cc.log(this._name + " attack")
                 this.attackMode();
                 return;
             }
         }else if(this._statetype != EnumStateType.WALKING && this._goRight == true){
-            cc.log(this._name + "walk right")
             this.walkMode();
             return;
         }else if(this._cooldown || this._statetype != EnumStateType.IDLE){
-            cc.log(this._name + "idle")
             this.idleMode();
             return;
         }
@@ -348,7 +340,6 @@ var Actor = cc.EffectSprite3D.extend({
     },
 
     attackUpdate:function(dt){
-        // cc.log(this._name + " attack update")
         this._attackTimer += dt;
         if(this._curAnimation == "attack" || this._curAnimation == "special")
             return;
@@ -398,7 +389,6 @@ var Actor = cc.EffectSprite3D.extend({
             this._targetFacing = cc.pToAngleSelf(cc.pSub(this._target._myPos,this._myPos));
             
             if(this._inRange()){
-                cc.log("in attack range, ready to attack")
                 this.attackMode();
             }
         }else{
