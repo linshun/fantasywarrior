@@ -7,10 +7,11 @@ var ChooseRoleLayer = (function(){
     var TAG_middle = 2, TAG_left = 1, TAG_right = 3,
         TAG_bag = 10, TAG_weapon = 11, TAG_armour = 12, TAG_helmet = 13;
     // var rtt = [cc.math.vec3(-90, -60, 0), cc.math.vec3(0, 30, 0), cc.math.vec3(-90, -60, 0)];
-    var visibleSize = cc.director.getVisibleSize();
-    var pos = [cc.math.vec3(visibleSize.width*0.14, visibleSize.height*0.35, -180),
-               cc.math.vec3(visibleSize.width*0.34, visibleSize.height*0.25, -40),
-               cc.math.vec3(visibleSize.width*0.5, visibleSize.height*0.35, -180)];
+    // var visibleSize = cc.director.getVisibleSize();
+    var visibleSize = {width:1136, height:640};
+    var pos = [cc.math.vec3(visibleSize.width*0.13, visibleSize.height*0.35, -180),
+               cc.math.vec3(visibleSize.width*0.33, visibleSize.height*0.25, -40),
+               cc.math.vec3(visibleSize.width*0.49, visibleSize.height*0.35, -180)];
 
     var weapon_item_pos = cc.p(832, 280), 
         armour_item_pos = cc.p(916, 280),
