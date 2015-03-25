@@ -188,7 +188,6 @@ var Actor = cc.EffectSprite3D.extend({
     },
 
     dyingMode:function(knockSource, knockAmount){
-        cc.log("dying mode")
         this.setStateType(EnumStateType.DYING);
         this.playAnimation("dead");
         this.playDyingEffects();

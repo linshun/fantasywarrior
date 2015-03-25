@@ -101,6 +101,7 @@ var BattleLayer = (function(_G){
         
         //set camera
         this._camera = cc.Camera.createPerspective(60.0, cc.winSize.width/cc.winSize.height, 10.0, 4000.0);
+        this._camera.setPosition3D(cc.math.vec3(0, 200, 100));
         this._camera.setGlobalZOrder(10);
         // this._camera.setCameraFlag(cc.CameraFlag.USER1);
         this.addChild(this._camera);
@@ -121,7 +122,8 @@ var BattleLayer = (function(_G){
 
         specialCamera.position = pos;
         specialCamera.valid = true;
-        this.setColor(cc.color(125, 125, 125));
+        //TODO fix color 
+        // this.setColor(cc.color(125, 125, 125));
 
         var self = this;
         function restoreTimeScale(){
