@@ -10,6 +10,15 @@ var HPCounter = cc.Node.extend({
         var time = 1;
         var self = this;
 
+        if(self._isBlooding == false){
+            self._isBlooding = true;
+            self._num = damage;
+        }else{
+            self._blood.stopAllActions();
+            self._blood.removeFromParent();
+            self._num += damage;
+        }
+
         function getRandomXYZ(){
             var randx = 20*Math.sin(cc.degreesToRadians(time*0.5+4356)),
                 randy = 20*Math.sin(cc.degreesToRadians(time*0.37+5436)),
@@ -17,19 +26,20 @@ var HPCounter = cc.Node.extend({
             return cc.math.vec3(randx, randy, randz);
         }
 
-        function getBlood(){
-            var num = self._num;
-            var tm = 0.5;
-            var pointZ = 50;
+        var effect;
+        {
+            let num = self._num;
+            let tm = 0.5;
+            let pointZ = 50;
 
-            var effect = new cc.BillBoard();
-            var ttfconfig = {outlineSize:7, fontSize:50, glyphs:0, fontFilePath:"fonts/britanic bold.ttf"};
-            var blood = cc.Label.createWithTTF(ttfconfig, "-"+num, cc.TEXT_ALIGNMENT_CENTER, 400);
+            effect = new cc.BillBoard();
+            let ttfconfig = {outlineSize:7, fontSize:50, glyphs:0, fontFilePath:"fonts/britanic bold.ttf"};
+            let blood = cc.Label.createWithTTF(ttfconfig, "-"+num, cc.TEXT_ALIGNMENT_CENTER, 400);
             blood.enableOutline(cc.color(0, 0, 0, 255));
             blood.setScale(0.1);
             blood.setGlobalZOrder(FXZorder);
 
-            var targetScale = 0.6;
+            let targetScale = 0.6;
             if(num > 1000)
                 blood.setColor(cc.color(254, 58, 19));
             else if(num > 300)
@@ -43,13 +53,19 @@ var HPCounter = cc.Node.extend({
                 blood.setColor(cc.color(0, 180, 255));
 
             function getAction(){
-                var seq = cc.sequence(
+                let seq = cc.sequence(
                     cc.scaleTo(tm/2, targetScale).easing(cc.easeElasticOut()),
                     cc.fadeOut(tm/2),
                     //todo fix error here
-                    cc.callFunc(function(){if(blood) blood.removeFromParent(); self._isBlooding = false;self._num=0;})
+                    cc.callFunc(function(){
+                        if(self._isBlooding == true){
+                            self._blood.removeFromParent();
+                            self._isBlooding = false;
+                            self._num=0;
+                        } 
+                        })
                     );
-                var spawn = cc.spawn(
+                let spawn = cc.spawn(
                     seq,
                     cc.moveBy(tm, cc.math.vec3(0, 0, pointZ)),
                     cc.rotateBy(tm, cc.randomMinus1To1()*40)
@@ -58,7 +74,7 @@ var HPCounter = cc.Node.extend({
             }
 
             if(attack){
-                var criticalAttack = new cc.Sprite("#hpcounter.png");
+                let criticalAttack = new cc.Sprite("#hpcounter.png");
                 criticalAttack.setGlobalZOrder(FXZorder);
                 tm = 1;
                 criticalAttack.runAction(getAction());
@@ -74,18 +90,8 @@ var HPCounter = cc.Node.extend({
             self._blood.runAction(getAction());
             effect.addChild(blood);
 
-            return effect;
         }
 
-        if(self._isBlooding == false){
-            self._isBlooding = true;
-            self._num = damage;
-        }else{
-            self._blood.stopAllActions();
-            self._blood.removeFromParent();
-            self._num += damage;
-        }
-
-        return getBlood();
+        return effect;
     }
 });
