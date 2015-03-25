@@ -12,11 +12,11 @@
                     let dist = cc.pDistance(apos, mpos);
                     if(dist < (attack.maxRange + monster._radius) && dist > attack.minRange){
                         let angle = radNormalize(cc.pToAngleSelf(cc.pSub(mpos, apos)));
-                        let afacing = radNormalize(attack.facing);
+                        let afacing = radNormalize(attack.facing - 90);
 
-                        if((afacing + attack.angle/2)>angle && angle >(afacing-attack.angle/2)){
+                        // if((afacing + attack.angle/2)>angle && angle >(afacing-attack.angle/2)){
                             attack.onCollide(monster);
-                        }
+                        // }
                     }
                 }
             }else{
@@ -234,6 +234,7 @@
         onCollide:function(target){
             this.hurtEffect(target);
             this.playHitAudio();
+            this.owner._angry += target.hurt(this)*0.3;
             MessageDispatcher.dispatchMessage(MessageDispatcher.MessageType.ANGRY_CHANGE, [target])
             this.curDuration = this.duration + 1;
         },

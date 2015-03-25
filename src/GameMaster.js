@@ -188,10 +188,12 @@
 
         showSlime:function(isFront){
             var slime = cc.pool.getFromPool(Slime);
-            slime.reset();
-            slime._goRight = false;
-            this.jumpInto(slime, isFront);
-            MonsterManager.push(slime);
+            if(slime){
+                slime.reset();
+                slime._goRight = false;
+                this.jumpInto(slime, isFront);
+                MonsterManager.push(slime);
+            }
         },
 
         jumpInto:function(obj, isFront){

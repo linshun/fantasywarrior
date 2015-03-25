@@ -102,7 +102,7 @@ var BattleLayer = (function(_G){
         //set camera
         this._camera = cc.Camera.createPerspective(60.0, cc.winSize.width/cc.winSize.height, 10.0, 4000.0);
         this._camera.setGlobalZOrder(10);
-        this._camera.setCameraFlag(cc.CameraFlag.USER1);
+        // this._camera.setCameraFlag(cc.CameraFlag.USER1);
         this.addChild(this._camera);
 
         for(var i = 0; i < HeroManager.length; ++i){
@@ -110,7 +110,7 @@ var BattleLayer = (function(_G){
         }
 
         this._camera.addChild(uiLayer);
-        this.setCameraMask(cc.CameraFlag.USER1);
+        // this.setCameraMask(cc.CameraFlag.USER1);
 
         MessageDispatcher.registerMessage(MessageDispatcher.MessageType.SPECIAL_PERSPECTIVE, this.specialPerspective, this);
     },
