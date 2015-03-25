@@ -154,7 +154,7 @@ var BattleFieldUI = cc.Layer.extend({
         this.knightBloodClone.setColor(cc.color(255, 83, 23));
         this.knightBloodClone.setType(cc.ProgressTimer.TYPE_BAR);
         this.knightBloodClone.setBarChangeRate(cc.p(1, 0));
-        this.knightBloodClone.setMidpoint(cc.p(0.0));
+        this.knightBloodClone.setMidpoint(cc.p(0, 0));
         this.knightBloodClone.setPercentage(100);
         this.knightBloodClone.setPosition3D(cc.math.vec3(this.knightPng.x-1, this.knightPng.y-offset, 3));
         this.knightBloodClone.setScale(scale);
