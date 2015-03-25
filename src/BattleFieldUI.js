@@ -361,5 +361,30 @@ var BattleFieldUI = cc.Layer.extend({
             this.archerAngryFullSignal.setVisible(false)   
             this.archerAngryClone.setVisible(false)
         }
+    },
+
+    showVictoryUI:function(){
+        var layer = new cc.LayerColor(cc.color(10, 10, 10, 150));
+        layer.ignoreAnchorPointForPosition(false);
+        layer.setPosition3D(cc.math.vec3(cc.winSize.width*0.5, cc.winSize.height*0.5, 0));
+        var victory = new cc.Sprite("#victory.png");
+        victory.setPosition3D(cc.math.vec3(cc.winSize.width*0.5, cc.winSize.height*0.5, 3));
+        victory.setScale(0.1);
+        victory.setGlobalZOrder(UIZorder);
+        layer.addChild(victory, 1);
+        this.addChild(layer);
+        victory.runAction(cc.scaleTo(1.5, 1).easing(cc.easeElasticOut()));
+
+        cc.eventManager.addListener({
+            event:cc.EventListener.TOUCH_ONE_BY_ONE,
+            onTouchBegan:function(){return true;},
+            onTouchEnded:function(){
+                cc.audioEngine.stopMusic();
+                cc.audioEngine.stopAllEffects();
+
+                cc.director.replaceScene(new MainMenuScene);
+                currentLayer = null;
+            }
+        }, this);
     }
 });
