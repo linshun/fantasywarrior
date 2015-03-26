@@ -60,7 +60,7 @@ var LoadingLayer = cc.Layer.extend({
         this._loadingbar.setPercent(this._num/this._totalResource * 100);
 
         //loading text action
-        var loadingAction = cc.jumpBy(0.016, cc.p(0, 0), 50, 1);
+        var loadingAction = cc.jumpBy(dt, cc.p(0, 0), 50, 1);
         var loadingIndex = this._num%this._loading.length;
         this._loading[loadingIndex].runAction(loadingAction);
 

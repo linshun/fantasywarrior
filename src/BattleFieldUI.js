@@ -384,6 +384,9 @@ var BattleFieldUI = cc.Layer.extend({
 
                 cc.director.replaceScene(new MainMenuScene);
                 currentLayer = null;
+                gameMaster = null;
+                HeroManager.length = 0;
+                MonsterManager.length = 0;
             }
         }, this);
     }
