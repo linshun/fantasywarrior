@@ -320,7 +320,7 @@ var BattleFieldUI = cc.Layer.extend({
     },
 
     timeInit:function(){
-        var ttfconfig = {outlineSize:1, fontSize:25, glyphs:0, fontFilePath:"fonts/britanic bold.ttf"};
+        var ttfconfig = {outlineSize:1, fontSize:25, glyphs:0, customGlyphs:"", fontFilePath:"fonts/britanic bold.ttf"};
         var label = cc.Label.createWithTTF(ttfconfig, "00:00");
         label.setAnchorPoint(0, 0);
         label.setPosition3D(cc.math.vec3(cc.winSize.width*0.02, cc.winSize.height*0.915, 2));
@@ -373,6 +373,7 @@ var BattleFieldUI = cc.Layer.extend({
         victory.setGlobalZOrder(UIZorder);
         layer.addChild(victory, 1);
         this.addChild(layer);
+        layer.setCameraMask(cc.CameraFlag.USER1, true);
         victory.runAction(cc.scaleTo(1.5, 1).easing(cc.easeElasticOut()));
 
         cc.eventManager.addListener({

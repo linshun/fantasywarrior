@@ -43,10 +43,11 @@
         }
     };
 
-    var BasicCollider = cc.Sprite3D.extend({
+    var BasicCollider = jsb.Sprite3D.extend({
         ctor:function(pos, facing, attackInfo){
             this._super();
             this.setCascadeColorEnabled(true);
+            this.setCameraMask(cc.CameraFlag.USER1, true);
 
             this.minRange = 0   //the min radius of the fan
             this.maxRange = 150 //the max radius of the fan
@@ -81,7 +82,7 @@
 
         hurtEffect:function(target){
             var hurtAction = cc.Animate.create(cc.animationCache.getAnimation("hurtAnimation"));
-            var hurtEffect = new cc.BillBoard();
+            var hurtEffect = new jsb.BillBoard();
             
             hurtEffect.setScale(1.2);
             hurtEffect.runAction(cc.sequence(
@@ -120,6 +121,7 @@
 
             this.sp = Archer.createArrow();
             this.sp.setRotation(cc.radiansToDegrees(-facing)-90);
+            this.sp.setCameraMask(cc.CameraFlag.USER1);
             this.addChild(this.sp);
         },
 
@@ -147,6 +149,7 @@
             this.owner = owner;
             this.sp = Archer.createArrow();
             this.sp.setRotation(cc.radiansToDegrees(-facing)-90);
+            this.sp.setCameraMask(cc.CameraFlag.USER1);
             this.addChild(this.sp);
         },
 
@@ -180,7 +183,7 @@
             this._target = target;
             this.owner = owner;
 
-            this.sp = cc.BillBoard.create("FX/FX.png", RECTS.iceBolt, 0);
+            this.sp = jsb.BillBoard.create("FX/FX.png", RECTS.iceBolt, 0);
             this.sp.setPosition3D(cc.math.vec3(0, 0, 50));
             this.sp.setScale(2);
             this.addChild(this.sp);
@@ -203,6 +206,8 @@
             pixi.setGlobalZOrder(0);
             pixi.setVertexZ(50);
 
+            this.setCameraMask(cc.CameraFlag.USER1, true);
+
             this.part1 = smoke;
             this.part2 = pixi;
         },
@@ -221,6 +226,7 @@
             this.addChild(magic);
             magic.setGlobalZOrder(0);
             magic.setVertexZ(0);
+            magic.setCameraMask(cc.CameraFlag.USER1);
 
             this.sp.setTextureRect(RECTS.iceSpike);
             this.sp.runAction(cc.fadeOut(1));
@@ -302,6 +308,8 @@
             this.addChild(magic);
             magic.setGlobalZOrder(-this.getPositionY()*2+FXZorder);
             magic.setVertexZ(0);
+
+            this.setCameraMask(cc.CameraFlag.USER1, true)
         },
 
         onTimeOut:function(){
@@ -314,6 +322,7 @@
             this.addChild(puff);
             puff.setGlobalZOrder(-this.getPositionY()+FXZorder);
             puff.setVertexZ(20);
+            puff.setCameraMask(cc.CameraFlag.USER1);
 
             var magic = cc.BillboardParticleSystem.create(ParticleManager.getPlistData("magic"));
             var magicf = cc.spriteFrameCache.getSpriteFrame("particle.png");
@@ -323,6 +332,7 @@
             this.addChild(magic);
             magic.setGlobalZOrder(-this.getPositionY()+FXZorder);
             magic.setVertexZ(0);
+            magic.setCameraMask(cc.CameraFlag.USER1);
 
             this.sp.runAction(cc.fadeOut(1));
             var self = this;
@@ -356,9 +366,10 @@
         ctor:function(pos,facing,attackInfo){
             this._super(pos,facing,attackInfo);
 
-            this.sp = cc.BillBoard.create("FX/FX.png", RECTS.fireBall);
+            this.sp = jsb.BillBoard.create("FX/FX.png", RECTS.fireBall);
             this.sp.setPosition3D(cc.math.vec3(0, 0, 48));
             this.sp.setScale(1.7);
+            this.sp.setCameraMask(cc.CameraFlag.USER1);
             this.addChild(this.sp);
         },
 
@@ -377,6 +388,7 @@
             magic.setGlobalZOrder(-this.y*2+FXZorder);
             magic.setVertexZ(0);
             magic.setEndColor(cc.color(255, 128, 0));
+            magic.setCameraMask(cc.CameraFlag.USER1);
 
             var fireBallAction = new cc.Animate(cc.animationCache.getAnimation("fireBallAnim"));
             this.sp.runAction(fireBallAction);

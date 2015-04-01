@@ -43,7 +43,7 @@ var ChooseRoleLayer = (function(){
 
         addBackground:function(){
             //holder for background
-            var node3d = new cc.Sprite3D();
+            var node3d = new jsb.Sprite3D();
 
             var bg = new cc.Sprite("chooseRole/cr_bk.jpg");
             bg.setAnchorPoint(0.5, 0.5);
@@ -137,7 +137,7 @@ var ChooseRoleLayer = (function(){
             bag.setNormalizedPosition(cc.p(0.75, 0.5));
             this.addChild(bag);
 
-            var ttfconfig = {outlineSize : 0, fontSize : 15, glyphs:0, fontFilePath : "chooseRole/actor_param.ttf"};
+            var ttfconfig = {outlineSize : 0, fontSize : 15, glyphs:0, customGlyphs:"", fontFilePath : "chooseRole/actor_param.ttf"};
             var text = "LEVEL\nATT\nHP\nDEF\nAGI\nCRT\nS.ATT";
             var text_label = cc.Label.createWithTTF(ttfconfig, text, cc.TEXT_ALIGNMENT_CENTER, 400);
             text_label.setPosition(cc.p(bagSize.width*0.45, bagSize.height*0.68));
@@ -157,7 +157,7 @@ var ChooseRoleLayer = (function(){
                 bag.removeChildByTag(102);
             }
 
-            var ttfconfig = {outlineSize : 0, fontSize : 15, glyphs:0, fontFilePath : "chooseRole/actor_param.ttf"};
+            var ttfconfig = {outlineSize : 0, fontSize : 15, glyphs:0, customGlyphs:"", fontFilePath : "chooseRole/actor_param.ttf"};
             var text = "LEVEL\nATT\nHP\nDEF\nAGI\nCRT\nS.ATT";
             var attr, point;
 

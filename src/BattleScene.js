@@ -64,7 +64,11 @@ var BattleLayer = (function(_G){
         this.setCascadeColorEnabled(true);
         cc.Texture2D.setDefaultAlphaPixelFormat(4);//RGB565
 
-        this.scheduleUpdate();
+        // this.scheduleUpdate();
+        delayExecute(this, function(){
+            this._gameMaster.init();
+            this.scheduleUpdate();
+        }, 0.01);
 
         cc.eventManager.addListener({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
@@ -74,7 +78,7 @@ var BattleLayer = (function(_G){
         }, this);
 
         //create background
-        var spriteBg = new cc.Sprite3D("model/scene/changing.c3b");
+        var spriteBg = new jsb.Sprite3D("model/scene/changing.c3b");
         this.addChild(spriteBg);
         spriteBg.setScale(2.65);
         spriteBg.setPosition3D(cc.math.vec3(-2300, -1000, 0));
@@ -103,7 +107,7 @@ var BattleLayer = (function(_G){
         this._camera = cc.Camera.createPerspective(60.0, cc.winSize.width/cc.winSize.height, 10.0, 4000.0);
         this._camera.setPosition3D(cc.math.vec3(0, 200, 100));
         this._camera.setGlobalZOrder(10);
-        // this._camera.setCameraFlag(cc.CameraFlag.USER1);
+        this._camera.setCameraFlag(cc.CameraFlag.USER1);
         this.addChild(this._camera);
 
         for(var i = 0; i < HeroManager.length; ++i){
@@ -111,7 +115,7 @@ var BattleLayer = (function(_G){
         }
 
         this._camera.addChild(uiLayer);
-        // this.setCameraMask(cc.CameraFlag.USER1);
+        this.setCameraMask(cc.CameraFlag.USER1, true);
 
         MessageDispatcher.registerMessage(MessageDispatcher.MessageType.SPECIAL_PERSPECTIVE, this.specialPerspective, this);
     },

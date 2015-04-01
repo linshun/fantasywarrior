@@ -170,7 +170,7 @@ var MainMenuLayer = cc.Layer.extend({
 
     addPointLight:function(){
         // add point light
-        this._pointLight = cc.PointLight.create(cc.math.vec3(0, 0, -100), cc.color(255, 255, 255), 10000);
+        this._pointLight = jsb.PointLight.create(cc.math.vec3(0, 0, -100), cc.color(255, 255, 255), 10000);
         this._pointLight.setCameraMask(1);
         this._pointLight.setEnabled(true);
 

@@ -34,7 +34,7 @@
 #include "jsb_cocos2dx_auto.hpp"
 #include "js_bindings_config.h"
 // for debug socket
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_WP8 || CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 #include <io.h>
 #include <WS2tcpip.h>
 #else
@@ -105,7 +105,7 @@ static std::unordered_map<std::string, JSObject*> globals;
 
 static void cc_closesocket(int fd)
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_WP8 || CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     closesocket(fd);
 #else
     close(fd);
@@ -351,6 +351,8 @@ bool JSBCore_os(JSContext *cx, uint32_t argc, jsval *vp)
     os = JS_InternString(cx, "OS X");
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
     os = JS_InternString(cx, "WP8");
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    os = JS_InternString(cx, "WINRT");
 #else
     os = JS_InternString(cx, "Unknown");
 #endif
@@ -593,19 +595,14 @@ void ScriptingCore::createGlobalContext() {
 #if defined(JS_GC_ZEAL) && defined(DEBUG)
     //JS_SetGCZeal(this->_cx, 2, JS_DEFAULT_ZEAL_FREQ);
 #endif
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    _global.emplace(_cx);
-#else
+
     _global.construct(_cx);
-#endif
     _global.ref() = NewGlobalObject(_cx);
     
     JSAutoCompartment ac(_cx, _global.ref());
     
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
     // Removed in Firefox v34
     js::SetDefaultObjectForContext(_cx, _global.ref());
-#endif
     
     for (std::vector<sc_register_sth>::iterator it = registrationList.begin(); it != registrationList.end(); it++) {
         sc_register_sth callback = *it;
@@ -991,8 +988,9 @@ void ScriptingCore::cleanupSchedulesAndActions(js_proxy_t* p)
     JS::RootedObject obj(_cx, p->obj.get());
     __Array* arr = JSScheduleWrapper::getTargetForJSObject(obj);
     if (arr) {
-        Scheduler* pScheduler = Director::getInstance()->getScheduler();
-        Ref* pObj = NULL;
+        Node* node = (Node*)p->ptr;
+        Scheduler* pScheduler = node->getScheduler();
+        Ref* pObj = nullptr;
         CCARRAY_FOREACH(arr, pObj)
         {
             pScheduler->unscheduleAllForTarget(pObj);
@@ -1662,7 +1660,7 @@ static void serverEntryPoint(unsigned int port)
     
     int err = 0;
     
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_WP8 || CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     WSADATA wsaData;
     err = WSAStartup(MAKEWORD(2, 2),&wsaData);
 #endif
@@ -1754,20 +1752,13 @@ bool JSBDebug_BufferWrite(JSContext* cx, unsigned argc, jsval* vp)
 
 void ScriptingCore::enableDebugger(unsigned int port)
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (_debugGlobal.isNothing())
-#else
     if (_debugGlobal.empty())
-#endif
     {
         JSAutoCompartment ac0(_cx, _global.ref().get());
         
         JS_SetDebugMode(_cx, true);
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        _debugGlobal.emplace(_cx);
-#else
+        
         _debugGlobal.construct(_cx);
-#endif
         _debugGlobal.ref() = NewGlobalObject(_cx, true);
         // Adds the debugger object to root, otherwise it may be collected by GC.
         //AddObjectRoot(_cx, &_debugGlobal); no need, it's persistent rooted now

@@ -178,7 +178,7 @@ var Archer = Actor.extend({
 });
 
 Archer.createArrow = function(){
-    var sprite3d = new cc.Sprite3D("model/archer/arrow.obj");
+    var sprite3d = new jsb.Sprite3D("model/archer/arrow.obj");
     sprite3d.setTexture("model/archer/hunter01_tex_head.jpg");
     sprite3d.setScale(2);
     sprite3d.setRotation3D(cc.math.vec3(-90, 0, 0));

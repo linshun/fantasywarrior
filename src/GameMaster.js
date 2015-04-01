@@ -16,7 +16,7 @@
         this._layer = layer;
         _G.HeroManager = [];
         _G.MonsterManager = [];
-        this.init();
+        // this.init();
 
     };
     _G.GameMaster = GameMaster;
@@ -38,6 +38,7 @@
             this._layer.addChild(knight);
             knight.idleMode();
             knight.setAIEnabled(true);
+            knight.setCameraMask(cc.CameraFlag.USER1);
             HeroManager.push(knight);
 
             var mage = new Mage();
@@ -45,6 +46,7 @@
             this._layer.addChild(mage);
             mage.idleMode();
             mage.setAIEnabled(true);
+            mage.setCameraMask(cc.CameraFlag.USER1);
             HeroManager.push(mage);
 
             var archer = new Archer();
@@ -52,6 +54,7 @@
             this._layer.addChild(archer);
             archer.idleMode();
             archer.setAIEnabled(true);
+            archer.setCameraMask(cc.CameraFlag.USER1);
             HeroManager.push(archer);
         },
 
@@ -65,6 +68,7 @@
         addDragon:function(){
             for(var i = 0; i < monsterCount.dragon; ++i){
                 var dragon = new Dragon();
+                dragon.setCameraMask(cc.CameraFlag.USER1);
                 dragon.setVisible(false);
                 // dragon.setAIEnabled(false);
                 this._layer.addChild(dragon);
@@ -76,6 +80,7 @@
             for (var i = 0; i < monsterCount.slime; ++i) {
                 var slime = new Slime();
                 slime.setVisible(false);
+                slime.setCameraMask(cc.CameraFlag.USER1);
                 this._layer.addChild(slime);
                 cc.pool.putInPool(slime);
             };
@@ -85,6 +90,7 @@
             for(var i = 0; i < monsterCount.piglet; ++i){
                 var pig = new Piglet();
                 pig.setVisible(false);
+                pig.setCameraMask(cc.CameraFlag.USER1);
                 this._layer.addChild(pig);
                 cc.pool.putInPool(pig);
             }
@@ -94,6 +100,7 @@
             for(var i = 0; i < monsterCount.rat; ++i){
                 var rat = new Rat();
                 rat.setVisible(false);
+                rat.setCameraMask(cc.CameraFlag.USER1);
                 this._layer.addChild(rat);
                 cc.pool.putInPool(rat);
             }
@@ -353,6 +360,7 @@
             waring.setVertexZ(-cc.director.getZEye()/2);
             waring.ignoreAnchorPointForPosition(false);
             waring.setLocalZOrder(999);
+            waring.setCameraMask(cc.CameraFlag.USER1);
             this._layer._camera.addChild(waring);
         },
 
@@ -366,6 +374,7 @@
 
             //create dialog
             var dialog = new cc.Layer();
+            dialog.setCameraMask(cc.CameraFlag.USER1);
             dialog.x = -cc.winSize.width*0.025;
 
             var outframe = new cc.Sprite("#outframe.png");
@@ -392,7 +401,7 @@
             bosslogo.setScale(0.74*resolutionRate);
             dialog.addChild(bosslogo);
 
-            var ttfconf = {outlineSize:0, fontSize:24, glyphs:0, fontFilePath:"fonts/britanic bold.ttf"};
+            var ttfconf = {outlineSize:0, fontSize:24, glyphs:0, customGlyphs:"", fontFilePath:"fonts/britanic bold.ttf"};
             var text = cc.Label.createWithTTF(ttfconf, "How dare you???");
             text.setPosition(cc.winSize.width*0.68, cc.winSize.height*0.27);
             text.setGlobalZOrder(UIZorder+1);
@@ -437,6 +446,7 @@
 
         showBoss:function(){
             var boss = new Rat();
+            boss.setCameraMask(cc.CameraFlag.USER1);
             this._layer.addChild(boss);
             boss.reset();
             var appearPos = cc.math.vec3(500, 200, 300);

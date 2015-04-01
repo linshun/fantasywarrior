@@ -32,12 +32,13 @@ var HPCounter = cc.Node.extend({
             let tm = 0.5;
             let pointZ = 50;
 
-            effect = new cc.BillBoard();
-            let ttfconfig = {outlineSize:7, fontSize:50, glyphs:0, fontFilePath:"fonts/britanic bold.ttf"};
+            effect = new jsb.BillBoard();
+            let ttfconfig = {outlineSize:7, fontSize:50, glyphs:0, customGlyphs:"", fontFilePath:"fonts/britanic bold.ttf"};
             let blood = cc.Label.createWithTTF(ttfconfig, "-"+num, cc.TEXT_ALIGNMENT_CENTER, 400);
             blood.enableOutline(cc.color(0, 0, 0, 255));
             blood.setScale(0.1);
-            blood.setGlobalZOrder(FXZorder);
+            blood.setGlobalZOrder(FXZorder+1);
+            blood.setCameraMask(cc.CameraFlag.USER1);
 
             let targetScale = 0.6;
             if(num > 1000)
@@ -76,6 +77,7 @@ var HPCounter = cc.Node.extend({
             if(attack){
                 let criticalAttack = new cc.Sprite("#hpcounter.png");
                 criticalAttack.setGlobalZOrder(FXZorder);
+                criticalAttack.setCameraMask(cc.CameraFlag.USER1);
                 tm = 1;
                 criticalAttack.runAction(getAction());
                 if(actor._name == "Rat")

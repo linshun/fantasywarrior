@@ -76,7 +76,7 @@ var LoadingLayer = cc.Layer.extend({
 
     addLoadingText:function(){
         var loading = ['l', 'o', 'a', 'd', 'i', 'n', 'g'];
-        var ttfconfig = {outlineSize:5, fontSize:55, glyphs:0, fontFilePath:"chooseRole/actor_param.ttf"};
+        var ttfconfig = {outlineSize:5, fontSize:55, glyphs:0, customGlyphs:"", fontFilePath:"chooseRole/actor_param.ttf"};
         var size = cc.winSize;
         for(var i = 0; i < loading.length; ++i){
             var l = cc.Label.createWithTTF(ttfconfig, loading[i]);
