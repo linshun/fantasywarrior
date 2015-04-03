@@ -14,6 +14,7 @@
 		1AD7E0A818C9DB93004817A6 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 1A6BF21418C9DB5900FB0E1C /* main.js */; };
 		1AD7E0A918C9DBE3004817A6 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 1A6BF21418C9DB5900FB0E1C /* main.js */; };
 		1AE159EC18C9DF3600FCA372 /* project.json in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A081B18C9DF05005C6854 /* project.json */; };
+		4209C3801ACF1D3000063253 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4209C37F1ACF1D3000063253 /* Security.framework */; };
 		421E2AE71AB8415300749DE3 /* jsb_cocos2dx_custom_auto_api.js in Resources */ = {isa = PBXBuildFile; fileRef = 421E2AD01AB8415300749DE3 /* jsb_cocos2dx_custom_auto_api.js */; };
 		421E2AE81AB8415300749DE3 /* jsb_cocos2dx_custom_auto_api.js in Resources */ = {isa = PBXBuildFile; fileRef = 421E2AD01AB8415300749DE3 /* jsb_cocos2dx_custom_auto_api.js */; };
 		421E2AE91AB8415300749DE3 /* BillboardParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 421E2AD11AB8415300749DE3 /* BillboardParticleSystem.cpp */; };
@@ -160,6 +161,7 @@
 		1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		1A96A4F2174A3432008653A9 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = "../../js-bindings/cocos2d-x/cocos2dx/platform/third_party/ios/libraries/libcurl.a"; sourceTree = "<group>"; };
 		1AC6FB34180E9ACB004C840B /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = "../../js-bindings/cocos2d-x/build/cocos2d_libs.xcodeproj"; sourceTree = "<group>"; };
+		4209C37F1ACF1D3000063253 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		421E2AD01AB8415300749DE3 /* jsb_cocos2dx_custom_auto_api.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jsb_cocos2dx_custom_auto_api.js; sourceTree = "<group>"; };
 		421E2AD11AB8415300749DE3 /* BillboardParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BillboardParticleSystem.cpp; sourceTree = "<group>"; };
 		421E2AD21AB8415300749DE3 /* BillboardParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BillboardParticleSystem.h; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4209C3801ACF1D3000063253 /* Security.framework in Frameworks */,
 				C037820F18BF77DE00FE4F13 /* libjsbindings Mac.a in Frameworks */,
 				1A67682A180E9C060076BC67 /* libcocos2d Mac.a in Frameworks */,
 				502380DC17EBB88200990C9B /* libcurl.dylib in Frameworks */,
@@ -400,6 +403,7 @@
 		A92275401517C094001B78AA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4209C37F1ACF1D3000063253 /* Security.framework */,
 				BA3A85EB1A724AE900924D24 /* Security.framework */,
 				BA4E718219EB6E4600932425 /* GameController.framework */,
 				BA4E718019EB6E3E00932425 /* MediaPlayer.framework */,
